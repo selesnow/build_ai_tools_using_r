@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 4 RAG: Подключаем LLM модель к собственной базе знаний | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="В предыдущей главе мы научили нашего ассистента пользоваться внешними инструментами через MCP. Но что делать, если задача требует не выполнения функции, а глубокого знания специфической...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 4 RAG: Подключаем LLM модель к собственной базе знаний | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/r_package_course/rag-подключаем-llm-модель-к-собственной-базе-знаний.html">
+<meta property="og:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<meta property="og:description" content="В предыдущей главе мы научили нашего ассистента пользоваться внешними инструментами через MCP. Но что делать, если задача требует не выполнения функции, а глубокого знания специфической...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 4 RAG: Подключаем LLM модель к собственной базе знаний | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="В предыдущей главе мы научили нашего ассистента пользоваться внешними инструментами через MCP. Но что делать, если задача требует не выполнения функции, а глубокого знания специфической...">
+<meta name="twitter:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="active" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4.html"><span class="header-section-number">5</span> Заключение</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="rag-подключаем-llm-модель-к-собственной-базе-знаний" class="section level1" number="4">
+<h1>
+<span class="header-section-number">Глава 4</span> RAG: Подключаем LLM модель к собственной базе знаний<a class="anchor" aria-label="anchor" href="#rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9"><i class="fas fa-link"></i></a>
+</h1>
+<p>В предыдущей главе мы научили нашего ассистента пользоваться внешними инструментами через MCP. Но что делать, если задача требует не выполнения функции, а глубокого знания специфической документации? Надеяться на общую эрудицию LLM опасно — она может “галлюцинировать” или просто не знать о существовании ваших внутренних регламентов и свежих учебников.</p>
+<p>В этой главе мы освоим технологию RAG (Retrieval-Augmented Generation). Мы создадим собственную базу знаний на основе учебника по Telegram-ботам, научим систему превращать текст в математические векторы и сохранять их в высокопроизводительное хранилище DuckDB. В итоге мы получим экспертную систему, которая отвечает на вопросы строго по вашим документам, предоставляя ссылки на первоисточники</p>
+<div id="видео-3" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-3"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/n60u8931mX4?si=Htz0l1CnuDc24BLs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div id="тайм-коды-3" class="section level3" number="4.1.1">
+<h3>
+<span class="header-section-number">4.1.1</span> Тайм коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-3"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=0"><strong>00:00</strong></a> — О чём это видео</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=114"><strong>01:54</strong></a> — Концепция RAG: теория и применение</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=362"><strong>06:02</strong></a> — Настройка переменных среды для API ключей</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=451"><strong>07:31</strong></a> — Подготовка и загрузка документов (пакет <code>ragnar</code>)</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=644"><strong>10:44</strong></a> — Чанкинг, эмбеддинг и запись в векторное хранилище</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=1344"><strong>22:24</strong></a> — Обзор инструмента Ragnar Store Inspector</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=1445"><strong>24:05</strong></a> — Гибридный поиск: сравнение VSS и BM25</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=1873"><strong>31:13</strong></a> — Подключение LLM к базе знаний (Retrieval Tool)</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=2108"><strong>35:08</strong></a> — Разработка UI интерфейса в <code>shinychat</code>
+</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=2335"><strong>38:55</strong></a> — Резюме пройденного материала</li>
+<li>
+<a href="https://youtu.be/n60u8931mX4?t=2482"><strong>41:22</strong></a> — Заключение</li>
+</ul>
+</div>
+</div>
+<div id="презентация-3" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-3"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/Fvl0Mk0bwKxp0q?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект-3" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-3"><i class="fas fa-link"></i></a>
+</h2>
+<div id="что-такое-rag-простыми-словами" class="section level3" number="4.3.1">
+<h3>
+<span class="header-section-number">4.3.1</span> Что такое RAG простыми словами<a class="anchor" aria-label="anchor" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-rag-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%BC%D0%B8-%D1%81%D0%BB%D0%BE%D0%B2%D0%B0%D0%BC%D0%B8"><i class="fas fa-link"></i></a>
+</h3>
+<p>Если обычная LLM (например, Gemini или ChatGPT) — это очень умный студент, который прочитал весь интернет, но ничего не знает о ваших личных файлах, то RAG — это тот же студент, которому разрешили пользоваться библиотекой ваших документов во время экзамена.</p>
+<p>Вместо того чтобы пытаться запихнуть всю документацию вашей компании в системный промпт (где место ограничено и это стоит дорого), мы учим модель:</p>
+<ul>
+<li>Сначала найти нужные куски текста в базе данных.</li>
+<li>Затем прочитать их и на их основе составить ответ.</li>
+</ul>
+<div class="inline-figure"><img src="img/4-1.jpg" align="middle" width="640"></div>
+</div>
+<div id="обзор-рабочего-процесса-rag" class="section level3" number="4.3.2">
+<h3>
+<span class="header-section-number">4.3.2</span> Обзор рабочего процесса RAG<a class="anchor" aria-label="anchor" href="#%D0%BE%D0%B1%D0%B7%D0%BE%D1%80-%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B5%D0%B3%D0%BE-%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%B0-rag"><i class="fas fa-link"></i></a>
+</h3>
+<p>В этом уроке мы с вами будем разбираться с пакетом <code>ragnar</code>, о котором ранее в этом курсе ещё не упоминалось. <code>ragnar</code> имеет в арсенале весь необходимый функционал для реализации RAG подхода.</p>
+<div class="inline-figure"><img src="img/4-2.jpg" align="middle" width="640"></div>
+<p>Рабочий процесс построения RAG:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Обработка документов</strong>, это первый этап на котором вам необходимо привести ваши документы к пригодному для дальнейшей работы формату. В <code>ragnar</code> для этого есть 2 функции:</li>
+</ol>
+<ul>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/read_as_markdown.html">read_as_markdown()</a></code> - Читает документы: pdf, power point, word, excel, zip, youtube видео и другие, и приводит их к markdown разметке.</li>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_find_links.html">ragnar_find_links()</a></code> - Ищет все ссылки на заданной веб-странице, для удобной подготовки любого сайта как будущей базы данных.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><p><strong>Разбивка документов на фрагменты</strong>, этот этап реализуется функцией <code><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk()</a></code>, которая является полнофункциональным инструментом для разделения текста на фрагменты.</p></li>
+<li><p><strong>Расширение контекста фрагментов</strong>, опциональный шаг, позволяющий добавить в каждый фрагмент текста дополнительный контекст, например заголовки. Реализуется функцией <code><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk()</a></code>.</p></li>
+<li><p><strong>Эмбединг</strong>, процесс векторного кодирования каждого отдельного фрагмента текста, реализуется семейством функций <code>embed_*()</code>.</p></li>
+<li><p><strong>Хранение базы знаний</strong>, зашифрованные фрагменты текста необходимо записать в хранилище, для этого есть несколько функций:</p></li>
+</ol>
+<ul>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_create()</a></code> - создание хранилище, по умолчанию используется DuckDB</li>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_connect()</a></code> - подключение к хранилищу</li>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_store_insert.html">ragnar_store_insert()</a></code> - запись данных в хранилище</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>
+<strong>Поиск и извлечение релевантных фрагментов</strong>, для этого этапа в <code>ragnar</code> также имеется семейство функций:</li>
+</ol>
+<ul>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_retrieve.html">ragnar_retrieve()</a></code> - высокоуровневая функция, которая совмещает в себе vss и bm25 поиск, а так же обработку полученных результатов.</li>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_retrieve_vss.html">ragnar_retrieve_vss()</a></code> - реализует vss поиск по базе знаний.</li>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/ragnar_retrieve_bm25.html">ragnar_retrieve_bm25()</a></code> - реализует полнотекстовый поиск по базе знаний.</li>
+<li>
+<code><a href="https://ragnar.tidyverse.org/reference/chunks_deoverlap.html">chunks_deoverlap()</a></code> - объединяет полученные поиском фрагменты учитывая то, что они могут перекрывать друг друга.</li>
+</ul>
+<ol start="7" style="list-style-type: decimal">
+<li>
+<strong>Подключаем чат к базе знаний</strong>, финальный этап, на котором мы подключаем базу знаний к чату с помощью функции <code>ragnar_register_tool_retrieve(chat, store)</code>.</li>
+</ol>
+<p>Далее каждый шаг разберём более подробно на реальном примере.</p>
+</div>
+<div id="обработка-документов-фрагментирование-эмбединг-и-запись-в-хранилище" class="section level3" number="4.3.3">
+<h3>
+<span class="header-section-number">4.3.3</span> Обработка документов: фрагментирование, эмбединг и запись в хранилище<a class="anchor" aria-label="anchor" href="#%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%8D%D0%BC%D0%B1%D0%B5%D0%B4%D0%B8%D0%BD%D0%B3-%D0%B8-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D1%8C-%D0%B2-%D1%85%D1%80%D0%B0%D0%BD%D0%B8%D0%BB%D0%B8%D1%89%D0%B5"><i class="fas fa-link"></i></a>
+</h3>
+<p>В качестве базы знаний я буду использовать свой учебник по <a href="https://selesnow.github.io/build_telegram_bot_using_r/">разработке telegram ботов</a>. Для начала нам необходимо получить ссылки на все главы учебника:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ragnar.tidyverse.org/">ragnar</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 1. Создание базы знаний -------------------------------------------------</span></span>
+<span></span>
+<span><span class="co"># задаём URL документации</span></span>
+<span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://selesnow.github.io/build_telegram_bot_using_r/"</span></span>
+<span></span>
+<span><span class="co"># считываем все ссылки исключая не нужные</span></span>
+<span><span class="va">pages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_find_links.html">ragnar_find_links</a></span><span class="op">(</span><span class="va">base_url</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>         <span class="va">.</span><span class="op">[</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">'https://selesnow.github.io/build_telegram_bot_using_r'</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+</div>
+<div id="разбивка-документов-на-фрагменты" class="section level3" number="4.3.4">
+<h3>
+<span class="header-section-number">4.3.4</span> Разбивка документов на фрагменты<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D0%B2%D0%BA%D0%B0-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82%D1%8B"><i class="fas fa-link"></i></a>
+</h3>
+<p>На этом этапе у нас есть вектор из URL на каждую главу учебника, который будет использоваться в качестве базы данных. Теперь каждую главу отдельно необходимо обработать, и разбить её дополнительно на фрагменты, но перед этим отвлечёмся немного от нашего реального примера, и рассмотрим примеры использования аргументов функции <code><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk()</a></code>.</p>
+<p><strong>Аргументы:</strong>
+* <code>md</code> - MarkdownDocument, или текст в Markdown разметке.
+* <code>target_size</code> - Целевой размер фрагмента в символах. По умолчанию: 1600 (приблизительно 400 токенов или 1 страница текста). Фактический размер блока может отличаться от целевого значения до 2 * <code>max_snap_dist.</code> Если установлено значение <code>NULL</code>, <code>NA</code> или <code>Inf</code> используется с <code>segment_by_heading_levels</code>, размер блока неограничен, и каждый блок соответствует сегменту.
+* <code>target_overlap</code> - Числовое значение в [0, 1). Доля желаемого перекрытия между последовательными фрагментами.
+* <code>max_snap_dist</code> - Максимальное расстояние (в символах), на которое может переместиться точка разреза, чтобы достичь семантической границы.
+* <code>segment_by_heading_levels</code> - Целочисленный вектор с возможными значениями 1:6. Заголовки на этих уровнях рассматриваются как границы сегментов; разбиение на фрагменты выполняется независимо для каждого сегмента.
+* <code>context</code> - Добавить столбец context, содержащий заголовки Markdown, находящиеся в области видимости, в начале каждого фрагмента кода.
+* <code>text</code> - Если значение равно TRUE, включить textстолбец с содержимым фрагмента.</p>
+<p>Что бы лучше понять работу каждого отдельного аргумента можно обратиться к примерам из справки:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ragnar.tidyverse.org/">ragnar</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">md</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st"># Title</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">## Section 1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">Some text that is long enough to be chunked.</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">A second paragraph to make the text even longer.</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">## Section 2</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">More text here.</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">### Section 2.1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">Some text under a level three heading.</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">#### Section 2.1.1</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">Some text under a level four heading.</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">## Section 3</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">Even more text here.</span></span>
+<span><span class="st">"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk</a></span><span class="op">(</span><span class="va">md</span>, target_size <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk</a></span><span class="op">(</span><span class="va">md</span>, target_size <span class="op">=</span> <span class="fl">40</span>, target_overlap <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk</a></span><span class="op">(</span><span class="va">md</span>, target_size <span class="op">=</span> <span class="cn">NA</span>, segment_by_heading_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk</a></span><span class="op">(</span><span class="va">md</span>, target_size <span class="op">=</span> <span class="fl">40</span>, max_snap_dist <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+<p>Теперь вернёмся к нашему примеру, у нас есть вектор с ссылкой на каждую главу учебника по разработке teelgram ботов, наша задача - разбить по очереди каждую главу учебника на фрагменты, векторизировать каждый фрагмент и записать в хранилище.</p>
+<p>При создании хранилища с помощью <code><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_create()</a></code> вам сразу необходимо передать в аргумент <code>embed</code> функцию реализующую эмбединг. Эмбеддинг (embedding) - это числовой вектор, который как можно компактнее и осмысленно кодирует смысл фрагмента текста (слова/предложения/параграфа/страницы). В RAG он превращает текст в пространство, где «похожесть смыслов» измеряется расстоянием между векторами — и на этом строится извлечение релевантных фрагментов. На данный момент в <code>ragnar</code> довольно большой набор функций для эмбединга:</p>
+<ul>
+<li>embed_azure_openai()</li>
+<li>embed_bedrock()</li>
+<li>embed_databricks()</li>
+<li>embed_google_gemini()</li>
+<li>embed_google_vertex()</li>
+<li>embed_lm_studio()</li>
+<li>embed_ollama()</li>
+<li>embed_openai()</li>
+<li>embed_snowflake()</li>
+</ul>
+<p>Все облачные модели требуют передачи API ключа, для тестов, как я говорил в первой главе, вы можете использовать бесплатный ключ к Gemini API, более подробно об этом я рассказывал в разделе <a href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F-api-%D0%BA%D0%BB%D1%8E%D1%87%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-llm">Генерация API ключа для работы с LLM</a>, единственная разница в том, что авторы <code>ragnar</code> используют своё название переменной среды для хранения API ключа, вместо <code>GOOGLE_API_KEY</code> вам необходимо передать ваш API ключ в переменную <code>GEMINI_API_KEY</code>.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># задём путь хранилища</span></span>
+<span><span class="va">store_location</span> <span class="op">&lt;-</span> <span class="st">"tgbot_rag.duckdb"</span></span>
+<span></span>
+<span><span class="co"># создаём хранилище</span></span>
+<span><span class="va">store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_create</a></span><span class="op">(</span></span>
+<span>  <span class="va">store_location</span>,</span>
+<span>  embed <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">ragnar</span><span class="fu">::</span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/embed_google_vertex.html">embed_google_gemini</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>После создания хранилища в цикле мы собираем обрабатываем каждую главу учебника, разбиваем на фрагменты, и записываем в хранилище, при записи в хранилище автоматически применяется эмбединг, т.к. функцию для эмбединга мы задали на прошлом шаге при создании хранилища.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># разбиваем каждую отдельную страницу на чанки</span></span>
+<span><span class="co"># и записываем в хранилище</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">page</span> <span class="kw">in</span> <span class="va">pages</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"ingesting: "</span>, <span class="va">page</span><span class="op">)</span></span>
+<span>  <span class="va">chunks</span> <span class="op">&lt;-</span> <span class="va">page</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/read_as_markdown.html">read_as_markdown</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_insert.html">ragnar_store_insert</a></span><span class="op">(</span><span class="va">store</span>, <span class="va">chunks</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Далее, что бы корректно работал поиск по базе знаний необходимо построить индекс с помощью <code><a href="https://ragnar.tidyverse.org/reference/ragnar_store_build_index.html">ragnar_store_build_index()</a></code>.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># строим индекс для поиска</span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_build_index.html">ragnar_store_build_index</a></span><span class="op">(</span><span class="va">store</span><span class="op">)</span></span></code></pre></div>
+<p>Каждый раз при добавлении новой информации в базу знаний индекс необходимо перестраивать.</p>
+<p>В <code>ragnar</code> отдельно встроен функционал Ragnar Store Inspector, запустить его можно с помощью <code>ragnar_store_inspect(store)</code>. С его помощью вы можете выполнять через графический интерфейс поиск по вашему хранилищу, это поможет вам определиться с тем, успешно вы разбили ваш исходный документ на чанки, или нет.</p>
+<div class="inline-figure"><img src="img/4-3.png" align="middle" width="640"></div>
+<p>Вы задаёте запрос, далее все фрагменты в правой части интерфейса сортируются по релевантности в порядке убывания, т.е. наиболее релевантный вашему запросу чанк должен быть самым первым. Если вы получается фрагменты релевантные запросу значит вы достаточно качествено выполнили разделения документов на фрагменты, в противном случае вам стоит вернуться к разделу <a href="#%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%8D%D0%BC%D0%B1%D0%B5%D0%B4%D0%B8%D0%BD%D0%B3-%D0%B8-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D1%8C-%D0%B2-%D1%85%D1%80%D0%B0%D0%BD%D0%B8%D0%BB%D0%B8%D1%89%D0%B5">Обработка документов: фрагментирование, эмбединг и запись в хранилище</a>, и переосмыслить фрагментирования (чанкинга), поигравшись с аргументами функции <code><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk()</a></code>.</p>
+<blockquote>
+<p>Совет: Используйте инспектор не только для проверки поиска, но и для отладки чанкинга. Если вы видите в результатах обрывки фраз или нечитаемые куски кода — значит, параметры target_size или max_snap_dist нужно подкорректировать.</p>
+</blockquote>
+</div>
+<div id="поиск-по-хранилищу" class="section level3" number="4.3.5">
+<h3>
+<span class="header-section-number">4.3.5</span> Поиск по хранилищу<a class="anchor" aria-label="anchor" href="#%D0%BF%D0%BE%D0%B8%D1%81%D0%BA-%D0%BF%D0%BE-%D1%85%D1%80%D0%B0%D0%BD%D0%B8%D0%BB%D0%B8%D1%89%D1%83"><i class="fas fa-link"></i></a>
+</h3>
+<p>Программно тоже можно осуществлять поиск по хранилищу:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 2. Обращение к базе знаний ----------------------------------------------</span></span>
+<span></span>
+<span><span class="co"># подключение к базе знаний</span></span>
+<span><span class="va">store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_connect</a></span><span class="op">(</span><span class="va">store_location</span>, read_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"Можно ли хранить токен telegram бота в переменной среды?"</span></span>
+<span></span>
+<span><span class="co"># запрос информации из базы знаний</span></span>
+<span><span class="va">relevant_chunks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_retrieve.html">ragnar_retrieve</a></span><span class="op">(</span><span class="va">store</span>, <span class="va">text</span><span class="op">)</span></span></code></pre></div>
+<p>В объекте <code>relevant_chunks</code> в результате будут хранится наиболее релевантные вашему запросу чанку, с дополнительным контекстом:</p>
+<pre><code>&gt; relevant_chunks
+# A tibble: 3 × 9
+  origin                                                 doc_id chunk_id start   end cosine_distance bm25  context text 
+  &lt;chr&gt;                                                   &lt;int&gt; &lt;list&gt;   &lt;int&gt; &lt;int&gt; &lt;list&gt;          &lt;lis&gt; &lt;chr&gt;   &lt;chr&gt;
+1 https://selesnow.github.io/build_telegram_bot_using_r…     10 &lt;int&gt;    23266 24775 &lt;dbl [1]&gt;       &lt;dbl&gt; "# Гла… "Дал…
+2 https://selesnow.github.io/build_telegram_bot_using_r…     10 &lt;int&gt;    39143 40839 &lt;dbl [1]&gt;       &lt;dbl&gt; "# Гла… "###…
+3 https://selesnow.github.io/build_telegram_bot_using_r…     12 &lt;int&gt;     4767  7211 &lt;dbl [2]&gt;       &lt;dbl&gt; "# Гла… "## …</code></pre>
+<p>Я уже писал выше, что <code>ragnar</code> совмещает два типа поиска:</p>
+<ul>
+<li>VSS - Поиск по смыслу. Ищем не совпадение слов, а близость смысла. Удобно, например, для поиска нужной функций по её описанию.</li>
+<li>BM25 - Поиск по ключевым словам. Ищем буквальное совпадение текста. Например, вы знаете точное название нужной функции, и хотите найти её описание.</li>
+</ul>
+</div>
+<div id="создаём-интерфейс-чата" class="section level3" number="4.3.6">
+<h3>
+<span class="header-section-number">4.3.6</span> Создаём интерфейс чата<a class="anchor" aria-label="anchor" href="#%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%91%D0%BC-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%87%D0%B0%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h3>
+<p>Итак, давайте ещё раз резумируем весь процесс создания хранилища с базой знаний, именно её мы далее будем использовать при создании интерфейса чата.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ragnar.tidyverse.org/">ragnar</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 1. Создание базы знаний -------------------------------------------------</span></span>
+<span></span>
+<span><span class="co"># задаём URL документации</span></span>
+<span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://selesnow.github.io/build_telegram_bot_using_r/"</span></span>
+<span></span>
+<span><span class="co"># считываем все ссылки исключая не нужные</span></span>
+<span><span class="va">pages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_find_links.html">ragnar_find_links</a></span><span class="op">(</span><span class="va">base_url</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>         <span class="va">.</span><span class="op">[</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">'https://selesnow.github.io/build_telegram_bot_using_r'</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># задём путь хранилища</span></span>
+<span><span class="va">store_location</span> <span class="op">&lt;-</span> <span class="st">"tgbot_rag.duckdb"</span></span>
+<span></span>
+<span><span class="co"># создаём хранилище</span></span>
+<span><span class="va">store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_create</a></span><span class="op">(</span></span>
+<span>  <span class="va">store_location</span>,</span>
+<span>  embed <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">ragnar</span><span class="fu">::</span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/embed_google_vertex.html">embed_google_gemini</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># разбиваем каждую отдельную страницу на чанки</span></span>
+<span><span class="co"># и записываем в хранилище</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">page</span> <span class="kw">in</span> <span class="va">pages</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"ingesting: "</span>, <span class="va">page</span><span class="op">)</span></span>
+<span>  <span class="va">chunks</span> <span class="op">&lt;-</span> <span class="va">page</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/read_as_markdown.html">read_as_markdown</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/markdown_chunk.html">markdown_chunk</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_insert.html">ragnar_store_insert</a></span><span class="op">(</span><span class="va">store</span>, <span class="va">chunks</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># строим индекс для поиска</span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_build_index.html">ragnar_store_build_index</a></span><span class="op">(</span><span class="va">store</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># инструмент проверки хранилища</span></span>
+<span><span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_inspect.html">ragnar_store_inspect</a></span><span class="op">(</span><span class="va">store</span><span class="op">)</span></span></code></pre></div>
+<p>Подготовка хранилища выполняется один раз, далее вы можете дополнять базу знаний, но не забывайте что при каждом изменении надо повторно строить индекс.</p>
+<p>Далее, с помощью пакета <code>shinychat</code>, знакомого нам по нескольким прошлым главам мы можем создать графический интерфейс для чата.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">page_fillable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="st">"**Привет!** я помогаю в разработке telegram ботов на языке R. Чем могу тебе помочь?"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  fillable_mobile <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># подключаем базу знаний к ellmer чату</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span>  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Ты помощник по разработке telegram ботов на языке R. </span></span>
+<span><span class="st">       Для формирования каждого ответа сначала ищи информацию в своей базе знаний используя инструмент get_data_from_knowledge_store, </span></span>
+<span><span class="st">       т.е. предупреждай, что начинаешь поиск по базе знаний, используй инструмент get_data_from_knowledge_store и только потом отвечай </span></span>
+<span><span class="st">       с учётом полученной из базы знаний информации, это обязательное условие для формирования ответов.</span></span>
+<span><span class="st">       Процитируй или перефразируй отрывки, четко отличая свои слова от слов источника. </span></span>
+<span><span class="st">       Предоставь рабочую ссылку на каждый цитируемый источник, а также любые дополнительные соответствующие ссылки.</span></span>
+<span><span class="st">       Так же всегда добавляй в ответ дополнительный контекст чанков которые использовал для формирования самого ответа, заголовки частей из которых был получен используемый чанк в формате списка с ссылками, где текст бери из поля context используемого чанка, а сама ссылка поля origin используемого чанка.</span></span>
+<span><span class="st">       Т.е. в конце сообщения ты обязательно должен вывести информацию про используемые для ответа чанки из базы знаний.</span></span>
+<span><span class="st">       Если ты не смог найти ни один чанк в базе знаний то в ответе просто скажи, что по вашему запросу я не сумел найти ничего в своей базе знаний, т.е. сам никогда ничего не придумывай, это важно!</span></span>
+<span><span class="st">      "</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    model <span class="op">=</span> <span class="st">'gemini-2.0-flash'</span>,  </span>
+<span>    echo  <span class="op">=</span> <span class="st">'none'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># подключаемся к хранилищу с базой знаний</span></span>
+<span>  <span class="va">store</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_store_create.html">ragnar_store_connect</a></span><span class="op">(</span><span class="st">"tgbot_rag.duckdb"</span>, read_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="co"># добавляем модели инструмент поиска по базе знаний</span></span>
+<span>  <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_register_tool_retrieve.html">ragnar_register_tool_retrieve</a></span><span class="op">(</span><span class="va">chat</span>, <span class="va">store</span>, top_k <span class="op">=</span> <span class="fl">10</span>, name <span class="op">=</span> <span class="st">'get_data_from_knowledge_store'</span>, title <span class="op">=</span> <span class="st">'knowledge_store'</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Подключение модели к базе знаний реализуется там же где и инициализация чата, т.е. в серверной части приложения, там же вы добавляете в объект <code>chat</code> инструмент <code>get_data_from_knowledge_store</code>, позволяющей модели осуществлять поиск по вашей базе знаний.</p>
+<div class="inline-figure"><img src="img/4-4.png" align="middle" width="640"></div>
+<p>Т.к. я в системном промпте прописал инструкции о том, что модель в конце ответа обязательно должна предоставить фрагменты базы знаний, которые были использованы при формировании ответа, то в конце ответа мы видим следующее:</p>
+<div class="inline-figure"><img src="img/4-5.png" align="middle" width="640"></div>
+</div>
+</div>
+<div id="заключение-3" class="section level2" number="4.4">
+<h2>
+<span class="header-section-number">4.4</span> Заключение<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-3"><i class="fas fa-link"></i></a>
+</h2>
+<p>Поздравляем! Вы прошли путь от создания простого чат-бота до построения сложной экспертной системы на языке R. Теперь ваш ассистент не просто владеет инструментами, но и обладает “памятью”, основанной на ваших документах. Это финальная точка нашего курса, где воедино сошлись Shiny, Telegram, MCP и векторные базы данных.</p>
+<p>Однако мир ИИ не стоит на месте. Теперь, когда вы освоили базу, вы можете масштабировать свои решения: подключать облачные векторные базы данных для работы с терабайтами данных или использовать локальные модели через Ollama для полной конфиденциальности. Главное, что теперь у вас есть надежный стек технологий на языке R для решения любых бизнес-задач с помощью искусственного интеллекта. Удачи в ваших проектах!</p>
+</div>
+<div id="вопросы-для-самопроверки-3" class="section level2" number="4.5">
+<h2>
+<span class="header-section-number">4.5</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-3"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="вопросы-для-самопроверки-4" class="section level2" number="4.6">
+<h2>
+<span class="header-section-number">4.6</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-4"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><details><summary><strong>Почему для реализации RAG-подхода недостаточно просто скопировать весь текст учебника в системный промпт?</strong>
+</summary>
+У каждой модели есть ограничение на размер контекстного окна. Кроме того, передача огромных массивов текста в каждом запросе сильно замедляет работу и делает каждый вопрос пользователя очень дорогим. RAG позволяет передавать только те 3-5 фрагментов, которые действительно нужны для ответа.
+</details></li>
+<li><details><summary><strong>В чем разница между поиском VSS и поиском BM25, которые комбинирует функция <code>ragnar_retrieve()</code>?</strong>
+</summary>
+VSS (Vector Semantic Search) ищет похожие по смыслу фрагменты, даже если слова не совпадают. BM25 — это классический полнотекстовый поиск, который находит точные вхождения слов. Их комбинация (гибридный поиск) обеспечивает максимальную точность.
+</details></li>
+<li><details><summary><strong>Зачем нужно устанавливать <code>target_overlap</code> (перекрытие) при разбиении текста на чанки?</strong>
+</summary>
+Перекрытие гарантирует, что важный контекст не будет “разрезан” пополам. Если предложение начинается в одном чанке и заканчивается в другом, модель сможет понять смысл фрагмента целиком, имея доступ к контексту из соседнего чанка.
+</details></li>
+<li><details><summary><strong>Почему после добавления новых документов в хранилище обязательно нужно вызывать <code>ragnar_store_build_index()</code>?</strong>
+</summary>
+Индекс — это специальная структура данных, которая позволяет искать похожие векторы за миллисекунды. Без перестроения индекса новые данные будут лежать в таблице, но поисковые алгоритмы не смогут их найти.
+</details></li>
+<li><details><summary><strong>Как системный промпт защищает от “галлюцинаций” модели при работе с базой знаний?</strong>
+</summary>
+С помощью инструкции «если ты не смог найти информацию в базе знаний — так и скажи». Это запрещает модели использовать свои общие знания из интернета и заставляет её опираться только на предоставленные факты.
+</details></li>
+</ol>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></div>
+<div class="next"><a href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4.html"><span class="header-section-number">5</span> Заключение</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-3"><span class="header-section-number">4.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-3"><span class="header-section-number">4.1.1</span> Тайм коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-3"><span class="header-section-number">4.2</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-3"><span class="header-section-number">4.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-rag-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%BC%D0%B8-%D1%81%D0%BB%D0%BE%D0%B2%D0%B0%D0%BC%D0%B8"><span class="header-section-number">4.3.1</span> Что такое RAG простыми словами</a></li>
+<li><a class="nav-link" href="#%D0%BE%D0%B1%D0%B7%D0%BE%D1%80-%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B5%D0%B3%D0%BE-%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%B0-rag"><span class="header-section-number">4.3.2</span> Обзор рабочего процесса RAG</a></li>
+<li><a class="nav-link" href="#%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%8D%D0%BC%D0%B1%D0%B5%D0%B4%D0%B8%D0%BD%D0%B3-%D0%B8-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D1%8C-%D0%B2-%D1%85%D1%80%D0%B0%D0%BD%D0%B8%D0%BB%D0%B8%D1%89%D0%B5"><span class="header-section-number">4.3.3</span> Обработка документов: фрагментирование, эмбединг и запись в хранилище</a></li>
+<li><a class="nav-link" href="#%D1%80%D0%B0%D0%B7%D0%B1%D0%B8%D0%B2%D0%BA%D0%B0-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82%D1%8B"><span class="header-section-number">4.3.4</span> Разбивка документов на фрагменты</a></li>
+<li><a class="nav-link" href="#%D0%BF%D0%BE%D0%B8%D1%81%D0%BA-%D0%BF%D0%BE-%D1%85%D1%80%D0%B0%D0%BD%D0%B8%D0%BB%D0%B8%D1%89%D1%83"><span class="header-section-number">4.3.5</span> Поиск по хранилищу</a></li>
+<li><a class="nav-link" href="#%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%91%D0%BC-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%87%D0%B0%D1%82%D0%B0"><span class="header-section-number">4.3.6</span> Создаём интерфейс чата</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-3"><span class="header-section-number">4.4</span> Заключение</a></li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-3"><span class="header-section-number">4.5</span> Вопросы для самопроверки</a></li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-4"><span class="header-section-number">4.6</span> Вопросы для самопроверки</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/04_rag.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/04_rag.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-09.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

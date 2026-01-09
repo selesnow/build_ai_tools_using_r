@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 1 Введение в разработку AI инструментов на языке R (ellmer, shinychat) | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="1.1 Описание урока Добро пожаловать в первую главу курса. Мы начинаем путь в мир прикладного AI с позиции практиков. Сегодня большие языковые модели (LLM) перестали быть игрушкой в браузере и...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 1 Введение в разработку AI инструментов на языке R (ellmer, shinychat) | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/r_package_course/введение-в-разработку-ai-инструментов-на-языке-r-ellmer-shinychat.html">
+<meta property="og:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<meta property="og:description" content="1.1 Описание урока Добро пожаловать в первую главу курса. Мы начинаем путь в мир прикладного AI с позиции практиков. Сегодня большие языковые модели (LLM) перестали быть игрушкой в браузере и...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 1 Введение в разработку AI инструментов на языке R (ellmer, shinychat) | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="1.1 Описание урока Добро пожаловать в первую главу курса. Мы начинаем путь в мир прикладного AI с позиции практиков. Сегодня большие языковые модели (LLM) перестали быть игрушкой в браузере и...">
+<meta name="twitter:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="active" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4.html"><span class="header-section-number">5</span> Заключение</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="введение-в-разработку-ai-инструментов-на-языке-r-ellmer-shinychat" class="section level1" number="1">
+<h1>
+<span class="header-section-number">Глава 1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat"><i class="fas fa-link"></i></a>
+</h1>
+<div id="описание-урока" class="section level2" number="1.1">
+<h2>
+<span class="header-section-number">1.1</span> Описание урока<a class="anchor" aria-label="anchor" href="#%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D1%83%D1%80%D0%BE%D0%BA%D0%B0"><i class="fas fa-link"></i></a>
+</h2>
+<p>Добро пожаловать в первую главу курса. Мы начинаем путь в мир прикладного AI с позиции практиков. Сегодня большие языковые модели (LLM) перестали быть игрушкой в браузере и стали полноценным компонентом ИТ-инфраструктуры.</p>
+<p>В этом уроке мы разберем, как аналитику на языке R «приручить» эти модели для решения ежедневных задач: от автоматического анализа логов на сервере до написания кода с учетом ваших внутренних библиотек. Мы не будем тратить время на теорию нейросетей — мы сразу перейдем к сборке работающего инструмента на базе пакетов <code>ellmer</code> и <code>shinychat</code>. Главная цель этой главы — показать, что современный AI-стек доступен любому R-разработчику бесплатно и без необходимости переходить на Python.</p>
+</div>
+<div id="видео" class="section level2" number="1.2">
+<h2>
+<span class="header-section-number">1.2</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/J7q4pfSDpgU?si=h2yvo2MBTVf9NeAO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div id="тайм-коды" class="section level3" number="1.2.1">
+<h3>
+<span class="header-section-number">1.2.1</span> Тайм коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=0"><strong>00:00</strong></a> — О чём это видео</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=65"><strong>01:05</strong></a> — Кейс практического внедрения AI в рабочие процессы</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=409"><strong>06:49</strong></a> — Введение в пакет <code>ellmer</code>
+</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=500"><strong>08:20</strong></a> — Как бесплатно сгенерировать API ключ для Gemini API</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=545"><strong>09:05</strong></a> — Аргументы конструктора LLM чатов</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=667"><strong>11:07</strong></a> — Создаём объект <code>chat</code>
+</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=781"><strong>13:01</strong></a> — Методы объекта <code>chat</code>
+</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=870"><strong>14:30</strong></a> — Отправляем первый запрос в LLM</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=1023"><strong>17:03</strong></a> — Извлечение структурированных данных из текста</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=1455"><strong>24:15</strong></a> — Добавляем в чат инструменты (Tool Calling)</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=1697"><strong>28:17</strong></a> — Создаём графический интерфейс с помощью <code>shinychat</code>
+</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=1862"><strong>31:02</strong></a> — Как дообучить модель своими данными (System Prompt)</li>
+<li>
+<a href="https://youtu.be/J7q4pfSDpgU?t=2030"><strong>33:50</strong></a> — Заключение</li>
+</ul>
+</div>
+</div>
+<div id="презентация" class="section level2" number="1.3">
+<h2>
+<span class="header-section-number">1.3</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/IyqLdALPcwvbAy?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект" class="section level2" number="1.4">
+<h2>
+<span class="header-section-number">1.4</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82"><i class="fas fa-link"></i></a>
+</h2>
+<div id="как-мы-используем-llm-в-рабочих-процессах" class="section level3" number="1.4.1">
+<h3>
+<span class="header-section-number">1.4.1</span> Как мы используем LLM в рабочих процессах<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%B0%D0%BA-%D0%BC%D1%8B-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D1%83%D0%B5%D0%BC-llm-%D0%B2-%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B8%D1%85-%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%B0%D1%85"><i class="fas fa-link"></i></a>
+</h3>
+<p>Львиная часть нашей работы заключается в разработке скриптов, которые получают данные из различных источников, обрабатывают их, и далее либо куда-то записывают, либо формируют из них сообщения или письма и рассылают. Все скрипты крутятся на сервере под Windows, и запускаются через планировщик задач. На данный момент в планировщике заданий настроено более 350 задач, запускающих разные скрипты.</p>
+<p>Для мониторинга планировщика заданий был написан бот, который запускается раз в 10 минут, и проверяет статус последнего выполнения всех настроенных нами задач. О самом боте я уже рассказывал в <a href="https://selesnow.github.io/build_telegram_bot_using_r/%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%91%D0%BC-%D0%B1%D0%BE%D1%82%D0%B0-%D0%B8-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D1%8F%D0%B5%D0%BC-%D1%81-%D0%B5%D0%B3%D0%BE-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B2-telegram.html#%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BF%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA%D0%B0-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87-windows-%D0%B8-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0-%D1%83%D0%B2%D0%B5%D0%B4%D0%BE%D0%BC%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BE-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%D1%85-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D1%85-%D0%B1%D1%8B%D0%BB%D0%B0-%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D0%B5%D0%BD%D0%B0-%D0%B0%D0%B2%D0%B0%D1%80%D0%B8%D0%B9%D0%BD%D0%BE">первой главе учебника по разработке telegram ботов</a>.</p>
+<p>Недавно мы пошли дальше, и развернули на сервере Shiny приложение, которое запрашивает все данные по задачам из планировщика заданий Windows, и позволяет:</p>
+<ul>
+<li>Просматривать и фильтровать список настроенных задач</li>
+<li>Просматривать логи, т.е. Rout файлы запускаемых задачей скриптов</li>
+<li>Отправлять .Rout файл на анализ в LLM, и получать объяснение о возникновении ошибки при выполнении скрипта, и пошаговый план по устранению ошибки</li>
+<li>Просматривать листинг скрипта запускаемого задачей</li>
+<li>Отправить код на анализ в Gemini и получить объяснение того, что этот код делает</li>
+<li>Запускать задачу</li>
+<li>Активировать и деактивировать задачи в планировщике заданий</li>
+</ul>
+<p>Так же в приложении есть и много другого функционала, среди которых есть чат основанный на LLM, который помогает генерировать код, и исправлять ошибки.</p>
+<p>У нас достаточно много внутренних источников данных:</p>
+<ul>
+<li>Внутренняя самописная ERP/CRM система</li>
+<li>Внутренняя самописная HRM система</li>
+<li>Менеджер задач</li>
+<li>Система финансового учёта</li>
+<li>И ряд других внутренних источников данных.</li>
+</ul>
+<p>Под работу с каждым из этих источников данных у нас написаны пакеты, которые по сути являются обёрткми в которые вшиты либо SQL запросы либо вызовы API. Так вот, чат помогающий нам писать код, анализирующий Rout файл и листинг кода, о котором я писал выше, дообучен документацией по работе к нашим пакетам, и он генерирует и анализирует код и логи с использованием подробной документации к нашим внутренним пакетам, чего не может делать ни один внешний LLM чат, ни ChatGPT, ни Claude, ни Gemini.</p>
+<p>Всё это работает на базе <code>Shiny</code>, <code>ellmer</code>, <code>shinychat</code> и Gemini, абсолютно бесплатно. Далее я подробно расскажу о том, как всё это было разработано.</p>
+</div>
+<div id="генерация-api-ключа-для-работы-с-llm" class="section level3" number="1.4.2">
+<h3>
+<span class="header-section-number">1.4.2</span> Генерация API ключа для работы с LLM<a class="anchor" aria-label="anchor" href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F-api-%D0%BA%D0%BB%D1%8E%D1%87%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-llm"><i class="fas fa-link"></i></a>
+</h3>
+<p>Для работы с API любой LLM модели вам надо сгенерировать API ключ. Практически все провайдеры сейчас убрали из планов бесплатный доступ к API, единственный провайдер, у которого я нашел бесплатный тарифы это Gemini.</p>
+<p>Для генерации ключа просто зайдите в <a href="https://aistudio.google.com/">Google AI Studio</a>, и нажмите кнопку Get API Key. В бесплатном тарифе вам доступно <a href="https://ai.google.dev/gemini-api/docs/pricing">несколько моделей</a>, среди которых очень неплохо себя показала Gemini 2.5 Flash.</p>
+<p>Для удобства дальнейшей работы создайте переменную среды GOOGLE_API_KEY с полученным ключём.</p>
+<blockquote>
+<p>Важное замечание по безопасности: В примерах этого урока мы будем использовать переменные среды для работы с ключами. Это удобно для обучения, но критически опасно, если вы решите опубликовать свой код. Чтобы узнать, как профессионально изолировать ключи от кода с помощью .Renviron или пакета keyring, обязательно посмотрите мой урок <a href="https://youtu.be/7PPP8q0lE_o">“Как правильно хранить секретные данные в R”</a>.</p>
+</blockquote>
+</div>
+<div id="работа-с-llm-в-r" class="section level3" number="1.4.3">
+<h3>
+<span class="header-section-number">1.4.3</span> Работа с LLM в R<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-llm-%D0%B2-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>Для взаимодействия с LLM моделями в R с недавних пор появился пакет ellmer, который предоставляет вам единый интерфейс к огромному количеству провайдеров LLM, моделей. Работа с ellmer начинается с создания объекта чата через один из конструкторов chat_*().</p>
+<p>Под каждый провайдер есть свой конструктор, на данный момент ellmer поддерживает работу со следующими провайдерами LLM моделей:</p>
+<ul>
+<li>Anthropic’s Claude: <code><a href="https://ellmer.tidyverse.org/reference/chat_anthropic.html">chat_anthropic()</a></code>.</li>
+<li>AWS Bedrock: <code><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_bedrock()</a></code>.</li>
+<li>Azure OpenAI: <code><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_azure()</a></code>.</li>
+<li>Databricks: <code><a href="https://ellmer.tidyverse.org/reference/chat_databricks.html">chat_databricks()</a></code>.</li>
+<li>DeepSeek: <code><a href="https://ellmer.tidyverse.org/reference/chat_deepseek.html">chat_deepseek()</a></code>.</li>
+<li>GitHub model marketplace: <code><a href="https://ellmer.tidyverse.org/reference/chat_github.html">chat_github()</a></code>.</li>
+<li>Google Gemini: <code><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini()</a></code>.</li>
+<li>Groq: <code><a href="https://ellmer.tidyverse.org/reference/chat_groq.html">chat_groq()</a></code>.</li>
+<li>Ollama: <code><a href="https://ellmer.tidyverse.org/reference/chat_ollama.html">chat_ollama()</a></code>.</li>
+<li>OpenAI: <code><a href="https://ellmer.tidyverse.org/reference/chat_openai.html">chat_openai()</a></code>.</li>
+<li>OpenRouter: <code><a href="https://ellmer.tidyverse.org/reference/chat_openrouter.html">chat_openrouter()</a></code>.</li>
+<li>perplexity.ai: <code><a href="https://ellmer.tidyverse.org/reference/chat_perplexity.html">chat_perplexity()</a></code>.</li>
+<li>Snowflake Cortex: <code><a href="https://ellmer.tidyverse.org/reference/chat_snowflake.html">chat_snowflake()</a></code> и <code>chat_cortex_analyst()</code>.</li>
+<li>VLLM: <code><a href="https://ellmer.tidyverse.org/reference/chat_vllm.html">chat_vllm()</a></code>.</li>
+</ul>
+<p>Установим пакет ellmer, и создадим объект chat и отправим свой первый запрос:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html">pak</a></span><span class="op">(</span><span class="st">'ellmer'</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># API ключ</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>GOOGLE_API_KEY <span class="op">=</span> <span class="st">'ВАШ API ТОКЕН'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<span>  system_prompt <span class="op">=</span> </span>
+<span>    <span class="st">'Ты специалист по анализу данных, и разработчик на языке R. </span></span>
+<span><span class="st">     В этом чате ты помогаешь генерировать код на языке R.'</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span></span>
+<span>  <span class="st">'Напиши мне функцию, которая по заданному </span></span>
+<span><span class="st">   городу запрашивает текущу погоду из бесплатного API'</span>, </span>
+<span>  echo <span class="op">=</span> <span class="st">'none'</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>Все функции-конструкторы чатов имеют общий набор основных аргументов:</p>
+<ul>
+<li>
+<code>model</code> - Имя модели, которую вы хотите использовать. Каждый провайдер предлагает различные модели, и вы можете выбрать ту, которая лучше всего подходит для вашего случая использования. Например, у OpenAI есть модели GPT-4o, gpt-4o-mini и др.</li>
+<li>
+<code>system_prompt</code> - Строка, описывающая роль или поведение чата. Это начальная подсказка, которая задает тон и стиль взаимодействия, например: «You are a friendly assistant.»</li>
+<li>
+<code>api_args</code> - Список дополнительных аргументов, которые могут быть переданы API. Это может включать настройки специфичные для конкретного провайдера, например, температуру для генерации текста.</li>
+<li>
+<code>echo</code> - Управление выводом результата, принимает одно из значений: <code>none</code>, <code>text</code>, <code>all</code>
+</li>
+</ul>
+<p>Объект chat построен на базе R6 классов, которые являются реализацией классического ООП в R, chat имеет следующие методы:</p>
+<ul>
+<li>
+<code><a href="https://ellmer.tidyverse.org/reference/chat-any.html">chat()</a></code> - Этот метод используется для отправки запроса к LLM и получения ответа в виде строки.</li>
+<li>
+<code>stream()</code> - Позволяет обрабатывать потоковые данные в реальном времени. Этот метод возвращает генератор coro, который позволяет обрабатывать ответ по мере его поступления. Это удобно для различных случаев использования, таких как запись данных в файл или отправка ответа в интерфейс Shiny.</li>
+<li>
+<code>chat_async()</code> - Асинхронная версия метода chat(). Возвращает promise, который разрешает результаты, когда ответ получен. Полезен для одновременного запуска нескольких сеансов общения или в контексте Shiny, чтобы не блокировать интерфейс.</li>
+<li>
+<code>stream_async()</code> - Асинхронная версия метода stream(). Она возвращает async generator, который позволяет обрабатывать асинхронные результаты с течением времени.</li>
+<li>
+<code>chat_structured()</code> - Используется для извлечения структурированных данных из текста или изображений. Принимает схему, определяющую, как должны быть структурированы данные. Возвращает данные в R-представлении, например в виде списка или таблицы данных.</li>
+<li>
+<code>register_tool()</code> - Регистрирует внешние функции или “инструменты”, которые чат-бот может вызывать. Позволяет настроить чат для выполнения дополнительных действий в зависимости от контекста, таких как выполнение API-запросов или манипуляции с данными.</li>
+<li>
+<code><a href="https://ellmer.tidyverse.org/reference/token_usage.html">token_usage()</a></code> - Возвращает информацию об использовании токенов в текущей сессии. Это полезно для оптимизации затрат на использование модели, так как позволяет следить за количеством использованных и оставшихся токенов.</li>
+</ul>
+</div>
+<div id="как-с-помощью-llm-извлекать-структурированные-данные-из-текста" class="section level3" number="1.4.4">
+<h3>
+<span class="header-section-number">1.4.4</span> Как с помощью LLM извлекать структурированные данные из текста<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%B0%D0%BA-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-llm-%D0%B8%D0%B7%D0%B2%D0%BB%D0%B5%D0%BA%D0%B0%D1%82%D1%8C-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B8%D0%B7-%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h3>
+<p>Большинство LLM моделей обладают функцией извлечения структурированных данных их текста. С помощью чего вы можете:</p>
+<ul>
+<li>быстро обрабатывать полнотекстовые анкеты извлекая из них нужные данные</li>
+<li>определить настроение комментариев</li>
+<li>классифицировать статьи по тематикам</li>
+</ul>
+<p>Да и в целом можно найти огромное количество вариантов применения этой функции. Реализуется она с помощью метода <code>$chat_structured()</code>, в который вам необходимо передать текст, из которого планируете извлечь структурированные данные, и описание структуры, которую ы хотите извлечь из текста.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## описание структуры</span></span>
+<span><span class="va">personal_data_str</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  age  <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">'Возраст в годах, целое число'</span><span class="op">)</span>,</span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">'Имя'</span><span class="op">)</span>,</span>
+<span>  job  <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">'Занимаемая на работе должность'</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## извлекаем информацию</span></span>
+<span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">Привет, меня зовут Алексей, мне 40 лет, с 2016 года занимаю должность </span></span>
+<span><span class="st">руководителя отдела аналитики.</span></span>
+<span><span class="st">"</span></span>
+<span><span class="va">personal_data</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">personal_data_str</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># классификация настроения комментария</span></span>
+<span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">Купленный товар работает отлично, к нему никаких претензий нет, </span></span>
+<span><span class="st">но обслуживание клиентов было ужасным. </span></span>
+<span><span class="st">Я, вероятно, больше не буду у них покупать.</span></span>
+<span><span class="st">"</span></span>
+<span><span class="va">type_sentiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_object</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Извлеки оценки настроений заданного текста. Сумма оценок настроений должна быть равна 1."</span>,</span>
+<span>  positive_score <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Положительная оценка, число от 0.0 до 1.0."</span><span class="op">)</span>,</span>
+<span>  negative_score <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Отрицательная оценка, число от 0.0 до 1.0."</span><span class="op">)</span>,</span>
+<span>  neutral_score <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Нейтральная оценка, число от 0.0 до 1.0."</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">chat</span><span class="op">$</span><span class="fu">chat_structured</span><span class="op">(</span><span class="va">text</span>, type <span class="op">=</span> <span class="va">type_sentiment</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Т.е. изначально вам необходимо создать объект описания структуры с помощью функции <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_object()</a></code>, внутри которого вы описываете каждый отдельный извлекаемый элемент структуры с помощью других функций семейства <code>type_*()</code>, все типы данных можно условно поделить на 3 категории:</p>
+<ul>
+<li>
+<strong>Скаляры</strong> представляют собой отдельные значения, которые бывают пяти типов: <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_boolean()</a></code>, <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_integer()</a></code>, <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number()</a></code>, <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string()</a></code> и <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_enum()</a></code>, представляющие собой отдельные логические, целочисленные, двойные, строковые и факторные значения соответственно.</li>
+<li>
+<strong>Массивы</strong> представляют любое количество значений одного типа и создаются с помощью <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_array()</a></code>. Вы всегда должны указывать <code>item</code> аргумент, который определяет тип каждого отдельного элемента. Массивы скаляров очень похожи на атомарные векторы R.</li>
+<li>
+<strong>Объекты</strong> представляют собой набор именованных значений и создаются с помощью <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_object()</a></code>. Объекты могут содержать любое количество скаляров, массивов и других объектов. Они похожи на именованные списки в R.</li>
+</ul>
+</div>
+<div id="добавляем-в-чат-инструменты" class="section level3" number="1.4.5">
+<h3>
+<span class="header-section-number">1.4.5</span> Добавляем в чат инструменты<a class="anchor" aria-label="anchor" href="#%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D1%8F%D0%B5%D0%BC-%D0%B2-%D1%87%D0%B0%D1%82-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B"><i class="fas fa-link"></i></a>
+</h3>
+<p>Метод <code>$register_tool()</code> позволяет вам встраивать в ваш чат дополнительные инструменты, например интеграцию с любыми другими API, или в целом описать любой другой инструментарий посредствам создания обычных R функций, которые вы добавите в чат. Например, ни одна LLM модель не может получить данные в реальном времени, она не знает даже текущего времени, не может дать вам информацию о текущей погоде в каком либо городе. Но вы можете обучить этому свой чат, добавив в него функции:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">'Какое текущее время сейчас по Киеву?'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#' Gets the current time in the given time zone.</span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' @param tz The time zone to get the current time in.</span></span>
+<span><span class="co">#' @return The current time in the given time zone.</span></span>
+<span><span class="va">get_current_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tz</span> <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, tz <span class="op">=</span> <span class="va">tz</span>, usetz <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">get_current_time</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_current_time"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Получить текущее время в указанном часовом поясе."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    tz <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Часовой пояс. По умолчанию `\"UTC\"`."</span>,</span>
+<span>      required <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">'Какое текущее время сейчас по Киеву?'</span><span class="op">)</span></span></code></pre></div>
+<p>В этом примере мы написали функцию <code>get_current_time()</code>, которая получает текущее время по указанному часовому поясу. Далее мы добавили эту функцию в чат с помощью метода <code>register_tool()</code>, и функции <code><a href="https://ellmer.tidyverse.org/reference/tool.html">tool()</a></code>, которая позволяет вам дать описание того что передаваемая в чат функция делает, и описать каждый её аргумент.</p>
+</div>
+<div id="создаём-shiny-интерфейс-для-чата" class="section level3" number="1.4.6">
+<h3>
+<span class="header-section-number">1.4.6</span> Создаём Shiny интерфейс для чата<a class="anchor" aria-label="anchor" href="#%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%91%D0%BC-shiny-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D0%B4%D0%BB%D1%8F-%D1%87%D0%B0%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h3>
+<p>С функционалом пакета <code>ellmer</code> разобрались, теперь перейдём к тому, как упаковать чат в графический интерфейс. Для этого проще всего использовать пакет <code>shinychat.</code></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html">page_fluid</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span><span class="st">"chat"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">"Ты специалист по разработке кода и анализу данных на языке R"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Представленный выше код Shiny приложения запустит интерфейс для вашего чата.</p>
+</div>
+<div id="как-дообучить-модель-своими-данными" class="section level3" number="1.4.7">
+<h3>
+<span class="header-section-number">1.4.7</span> Как дообучить модель своими данными<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%BE%D0%B1%D1%83%D1%87%D0%B8%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%B2%D0%BE%D0%B8%D0%BC%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC%D0%B8"><i class="fas fa-link"></i></a>
+</h3>
+<p>Основным аргументом позволяющим вам дообучать модель собственными данными, например документацией к вашим пакетам, или просто описанием каких либо ваших рабочих процессов источников данных, или чего угодно, является system_prompt.</p>
+<p>Помимо обычной строки вы можете скормить ему довольно большой .md файл, в котором будет вся необходимая для обучения информация. В своём приложении я дал базовое описание:</p>
+<ul>
+<li>какие внутренние источники данных у нас есть</li>
+<li>определение того какой пакет предназначен для работы с каким источником</li>
+<li>описание всех функций, всех аргументов, и всех возвращаемых каждой функцией пакета полей</li>
+</ul>
+<p>Т.е. мой md файл выглядит примерно так:</p>
+<pre><code>В этом чате ты выполняешь несколько фукнций:
+
+1. Анализируешь логи выполнения скриптом читая Rout файлы, даёшь объяснения ошибки и пошаговый план её исправления
+2. Помогаешь генерировать код на основе внутренних корпоративных пакетов
+
+# Внутренние источники данных
+Тут базово описаны внутренние истоники данных
+
+# Соответвие пакета и источника данных
+Прописываем какой пакет предназначен для работы с каждым из источников данных
+
+# Документация к пакетам
+Ниже приведена подробная документация к корпоративным пакетам, используй эту документацию для генерации кода и анализа Rout файлов.
+
+## Название пакета
+Работает с источником 1
+
+## Функции пакета
+
+* название фукнции 1 - описание
+  * аргументы
+    * аргумент 1 - описание
+    * аргумент 2 - описание
+  * поля которые возвращает функция
+    * поле 1 - описание
+    * поле 2 - описание
+* название фукнции 2 - описание
+  * аргументы
+    * аргумент 1 - описание
+    * аргумент 2 - описание
+  * поля которые возвращает функция
+    * поле 1 - описание
+    * поле 2 - описание</code></pre>
+<p>Далее вы передаёте этот .md файл в аргумент <code>system_prompt</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/interpolate.html">interpolate_file</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">'system_prompt.md'</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>После чего ваш чат будет обучен на основе ваших данных, и будет помогать как в генерации кода, так и в исправлении ошибок при запуске созданных ранее скриптов.</p>
+</div>
+<div id="заключение" class="section level3" number="1.4.8">
+<h3>
+<span class="header-section-number">1.4.8</span> Заключение<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5"><i class="fas fa-link"></i></a>
+</h3>
+<p>Мы заложили фундамент: наш AI-чат понимает документацию, умеет использовать инструменты R и возвращает данные в удобном нам формате. Но интерфейс Shiny требует открытого браузера и активной сессии.</p>
+<p>В следующей главе мы сделаем этот интеллект мобильным. Мы возьмем наработки из этой главы и «упакуем» их в Telegram-бота. Это позволит вам получать анализ серверных ошибок или генерировать код прямо со смартфона, находясь в дороге или на совещании. Мы разберем, как подружить асинхронность ellmer с событийной моделью Telegram-бота.</p>
+</div>
+</div>
+<div id="вопросы-для-самопроверки" class="section level2" number="1.5">
+<h2>
+<span class="header-section-number">1.5</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><details><summary><strong>В чем главное преимущество пакета ellmer перед прямым обращением к API конкретной модели?</strong>
+</summary>
+Пакет <code>ellmer</code> предоставляет единый интерфейс (унифицированные функции и методы) для работы с десятками разных провайдеров (Gemini, Claude, OpenAI, Ollama). Это позволяет переключаться между моделями разных компаний, практически не меняя основной код вашего приложения.
+</details></li>
+<li><details><summary><strong>Какой метод объекта <code>chat</code> следует использовать, если вам нужно получить результат анализа текста в виде именованного списка R, а не просто строки?</strong>
+</summary>
+Для этого используется метод <code>$chat_structured()</code>. Он заставляет модель возвращать ответ в строго заданном формате (JSON под капотом), который <code>ellmer</code> автоматически преобразует в привычные объекты R (списки или векторы).
+</details></li>
+<li><details><summary><strong>Зачем нужен метод <code>$register_tool()</code>?</strong>
+</summary>
+Этот метод позволяет расширить возможности модели, предоставив ей доступ к вашим собственным функциям на языке R. С его помощью модель может получать актуальные данные из интернета, обращаться к базам данных или выполнять вычисления, которые ей недоступны «из коробки».
+</details></li>
+<li><details><summary><strong>Как “обучить” модель специфике вашей компании, если вы не занимаетесь Fine-tuning (дообучением весов)?</strong>
+</summary>
+Это делается через <strong>System Prompt</strong>. Вы можете передать в этот аргумент (в том числе загрузив из <code>.md</code> файла) подробную инструкцию, описание ваших бизнес-процессов и документацию к внутренним пакетам. Модель будет использовать этот контекст при каждом ответе.
+</details></li>
+<li><details><summary><strong>Какие три категории типов данных используются при извлечении структурированной информации методом <code>$chat_structured()</code>?</strong>
+</summary><ol style="list-style-type: decimal">
+<li>
+<strong>Скаляры</strong> (<code>type_string</code>, <code>type_integer</code>, <code>type_number</code>, <code>type_boolean</code>, <code>type_enum</code>) — одиночные значения.</li>
+<li>
+<strong>Массивы</strong> (<code>type_array</code>) — списки однотипных значений (аналог векторов).</li>
+<li>
+<strong>Объекты</strong> (<code>type_object</code>) — наборы именованных полей, которые могут содержать в себе скаляры, массивы и другие объекты (аналог именованных списков).</li>
+</ol></details></li>
+</ol>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="index.html">Введение</a></div>
+<div class="next"><a href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="nav-link" href="#%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D1%83%D1%80%D0%BE%D0%BA%D0%B0"><span class="header-section-number">1.1</span> Описание урока</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE"><span class="header-section-number">1.2</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B"><span class="header-section-number">1.2.1</span> Тайм коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F"><span class="header-section-number">1.3</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82"><span class="header-section-number">1.4</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D0%BA%D0%B0%D0%BA-%D0%BC%D1%8B-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D1%83%D0%B5%D0%BC-llm-%D0%B2-%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B8%D1%85-%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%B0%D1%85"><span class="header-section-number">1.4.1</span> Как мы используем LLM в рабочих процессах</a></li>
+<li><a class="nav-link" href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F-api-%D0%BA%D0%BB%D1%8E%D1%87%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-llm"><span class="header-section-number">1.4.2</span> Генерация API ключа для работы с LLM</a></li>
+<li><a class="nav-link" href="#%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-llm-%D0%B2-r"><span class="header-section-number">1.4.3</span> Работа с LLM в R</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%B0%D0%BA-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-llm-%D0%B8%D0%B7%D0%B2%D0%BB%D0%B5%D0%BA%D0%B0%D1%82%D1%8C-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B8%D0%B7-%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%B0"><span class="header-section-number">1.4.4</span> Как с помощью LLM извлекать структурированные данные из текста</a></li>
+<li><a class="nav-link" href="#%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D1%8F%D0%B5%D0%BC-%D0%B2-%D1%87%D0%B0%D1%82-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D1%8B"><span class="header-section-number">1.4.5</span> Добавляем в чат инструменты</a></li>
+<li><a class="nav-link" href="#%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%91%D0%BC-shiny-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D0%B4%D0%BB%D1%8F-%D1%87%D0%B0%D1%82%D0%B0"><span class="header-section-number">1.4.6</span> Создаём Shiny интерфейс для чата</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%B0%D0%BA-%D0%B4%D0%BE%D0%BE%D0%B1%D1%83%D1%87%D0%B8%D1%82%D1%8C-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%B2%D0%BE%D0%B8%D0%BC%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC%D0%B8"><span class="header-section-number">1.4.7</span> Как дообучить модель своими данными</a></li>
+<li><a class="nav-link" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5"><span class="header-section-number">1.4.8</span> Заключение</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8"><span class="header-section-number">1.5</span> Вопросы для самопроверки</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/01_intro_to_ellmer.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/01_intro_to_ellmer.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-09.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

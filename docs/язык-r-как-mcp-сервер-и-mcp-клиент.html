@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 3 Язык R как MCP сервер и MCP клиент | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="В предыдущих главах мы научили нашего бота говорить и помнить контекст. Но до сих пор он оставался лишь “советчиком”, запертым внутри диалогового окна. Чтобы превратить ИИ в настоящего цифрового...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 3 Язык R как MCP сервер и MCP клиент | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/r_package_course/язык-r-как-mcp-сервер-и-mcp-клиент.html">
+<meta property="og:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<meta property="og:description" content="В предыдущих главах мы научили нашего бота говорить и помнить контекст. Но до сих пор он оставался лишь “советчиком”, запертым внутри диалогового окна. Чтобы превратить ИИ в настоящего цифрового...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 3 Язык R как MCP сервер и MCP клиент | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="В предыдущих главах мы научили нашего бота говорить и помнить контекст. Но до сих пор он оставался лишь “советчиком”, запертым внутри диалогового окна. Чтобы превратить ИИ в настоящего цифрового...">
+<meta name="twitter:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="active" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4.html"><span class="header-section-number">5</span> Заключение</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="язык-r-как-mcp-сервер-и-mcp-клиент" class="section level1" number="3">
+<h1>
+<span class="header-section-number">Глава 3</span> Язык R как MCP сервер и MCP клиент<a class="anchor" aria-label="anchor" href="#%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82"><i class="fas fa-link"></i></a>
+</h1>
+<p>В предыдущих главах мы научили нашего бота говорить и помнить контекст. Но до сих пор он оставался лишь “советчиком”, запертым внутри диалогового окна. Чтобы превратить ИИ в настоящего цифрового сотрудника, нам нужно дать ему доступ к нашим инструментам: базам данных, API и локальным скриптам.</p>
+<p>В этой главе мы освоим Model Context Protocol (MCP) — открытый стандарт, который позволяет языковым моделям бесшовно подключаться к вашим R-функциям. Мы пройдем путь от написания своего MCP-сервера на языке R до подключения его к профессиональным инструментам вроде Claude Desktop. Вы увидите, как превратить обычную библиотеку для работы с Google Таблицами в мощный AI-инструмент, который выполняет ваши команды в реальном времени.</p>
+<div id="видео-2" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-2"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/460ZySMbpuI?si=57sOVxW1XeB2vlz5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div id="тайм-коды-2" class="section level3" number="3.1.1">
+<h3>
+<span class="header-section-number">3.1.1</span> Тайм коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-2"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=0"><strong>00:00</strong></a> — О чём это видео</li>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=110"><strong>01:50</strong></a> — Что такое MCP сервер: концепция и протокол</li>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=190"><strong>03:10</strong></a> — Пишем свой MCP сервер на языке R (пакет <code>mcptools</code>)</li>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=783"><strong>13:03</strong></a> — Использование R в качестве MCP клиента</li>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=1224"><strong>20:24</strong></a> — Подключение R-сервера к Claude Desktop</li>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=1390"><strong>23:10</strong></a> — Работа с активными R сессиями через пакет <code>btw</code>
+</li>
+<li>
+<a href="https://youtu.be/460ZySMbpuI?t=1629"><strong>27:09</strong></a> — Заключение и итоги</li>
+</ul>
+</div>
+</div>
+<div id="презентация-2" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-2"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/gOcodtotgJZmGV?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект-2" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-2"><i class="fas fa-link"></i></a>
+</h2>
+<div id="что-такое-mcp-сервер" class="section level3" number="3.3.1">
+<h3>
+<span class="header-section-number">3.3.1</span> Что такое MCP сервер<a class="anchor" aria-label="anchor" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80"><i class="fas fa-link"></i></a>
+</h3>
+<p>MCP-сервер — это сервис, который предоставляет языковым моделям (типа ChatGPT или Claude) доступ к функциям и данным на вашей стороне. Модель подключается к серверу через единый стандартный протокол и получает «инструменты»: функции, API-эндпоинты, доступ к файлам, базе данных, Google Sheets и т.д.</p>
+<p>По сути: MCP-сервер = адаптер между вашим кодом и ИИ, который говорит с моделью на понятном ей стандартизированном языке.</p>
+<p>Это способ научить ИИ пользоваться вашими функциями, но не через обычный function calling (как внутри одного запроса), а через универсальный сервер, к которому могут подключаться разные приложения — Claude, VSCode плагины, ellmer, ваш Shiny, боты и т.д.</p>
+</div>
+<div id="язык-r-как-mcp-сервер" class="section level3" number="3.3.2">
+<h3>
+<span class="header-section-number">3.3.2</span> Язык R как MCP сервер<a class="anchor" aria-label="anchor" href="#%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80"><i class="fas fa-link"></i></a>
+</h3>
+<p>Используя пакет mcptools язык R может выполнять роль и MCP сервера, и MCP клиента.</p>
+<div class="inline-figure"><img src="img/3-1.png" align="middle" width="640"></div>
+<p>MCP сервер на R должен состоять из следующих компонентов:</p>
+<p>Функции на языке R;</p>
+<ul>
+<li>Аннотации к этим функциям, т.е. их описание;</li>
+<li>Скрипт должен возвращать список объектов, созданных с помощью <code><a href="https://ellmer.tidyverse.org/reference/tool.html">ellmer::tool()</a></code>.</li>
+<li>Ниже я приведу небольшой пример написанного на языке R MCP сервера для работы с Google Sheets API.</li>
+</ul>
+<blockquote>
+<p>Если вы ранее не работали с Google Sheets API на языке R то можете обратиться к статье <a href="https://habr.com/ru/articles/488756/">“Как работать с API Google Таблиц (Google Sheets API v4) на языке R с помощью нового пакета googlesheets4”</a>.</p>
+</blockquote>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># gs-tools.R ----------------------------------------------</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://googlesheets4.tidyverse.org">googlesheets4</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Создание R функций</span></span>
+<span></span>
+<span><span class="co"># 1) Создать демо‑таблицу ------------------------------------------------------</span></span>
+<span><span class="va">.gs_init_demo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">title</span> <span class="op">=</span> <span class="st">"MCP Demo Contacts"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">.gs4_auth_once</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">df0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, city <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_create.html">gs4_create</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">title</span>, sheets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>contacts <span class="op">=</span> <span class="va">df0</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># Вернём удобные поля для LLM</span></span>
+<span>  <span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_get.html">gs4_get</a></span><span class="op">(</span><span class="va">ss</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">toJSON</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>      spreadsheet_url <span class="op">=</span> <span class="va">meta</span><span class="op">$</span><span class="va">spreadsheet_url</span>,</span>
+<span>      spreadsheet_id <span class="op">=</span> <span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/sheets_id.html">as_sheets_id</a></span><span class="op">(</span><span class="va">ss</span><span class="op">)</span><span class="op">$</span><span class="va">spreadsheet_id</span>,</span>
+<span>      worksheet <span class="op">=</span> <span class="st">"contacts"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># 2) Прочитать верхние n строк -------------------------------------------------</span></span>
+<span><span class="va">.gs_read</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sheet</span>, <span class="va">worksheet</span> <span class="op">=</span> <span class="st">"contacts"</span>, <span class="va">range</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">n_max</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">googlesheets4</span><span class="fu">::</span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_auth.html">gs4_auth</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_SERVICE_ACCOUNT_JSON"</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="fu">googlesheets4</span><span class="fu">::</span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/range_read.html">read_sheet</a></span><span class="op">(</span><span class="va">sheet</span>, sheet <span class="op">=</span> <span class="va">worksheet</span>, range <span class="op">=</span> <span class="va">range</span>, n_max <span class="op">=</span> <span class="va">n_max</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">toJSON</a></span><span class="op">(</span><span class="va">res</span>, pretty <span class="op">=</span> <span class="cn">TRUE</span>, auto_unbox <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># 3) Добавить одну строку ------------------------------------------------------</span></span>
+<span><span class="va">.gs_append_contact</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sheet</span>, <span class="va">worksheet</span> <span class="op">=</span> <span class="st">"data"</span>, <span class="va">name</span>, <span class="va">position</span> <span class="op">=</span> <span class="cn">NA</span>, <span class="va">rate</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">googlesheets4</span><span class="fu">::</span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_auth.html">gs4_auth</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_SERVICE_ACCOUNT_JSON"</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span>, position <span class="op">=</span> <span class="va">position</span>, rate <span class="op">=</span> <span class="va">rate</span><span class="op">)</span></span>
+<span>  <span class="fu">googlesheets4</span><span class="fu">::</span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/sheet_append.html">sheet_append</a></span><span class="op">(</span>ss <span class="op">=</span> <span class="va">sheet</span>, data <span class="op">=</span> <span class="va">df</span>, sheet <span class="op">=</span> <span class="va">worksheet</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">toJSON</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ok <span class="op">=</span> <span class="cn">TRUE</span>, appended <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>, pretty <span class="op">=</span> <span class="cn">TRUE</span>, auto_unbox <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># 4) Прочитать метаданные таблицы ----------------------------------------------</span></span>
+<span><span class="va">.gs_info</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sheet</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">googlesheets4</span><span class="fu">::</span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_auth.html">gs4_auth</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"GOOGLE_SERVICE_ACCOUNT_JSON"</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="fu">googlesheets4</span><span class="fu">::</span><span class="fu"><a href="https://googlesheets4.tidyverse.org/reference/gs4_get.html">gs4_get</a></span><span class="op">(</span><span class="va">sheet</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">toJSON</a></span><span class="op">(</span><span class="va">res</span>, pretty <span class="op">=</span> <span class="cn">TRUE</span>, auto_unbox <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># 5) Проверка значений переменной среды ----------------------------------------</span></span>
+<span><span class="va">.gs_show_env</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">env</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"Переменная среды: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="va">env</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html">toJSON</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="va">env</span>, unset <span class="op">=</span> <span class="st">""</span><span class="op">)</span>, pretty <span class="op">=</span> <span class="cn">TRUE</span>, auto_unbox <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Описания инструментов (ellmer 0.3.0) -----------------------------------------</span></span>
+<span></span>
+<span><span class="va">Tool_gs_init</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">.gs_init_demo</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"gs_init"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Create an empty Google Sheet with a 'contacts' worksheet (name, email, city). Returns spreadsheet metadata."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Spreadsheet title"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Tool_gs_read</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">.gs_read</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"gs_read"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Read a small preview from a Google Sheet. Useful for head/preview, not full export."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    sheet <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Google Sheet URL or ID"</span><span class="op">)</span>,</span>
+<span>    worksheet <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Worksheet name"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    range <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"A1 range like 'A1:D20'"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    n_max <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="st">"How many rows to return"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Tool_gs_append_contact</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">.gs_append_contact</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"gs_append_contact"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Append a single contact row (name, email, optional city) to the Google Sheet."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    sheet <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Google Sheet URL or ID"</span><span class="op">)</span>,</span>
+<span>    worksheet <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Worksheet name"</span><span class="op">)</span>,</span>
+<span>    name      <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Employee name"</span><span class="op">)</span>,</span>
+<span>    position  <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Employee job title"</span>, required <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    rate      <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Employee salary"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Tool_gs_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">.gs_info</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"gs_info"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Read a google sheet metadata info."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    sheet <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Google Sheet URL or ID"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Tool_show_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">.gs_show_env</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"gs_show_env"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Show environment variable for debug."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    env <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Environ variables name"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">msum</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">Tool_sum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">msum</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"sum"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Sum of Vector Elements"</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mmax</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">Tool_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="va">mmax</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"max"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Max value of Vector Elements"</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_array</a></span><span class="op">(</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_integer</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># MCP сервер должен вернуть список инструментов</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  <span class="va">Tool_sum</span>,</span>
+<span>  <span class="va">Tool_max</span>,</span>
+<span>  <span class="va">Tool_gs_init</span>,</span>
+<span>  <span class="va">Tool_gs_read</span>,</span>
+<span>  <span class="va">Tool_gs_append_contact</span>,</span>
+<span>  <span class="va">Tool_gs_info</span>,</span>
+<span>  <span class="va">Tool_show_env</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Сохраняем код нашего MCP сервера в файл <code>gs-tools.R</code>.</p>
+<p>Код этого MCP сервера, как я и писал выше, состоит из 3 блоков:</p>
+<ol style="list-style-type: decimal">
+<li>Создание R функций:
+<ol type="1" start="1">
+<li>
+<code>.gs_init_demo()</code> - создание Google таблицы
+</li>
+<li>
+<code>.gs_read()</code> - чтение google таблицы
+</li>
+<li>
+<code>.gs_append_contact()</code> - добавить строку в google таблицу
+</li>
+<li>
+<code>.gs_info()</code> - чтение метаданных google таблицы
+</li>
+<li>
+<code>.gs_show_env()</code> - чтение переменной среды
+</li>
+<li>
+<code>msum()</code> / <code>mmax()</code> - арифметические функции
+</li>
+</ol>
+</li>
+<li>Описание функций:
+<ol type="1" start="1">
+<li>
+<code>Tool_gs_init</code>
+</li>
+<li>
+<code>Tool_gs_read</code>
+</li>
+<li>
+<code>Tool_gs_append_contact</code>
+</li>
+<li>
+<code>Tool_gs_info</code>
+</li>
+<li>
+<code>Tool_show_env</code>
+</li>
+<li>
+<code>Tool_sum</code>
+</li>
+<li>
+<code>Tool_max</code>
+</li>
+</ol>
+</li>
+<li>Возвращает список инструментов</li>
+</ol>
+<p>Есть несколько правил, которые необходимо помнить при написании своего MCP сервера:</p>
+<ul>
+<li>Все функции должны возвращать JSON объекты, поэтому у меня все возвращаемые объекты завёрнуты в <code>return(jsonlite::toJSON(obj, pretty = TRUE, auto_unbox = TRUE))</code>
+</li>
+<li>Если внутри функции вам необходимо использовать какие-то пакеты, то прописывайте полный путь к этой функции, т.е. <code>package::function()</code> а не просто <code>function()</code>.</li>
+<li>В конце скрипта должен возвращаться список созданных инструментов.</li>
+</ul>
+<p>При описании своих функций с помощью <code><a href="https://ellmer.tidyverse.org/reference/tool.html">ellmer::tool()</a></code> вам необходимо передать следующие аргументы:</p>
+<ul>
+<li>Сам объект функции, которую описываете</li>
+<li>Дать её имя, которое будет использовать модель</li>
+<li>Задать подробное описание функции, именно по описание модель из контекста промпта будет понимать какую функцию ей необходимо вызвать.</li>
+<li>Отдельным списком дать описание каждого аргумента функции, для обозначения того, какого типа данные необходимо передавать в каждый из аргументов функции используйте семейство функций <code>ellmer::type_*()</code>, которые можно разделить на 3 категории:
+<ul>
+<li>
+<strong>Скаляры</strong> представляют собой отдельные значения, которые бывают пяти типов: <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_boolean()</a></code>, <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_integer()</a></code>, <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number()</a></code>, <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string()</a></code> и <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_enum()</a></code>, представляющие собой отдельные логические, целочисленные, двойные, строковые и факторные значения соответственно.</li>
+<li>
+<strong>Массивы</strong> представляют любое количество значений одного типа и создаются с помощью type_array(). Вы всегда должны указывать item аргумент, который определяет тип каждого отдельного элемента. Массивы скаляров очень похожи на атомарные векторы R. Если необходимо передавать вектор какого то определённого типа, то необходимо использовать сочетание функций, например если аргумент требует передать целочисленный вектор то описать это можно так: <code>type_array(type_integer())</code>.</li>
+<li>
+<strong>Объекты</strong> представляют собой набор именованных значений и создаются с помощью <code><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_object()</a></code>. Объекты могут содержать любое количество скаляров, массивов и других объектов. Они похожи на именованные списки в R.</li>
+</ul>
+</li>
+</ul>
+<p>Для того, чтобы подключить MCP сервер к какому либо клиенту, будь то <code>ellmer</code> или Claude Desktop, необходимо прописать его конфиг в виде json файла:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb14-1"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb14-2"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-2" tabindex="-1"></a>  <span class="dt">"mcpServers"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-3"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-3" tabindex="-1"></a>    <span class="dt">"r-gsheets"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-4"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-4" tabindex="-1"></a>      <span class="dt">"command"</span><span class="fu">:</span> <span class="st">"Rscript"</span><span class="fu">,</span></span>
+<span id="cb14-5"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-5" tabindex="-1"></a>      <span class="dt">"args"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"-e"</span><span class="ot">,</span> <span class="st">"mcptools::mcp_server(tools='G:/GS_MCP/gs-tools.R')"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb14-6"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-6" tabindex="-1"></a>      <span class="dt">"env"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb14-7"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-7" tabindex="-1"></a>        <span class="dt">"GOOGLE_SERVICE_ACCOUNT_JSON"</span><span class="fu">:</span> <span class="st">"G:/GS_MCP/service.json"</span><span class="fu">,</span></span>
+<span id="cb14-8"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-8" tabindex="-1"></a>        <span class="dt">"R_LIBS_USER"</span><span class="fu">:</span> <span class="st">"C:/Users/User/AppData/Local/R/win-library/4.4"</span></span>
+<span id="cb14-9"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-9" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb14-10"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-10" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb14-11"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-11" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb14-12"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb14-12" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<ul>
+<li>
+<code>mcpServers</code> это объект верхнего уровня, каждый его дочерний элемент является отдельным подключенным MCP сервером.</li>
+<li>
+<code>r-gsheets</code> - заданное нами имя для MCP сервера, который мы написали.</li>
+<li>
+<code>command</code> - каждый MCP сервер запускает какую либо команду, в нашем случае MCP сервер запускается через утилиту Rscript.</li>
+<li>
+<code>args</code> - сюда мы передаём аргументы командной строки, в нашем случае для выполнения R кода прописывается <code>"-e"</code>, и далее сама команда запуска MCP сервера <code>"mcptools::mcp_server(tools='G:/GS_MCP/gs-tools.R')"</code>, т.е. мы запускаем MCP сервер, который считывает инструменты из созданного нами файла <code>gs-tools.R</code>.</li>
+<li>
+<code>env</code> - позволяет передать в MCP сервер переменные среды, в моём случае:
+<ul>
+<li>
+<code>GOOGLE_SERVICE_ACCOUNT_JSON</code> - передаю путь к ключу сервисного аккаунта Google, под которым проходит авторизация в Google Sheets.</li>
+<li>
+<code>R_LIBS_USER</code> - отдельно передаю путь к моей пользовательской библиотеке пакетов, получить путь можно через <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code>. Если не задавать эту переменную то в моём случае MCP сервер на windows вообще не запускался, потому что не понимал откуда подгружать необходимые пакеты.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="r-как-mcp-клиент" class="section level3" number="3.3.3">
+<h3>
+<span class="header-section-number">3.3.3</span> R как MCP клиент<a class="anchor" aria-label="anchor" href="#r-%D0%BA%D0%B0%D0%BA-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82"><i class="fas fa-link"></i></a>
+</h3>
+<p>У нас уже есть код и конфиг нашего MCP сервера, теперь осталось разобраться с тем, как подключить его к объекту чата созданного с помощью <code>ellmer::chat_*()</code>.</p>
+<p>В этом разделе мы будем работать с Google таблицами, я заранее создал <a href="https://docs.google.com/spreadsheets/d/1MARmNaTbn0OhIoHM7EsNa7hh48VPUpxQN5B1gGYFSD0/edit?gid=0#gid=0">демо таблицу</a> и расшарил доступ на сервисный аккаунт, который использую в своём MCP клиенте.</p>
+<div class="inline-figure"><img src="img/3-2.png" align="middle" width="640"></div>
+<p>Для подключения MCP сервера достаточно использовать метод <code>Chat$set_tools()</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-1" tabindex="-1"></a><span class="fu">library</span>(mcptools)</span>
+<span id="cb15-2"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-2" tabindex="-1"></a><span class="fu">library</span>(ellmer)</span>
+<span id="cb15-3"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-4" tabindex="-1"></a><span class="co"># Создаём объект чата</span></span>
+<span id="cb15-5"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-5" tabindex="-1"></a>chat <span class="ot">&lt;-</span> <span class="fu">chat_google_gemini</span>(<span class="at">system_prompt =</span> <span class="st">'Ты помощник по работе с google таблицами'</span>)</span>
+<span id="cb15-6"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-7" tabindex="-1"></a><span class="co"># Подключаем MCP сервер</span></span>
+<span id="cb15-8"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-8" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">set_tools</span>(<span class="fu">mcp_tools</span>(<span class="at">config =</span> <span class="st">"G:\GS_MCP\gs-tools.json"</span>))</span>
+<span id="cb15-9"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-9" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-10" tabindex="-1"></a><span class="co"># Используем инструменты из MCP сервера</span></span>
+<span id="cb15-11"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-11" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">'Привет, скажи какой список инструментов у тебя есть?'</span>)</span>
+<span id="cb15-12"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-12" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-13" tabindex="-1"></a><span class="co"># Проверяем что переменные окружения успешно считались из конфига MCP сервера</span></span>
+<span id="cb15-14"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-14" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">'Покажи мне значение переменной среды GOOGLE_SERVICE_ACCOUNT_JSON'</span>)</span>
+<span id="cb15-15"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-15" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-16" tabindex="-1"></a><span class="co"># Читаем Google таблицу</span></span>
+<span id="cb15-17"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-17" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"Посмотри какие метаданные есть в таблице 1MARmNaTbn0OhIoHM7EsNa7hh48VPUpxQN5B1gGYFSD0"</span>)</span>
+<span id="cb15-18"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-18" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"Теперь у той же таблицы с ключом 1MARmNaTbn0OhIoHM7EsNa7hh48VPUpxQN5B1gGYFSD0 прочитай данные с листа data, что там?"</span>)</span>
+<span id="cb15-19"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-19" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"Хорошо, а можешь теперь посчитать общую сумму зарплат из поля rate?"</span>)</span>
+<span id="cb15-20"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-20" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"У кого из сотрудников в таблице самая высокая зарплата?"</span>)</span>
+<span id="cb15-21"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-21" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-22" tabindex="-1"></a><span class="co"># Запись данных</span></span>
+<span id="cb15-23"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html#cb15-23" tabindex="-1"></a>chat<span class="sc">$</span><span class="fu">chat</span>(<span class="st">"А теперь запиши в эту же таблицу новую строку, имя Erik, должность CFO, оклад 4250"</span>)</span></code></pre></div>
+<p>Т.е. в этом примере мы:</p>
+<ol style="list-style-type: decimal">
+<li>Создаём объект чата с помощью <code><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini()</a></code>
+</li>
+<li>Подключаем MCP сервер через <code>chat$set_tools(mcp_tools(config = "gs-tools.json"))</code>, указав путь к созданному ранее конфигу MCP сервера.</li>
+</ol>
+<p>Далее модель из контекста вашего промпта понимает какие из инструментов MCP сервера ей использовать для выполнения действий.</p>
+</div>
+<div id="заворачиваем-ai-ассистента-в-интерфейс-чата" class="section level3" number="3.3.4">
+<h3>
+<span class="header-section-number">3.3.4</span> Заворачиваем AI ассистента в интерфейс чата<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%B2%D0%BE%D1%80%D0%B0%D1%87%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-ai-%D0%B0%D1%81%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BD%D1%82%D0%B0-%D0%B2-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%87%D0%B0%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h3>
+<p>Что бы этот урок был максимально автономным ещё раз вспомним о пакете <code>shinychat</code> и обернём наш чат бот в веб интерфейс.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/posit-dev/mcptools">mcptools</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">page_fillable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="st">"Привет, я могу помочь в работе с Google Таблицами, что надо сделать?"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  fillable_mobile <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># Создаём объект чата</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по работе с google таблицами'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Подключаем MCP сервер</span></span>
+<span>  <span class="va">chat</span><span class="op">$</span><span class="fu">set_tools</span><span class="op">(</span><span class="fu"><a href="https://posit-dev.github.io/mcptools/reference/client.html">mcp_tools</a></span><span class="op">(</span>config <span class="op">=</span> <span class="st">r"(G:\GS_MCP\gs-tools.json)"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Теперь ваш AI ассистент будет иметь графический интерфейс, и уметь работать с Google Таблицами.</p>
+<div class="inline-figure"><img src="img/3-3.png" align="middle" width="640"></div>
+</div>
+<div id="подключаем-mcp-сервер-к-claude-desktop" class="section level3" number="3.3.5">
+<h3>
+<span class="header-section-number">3.3.5</span> Подключаем MCP сервер к Claude Desktop<a class="anchor" aria-label="anchor" href="#%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%BA-claude-desktop"><i class="fas fa-link"></i></a>
+</h3>
+<p>Написанный на R MCP сервер можно подключать не только к <code>ellmer</code>, но и к другим клиентам, например Claude Desktop.</p>
+<p>Для этого в Claude Desktop перейдите в <code>Settings</code> / <code>Developer</code> / <code>Edit config</code>, и добавьте созданный ранее JSON конфиг для подключения нашего MCP сервера.</p>
+<p>После перезапуска Claude Desktop вы сможете использовать MCP сервер:</p>
+<div class="inline-figure"><img src="img/3-4.png" align="middle" width="640"></div>
+</div>
+</div>
+<div id="заключение-2" class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> Заключение<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-2"><i class="fas fa-link"></i></a>
+</h2>
+<p>Теперь ваш ИИ-ассистент умеет действовать: он может создавать таблицы, считать зарплаты и менять данные по вашей команде. Вы построили универсальный мост между логикой R и интеллектом LLM.</p>
+<p>Однако возможности ассистента все еще ограничены теми данными, которые мы передаем в промпте или которые он может достать через функции. А что, если у вас тысячи PDF-отчетов, гигабайты технической документации или огромная база знаний, которую невозможно “скормить” модели целиком? В следующей главе мы разберем технологию RAG (Retrieval-Augmented Generation). Мы научим нашего бота самостоятельно искать нужную информацию в огромных массивах ваших документов и давать ответы, основываясь только на проверенных фактах из вашей базы знани</p>
+</div>
+<div id="вопросы-для-самопроверки-2" class="section level2" number="3.5">
+<h2>
+<span class="header-section-number">3.5</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-2"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><details><summary><strong>В чем принципиальное различие между обычным вызовом функции (Function Calling) и использованием MCP-сервера?</strong>
+</summary>
+Function Calling обычно настраивается внутри одного приложения для одной модели. MCP-сервер — это универсальный стандарт: один раз написав сервер на R, вы можете подключить его к разным клиентам (Claude Desktop, IDE, Shiny, сторонние боты) без переписывания кода.
+</details></li>
+<li><details><summary><strong>Почему функции внутри MCP-сервера на R должны возвращать именно JSON, а не обычные объекты R (data.frame, list)?</strong>
+</summary>
+Протокол MCP основан на JSON-RPC. Чтобы языковая модель (которая “общается” через текстовые токены) и клиент смогли корректно интерпретировать данные, они должны быть сериализованы в стандартный формат JSON.
+</details></li>
+<li><details><summary><strong>Для чего в конфиге MCP-сервера на Windows часто приходится вручную прописывать переменную <code>R_LIBS_USER</code>?</strong>
+</summary>
+При запуске через <code>Rscript</code> из внешнего приложения (например, Claude Desktop) системное окружение может отличаться от вашего привычного RStudio. Без этой переменной R может не найти установленные пакеты (googlesheets4, ellmer и др.) в вашей пользовательской библиотеке.
+</details></li>
+<li><details><summary><strong>Какую роль играет описание (description) в функции <code>ellmer::tool()</code>?</strong>
+</summary>
+Это “инструкция по применению” для ИИ. Именно по этому описанию модель понимает, какую задачу решает функция и в какой ситуации её нужно вызвать. Чем точнее описание, тем реже модель будет ошибаться.
+</details></li>
+<li><details><summary><strong>Как передать в MCP-сервер секретные данные (например, ключи доступа), не вписывая их в основной код функций?</strong>
+</summary>
+Лучше всего передавать их через блок <code>env</code> в JSON-конфигурации сервера. В самом R-коде эти значения будут доступны через <code><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv()</a></code>. Это позволяет разделять логику кода и конфиденциальные данные.
+</details></li>
+</ol>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></div>
+<div class="next"><a href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-2"><span class="header-section-number">3.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-2"><span class="header-section-number">3.1.1</span> Тайм коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-2"><span class="header-section-number">3.2</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-2"><span class="header-section-number">3.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80"><span class="header-section-number">3.3.1</span> Что такое MCP сервер</a></li>
+<li><a class="nav-link" href="#%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80"><span class="header-section-number">3.3.2</span> Язык R как MCP сервер</a></li>
+<li><a class="nav-link" href="#r-%D0%BA%D0%B0%D0%BA-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82"><span class="header-section-number">3.3.3</span> R как MCP клиент</a></li>
+<li><a class="nav-link" href="#%D0%B7%D0%B0%D0%B2%D0%BE%D1%80%D0%B0%D1%87%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-ai-%D0%B0%D1%81%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BD%D1%82%D0%B0-%D0%B2-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%87%D0%B0%D1%82%D0%B0"><span class="header-section-number">3.3.4</span> Заворачиваем AI ассистента в интерфейс чата</a></li>
+<li><a class="nav-link" href="#%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%BA-claude-desktop"><span class="header-section-number">3.3.5</span> Подключаем MCP сервер к Claude Desktop</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-2"><span class="header-section-number">3.4</span> Заключение</a></li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-2"><span class="header-section-number">3.5</span> Вопросы для самопроверки</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/03_mcp_server.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/03_mcp_server.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-09.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

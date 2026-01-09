@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 2 Встраиваем LLM модель в Telegram бота | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне. В этой главе мы переместим наш...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 2 Встраиваем LLM модель в Telegram бота | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/r_package_course/встраиваем-llm-модель-в-telegram-бота.html">
+<meta property="og:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<meta property="og:description" content="В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне. В этой главе мы переместим наш...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 2 Встраиваем LLM модель в Telegram бота | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне. В этой главе мы переместим наш...">
+<meta name="twitter:image" content="https://selesnow.github.io/r_package_course/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="active" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4.html"><span class="header-section-number">5</span> Заключение</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="встраиваем-llm-модель-в-telegram-бота" class="section level1" number="2">
+<h1>
+<span class="header-section-number">Глава 2</span> Встраиваем LLM модель в Telegram бота<a class="anchor" aria-label="anchor" href="#%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h1>
+<p>В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне.</p>
+<p>В этой главе мы переместим наш AI-движок в Telegram. Главный вызов здесь — многопользовательская среда. Мы разберем, как сделать так, чтобы бот не путал контекст диалогов разных людей и помнил историю переписки даже после перезагрузки сервера. Мы превратим Telegram из простого мессенджера в полноценную точку доступа к вашему кастомному ИИ.</p>
+<blockquote>
+<p>Если вы не знакомы с принципами разработки telegram ботов на языке R то можете пройти курс <a href="https://selesnow.github.io/build_telegram_bot_using_r/">“Разработка telegram ботов на языке R”</a>.</p>
+</blockquote>
+<div id="видео-1" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-1"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/J7fLXcHtDX0?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<div id="тайм-коды-1" class="section level3" number="2.1.1">
+<h3>
+<span class="header-section-number">2.1.1</span> Тайм коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-1"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=0"><strong>00:00</strong></a> — О чём это видео</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=46"><strong>00:46</strong></a> — Генерация API ключа</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=140"><strong>02:20</strong></a> — Введение в пакет <code>ellmer</code>
+</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=200"><strong>03:20</strong></a> — Создаём объект чата</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=404"><strong>06:44</strong></a> — Извлечение структурированных данных из текста</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=635"><strong>10:35</strong></a> — Классификация текста с помощью LLM моделей</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=833"><strong>13:53</strong></a> — Интеграция LLM моделей со сторонними API</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=1113"><strong>18:33</strong></a> — Как интегрировать LLM модель в Telegram-бота</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=1407"><strong>23:27</strong></a> — Как сохранять состояние чатов (Session Handling)</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=1584"><strong>26:24</strong></a> — Как дообучить бота своими данными (System Prompt)</li>
+<li>
+<a href="https://youtu.be/J7fLXcHtDX0?t=1738"><strong>28:58</strong></a> — Заключение</li>
+</ul>
+</div>
+</div>
+<div id="презентация-1" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-1"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/w0fpI1e8rCba1M?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект-1" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-1"><i class="fas fa-link"></i></a>
+</h2>
+<div id="интеграция-llm-модели-в-бот" class="section level3" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> Интеграция LLM модели в бот<a class="anchor" aria-label="anchor" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8-%D0%B2-%D0%B1%D0%BE%D1%82"><i class="fas fa-link"></i></a>
+</h3>
+<p>Давайте разберёмся с тем, как добавить весь описанный в первой главе функционал в Telegram бота. Основная сложность с которой вы можете столкнуться это то, как хранить одновременно отдельные объекты chat для каждого отдельного чата в Telegram. Т.к. если вы просто создадите один объект чата, и в него будут прилетать сообщения из разных telegram чатов, и разных пользователей, то контекст чата будет запутан, и соответвенно модель в чате не сможет осмысленно связать все входящие сообщения, и качество ответов будет оставлять лучшего. Поэтому одним из вариантов хранения информация о разных чатах является создание списка, в котором в виде отдельных элементов будут хранится разные объекты чата для разных telegram чатов, название каждого элемента списка будет соответствовать идентификатору чата в telegram.</p>
+<div class="inline-figure"><img src="img/2-1.png" align="middle" width="640"></div>
+<p>Простейший пример кода, для интеграции LLM модели в telegram бот выглядит так:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ebeneditos/telegram.bot">telegram.bot</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Создаём глобальную переменную для хранения сессий</span></span>
+<span><span class="co"># в которую будут добавляться новые чаты</span></span>
+<span><span class="va">sessions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Handler для команды /start</span></span>
+<span><span class="va">start_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">bot</span>, <span class="va">update</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">chat_id</span> <span class="op">&lt;-</span> <span class="va">update</span><span class="op">$</span><span class="va">message</span><span class="op">$</span><span class="va">chat</span><span class="op">$</span><span class="va">id</span></span>
+<span>  </span>
+<span>  <span class="co"># Создаём новый чат-объект для пользователя с уникальным чатом</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">"</span></span>
+<span><span class="st">        Ты специалист по разработке кода и анализу данных на языке R, </span></span>
+<span><span class="st">        в этом чате помогаешь с разработкой кода на R. Твои ответы должны занимать не более 3000 символов.</span></span>
+<span><span class="st">    "</span>,</span>
+<span>    api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>      generation_config <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>        max_output_tokens <span class="op">=</span> <span class="fl">1500</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Сохраняем чат-объект в глобальной переменной sessions</span></span>
+<span>  <span class="va">sessions</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">chat_id</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;&lt;-</span> <span class="va">chat</span></span>
+<span>  </span>
+<span>  <span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span>chat_id <span class="op">=</span> <span class="va">chat_id</span>, text <span class="op">=</span> <span class="st">"Здравствуйте, чем могу вам помочь?"</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Handler для текстовых сообщений</span></span>
+<span><span class="va">message_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">bot</span>, <span class="va">update</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">chat_id</span> <span class="op">&lt;-</span> <span class="va">update</span><span class="op">$</span><span class="va">message</span><span class="op">$</span><span class="va">chat</span><span class="op">$</span><span class="va">id</span></span>
+<span>  </span>
+<span>  <span class="co"># Получаем чат-объект для пользователя</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="va">sessions</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">chat_id</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># Если чат не найден то просим выполнить команду start для его запуска</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">chat</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span>chat_id <span class="op">=</span> <span class="va">chat_id</span>, text <span class="op">=</span> <span class="st">"Используйте /start для начала AI чата."</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># текст запроса</span></span>
+<span>  <span class="va">user_message</span> <span class="op">&lt;-</span> <span class="va">update</span><span class="op">$</span><span class="va">message</span><span class="op">$</span><span class="va">text</span></span>
+<span>  </span>
+<span>  <span class="co"># отправляем запрос пользователя в LLM</span></span>
+<span>  <span class="va">response</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">user_message</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># отправляем в чат полученный от LLM ответ</span></span>
+<span>  <span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span></span>
+<span>    chat_id <span class="op">=</span> <span class="va">chat_id</span>, </span>
+<span>    text <span class="op">=</span> <span class="va">response</span>,</span>
+<span>    parse_mode <span class="op">=</span> <span class="st">'markdown'</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Инициализируем бот и добавляем обработчики</span></span>
+<span><span class="va">updater</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/Updater.html">Updater</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/bot_token.html">bot_token</a></span><span class="op">(</span><span class="st">'TEST'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Обработчики</span></span>
+<span><span class="va">h_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/CommandHandler.html">CommandHandler</a></span><span class="op">(</span><span class="st">"start"</span>, <span class="va">start_handler</span><span class="op">)</span></span>
+<span><span class="va">h_msgs</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/MessageHandler.html">MessageHandler</a></span><span class="op">(</span><span class="va">message_handler</span>, <span class="va">MessageFilters</span><span class="op">$</span><span class="va">text</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">updater</span> <span class="op">&lt;-</span> <span class="va">updater</span> <span class="op">+</span> <span class="va">h_start</span> <span class="op">+</span> <span class="va">h_msgs</span></span>
+<span></span>
+<span><span class="co"># Запускаем бота</span></span>
+<span><span class="va">updater</span><span class="op">$</span><span class="fu">start_polling</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p>Безопасность прежде всего: Обратите внимание на функцию <code><a href="https://rdrr.io/pkg/telegram.bot/man/bot_token.html">bot_token()</a></code>. Никогда не вставляйте токен бота строкой прямо в код. Самый надежный способ — прописать его в файле <code>.Renviron</code> под именем <code>R_TELEGRAM_BOT_TEST</code>. Подробнее о том, почему это важно и как это настроить, смотрите в уроке <a href="https://youtu.be/7PPP8q0lE_o">“Работа с секретными данными на языке R”</a>.</p>
+</blockquote>
+<p>Что делает этот код и как он устроен:
+В этом примере мы создаём Telegram-бота, который использует LLM-модель через пакет <code>ellmer</code> и умеет вести отдельные диалоги с каждым пользователем, сохраняя контекст общения.</p>
+<ol style="list-style-type: decimal">
+<li><p>Инициализация переменной sessions:
+В начале мы создаём глобальный список sessions, куда будут добавляться объекты чата <code>chat_google_gemini</code> для каждого Telegram-пользователя. Ключом в этом списке будет ID Telegram-чата (chat_id). Это позволяет хранить независимый LLM-контекст для каждого пользователя.</p></li>
+<li><p>Обработчик команды /start:
+Когда пользователь впервые запускает бота командой <code>/start</code>, срабатывает <code>start_handler</code>.
+В нём:</p></li>
+</ol>
+<ul>
+<li>Получается <code>chat_id</code> пользователя.</li>
+<li>Создаётся новый объект <code>chat_google_gemini</code> с заданным <code>system_prompt.</code> В prompt задаётся роль модели: помощник по разработке на языке R.</li>
+<li>Так же мы ограничиваем максимальную длинну ответа от LLM передав через <code>api_args</code> параметр <code>max_output_tokens</code>, поскольку в telegram есть лимит на длинну сообщения в 4096 символов. <code>api_args</code> - аргумент, который позволяет передавать в запросе различные параметры, такие как температура, максимальная длинна ответа и так далее, набор этих параметров у каждой модели свой.</li>
+<li>Этот объект сохраняется в список sessions, где ключом служит chat_id.</li>
+<li>Пользователю отправляется приветственное сообщение.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Обработчик текстовых сообщений:
+Этот обработчик вызывается каждый раз, когда пользователь пишет что-то в чат. Внутри:</li>
+</ol>
+<ul>
+<li>Получаем <code>chat_id</code> и по нему — соответствующий объект из <code>sessions.</code>
+</li>
+<li>Если объект чата не найден (например, пользователь не вызвал <code>/start</code>), то бот просит сначала это сделать.</li>
+<li>Если всё ок — берём текст сообщения пользователя и отправляем его в LLM через <code>chat$chat()</code>.</li>
+<li>Полученный ответ от модели возвращается пользователю в Telegram.</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>Запуск бота:
+Далее создаётся объект <code>Updater</code> с токеном бота, к нему добавляются два обработчика: для команды <code>/start</code> и для всех обычных сообщений.
+Затем вызывается <code>start_polling()</code>, чтобы бот начал слушать входящие сообщения.</li>
+</ol>
+<p>В чём суть логики?
+Главное в этом подходе — поддержка сессий для каждого пользователя. Благодаря списку <code>sessions</code> мы можем вести независимые диалоги с разными пользователями одновременно. Каждый <code>chat_gemini</code> живёт в своей “ячейке” и помнит контекст диалога. Это особенно важно для того, чтобы LLM не путала запросы между разными пользователями, и могла давать максимально точные и уместные ответы.</p>
+<p>Обратите внимание, что в системном промпте я отдельно указал “Твои ответы должны занимать не более 3000 символов.”, это сделано для того, что полученный от модели ответ помещался в одно сообщение telegram, которое на данный момент имеет лимит в 4096 символов.</p>
+<p>Приведённый выше бот будет хранить все чаты в рамках одной своей сессии, после перезапуска все чаты будут удалены из его памяти. Если вам нужен бот, который будет хранить информацию о всех чатах между сессиями то объекты чата надо хранить в виде локальных rds файлов. Для реализации надо:</p>
+<ol style="list-style-type: decimal">
+<li>Написать функции для сохранения и записи объектов чатов в RDS файлы</li>
+<li>Доработать функции start_handler() и message_handler() так, что бы они читали и сохраняли объекты чата в отдельные RDS файлы.</li>
+</ol>
+<p>Сохраним код функций для работы с RDS файлами в отдельный <code>session_func.R</code> файл.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">save_chat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">chat_id</span>, <span class="va">chat_object</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"chat_sessions"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">chat_id</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">chat_object</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">load_chat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">chat_id</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"chat_sessions"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">chat_id</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>И доработаем код бота:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ebeneditos/telegram.bot">telegram.bot</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Загрузка функций чтения объектов чата</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">'session_func.R'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Handler для команды /start</span></span>
+<span><span class="va">start_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">bot</span>, <span class="va">update</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">chat_id</span> <span class="op">&lt;-</span> <span class="va">update</span><span class="op">$</span><span class="va">message</span><span class="op">$</span><span class="va">chat</span><span class="op">$</span><span class="va">id</span></span>
+<span>  </span>
+<span>  <span class="co"># Проверяем был ли ранее создан чат</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">load_chat</span><span class="op">(</span><span class="va">chat_id</span><span class="op">)</span></span>
+<span>  <span class="co"># Создаём новый чат-объект для пользователя с уникальным чатом</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">chat</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<span>      system_prompt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html">here</a></span><span class="op">(</span><span class="st">'system_prompt.md'</span><span class="op">)</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span>,</span>
+<span>      api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>        generation_config <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>          max_output_tokens <span class="op">=</span> <span class="fl">1500</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># сохраняем объект чата</span></span>
+<span>    <span class="fu">save_chat</span><span class="op">(</span><span class="va">chat_id</span>, <span class="va">chat</span><span class="op">)</span></span>
+<span>    </span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span>chat_id <span class="op">=</span> <span class="va">chat_id</span>, text <span class="op">=</span> <span class="st">"Здравствуйте, чем могу вам помочь?"</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Handler для текстовых сообщений</span></span>
+<span><span class="va">message_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">bot</span>, <span class="va">update</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">chat_id</span> <span class="op">&lt;-</span> <span class="va">update</span><span class="op">$</span><span class="va">message</span><span class="op">$</span><span class="va">chat</span><span class="op">$</span><span class="va">id</span></span>
+<span>  </span>
+<span>  <span class="co"># Получаем чат-объект для пользователя</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">load_chat</span><span class="op">(</span><span class="va">chat_id</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Если чат не найден то просим выполнить команду start для его запуска</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">chat</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span>chat_id <span class="op">=</span> <span class="va">chat_id</span>, text <span class="op">=</span> <span class="st">"Используйте /start для начала AI чата."</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># текст запроса</span></span>
+<span>  <span class="va">user_message</span> <span class="op">&lt;-</span> <span class="va">update</span><span class="op">$</span><span class="va">message</span><span class="op">$</span><span class="va">text</span></span>
+<span>  </span>
+<span>  <span class="co"># отправляем запрос пользователя в LLM</span></span>
+<span>  <span class="va">response</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">user_message</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># сохраняем объект чата</span></span>
+<span>  <span class="fu">save_chat</span><span class="op">(</span><span class="va">chat_id</span>, <span class="va">chat</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># отправляем в чат полученный от LLM ответ</span></span>
+<span>  <span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span></span>
+<span>    chat_id <span class="op">=</span> <span class="va">chat_id</span>, </span>
+<span>    text <span class="op">=</span> <span class="va">response</span>,</span>
+<span>    parse_mode <span class="op">=</span> <span class="st">'markdown'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Инициализируем бот и добавляем обработчики</span></span>
+<span><span class="va">updater</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/Updater.html">Updater</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/bot_token.html">bot_token</a></span><span class="op">(</span><span class="st">'TEST'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Обработчики</span></span>
+<span><span class="va">h_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/CommandHandler.html">CommandHandler</a></span><span class="op">(</span><span class="st">"start"</span>, <span class="va">start_handler</span><span class="op">)</span></span>
+<span><span class="va">h_msgs</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/telegram.bot/man/MessageHandler.html">MessageHandler</a></span><span class="op">(</span><span class="va">message_handler</span>, <span class="va">MessageFilters</span><span class="op">$</span><span class="va">text</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">updater</span> <span class="op">&lt;-</span> <span class="va">updater</span> <span class="op">+</span> <span class="va">h_start</span> <span class="op">+</span> <span class="va">h_msgs</span></span>
+<span></span>
+<span><span class="co"># Запускаем бота</span></span>
+<span><span class="va">updater</span><span class="op">$</span><span class="fu">start_polling</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Как изменилась логика работы бота
+В этой версии бота добавлена долговременная память — теперь каждый чат сохраняется в отдельный .rds-файл, а значит, бот не забывает переписку после перезапуска.</p>
+<p>Основные изменения:</p>
+<ol style="list-style-type: decimal">
+<li><p>Загрузка и сохранение сессий:
+Вместо хранения объектов <code>chat_gemini</code> в оперативной памяти (в списке sessions) теперь используется файловая система. Добавлены функции <code>load_chat()</code> и <code>save_chat()</code>, которые читают и записывают объекты чата в .rds-файлы (по одному на каждый chat_id). Эти функции подключаются из внешнего файла <code>session_func.R</code>.</p></li>
+<li><p>Обновлён <code>start_handler()</code>:
+Теперь при вызове <code>/start</code> бот сначала проверяет, есть ли сохранённый .rds-файл сессии для данного пользователя. Если есть — загружает его. Если нет — создаёт новый чат-объект и сохраняет его.</p></li>
+<li><p>Обновлён <code>message_handler()</code>:
+Здесь всё то же, что и раньше, но теперь после каждого запроса дополнительно сохраняется обновлённый объект чата обратно в <code>.rds</code>. Это важно, чтобы вся история общения сохранялась между сессиями.</p></li>
+</ol>
+<p>Таким образом, теперь бот умеет “помнить”, о чём вы говорили с ним ранее, даже если он был выключен или перезапущен — очень полезно для долгосрочного взаимодействия с пользователями.</p>
+</div>
+<div id="конвертация-ответа-от-llm-в-telegram-markdownv2" class="section level3" number="2.3.2">
+<h3>
+<span class="header-section-number">2.3.2</span> Конвертация ответа от LLM в Telegram MarkdownV2<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D0%B2%D0%B5%D1%80%D1%82%D0%B0%D1%86%D0%B8%D1%8F-%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%B0-%D0%BE%D1%82-llm-%D0%B2-telegram-markdownv2"><i class="fas fa-link"></i></a>
+</h3>
+<p>Описанный выше код будет вполне корректно работать при простых ответах от LLM. Но есть одна проблема, с которой сталкиваются почти все разработчики, которые пытаются переслать полученный от LLM ответ сразу в telegram - <code>Bad Request: can't parse entities</code>. Дело в том, что все LLM отдают свой ответ в разметке GitHub-flavored Markdown (GFM), а telegram требуеют свою Markdown разметку, причём довольно строго относится к ошибкам в ней. У Telegram строгие правила экранирования множества символов и немного иной набор допустимых конструкций.</p>
+<p>Один из вариантов решения “в лоб” - просто поменять разметку в <code>parse_mode</code> на HTML, она обычно не возвращает ошибку <code>Bad Request: can't parse entities</code>, но и само сообщение полученное в Telegram будет выглядеть сырым, с элементами разметки, смотреться это будет откровенно говоря не презентабельно.</p>
+<p>Писать собственный конвертер GFM -&gt; Telegram MarkdownV2 задача достаточно непростая, но можно использовать готовое решение, правда написанное на Python - модуль <code>telegramify-markdown</code>.</p>
+<p>Для начала установите пакет <code>reticulate</code>, который позволяет выполнять python код внутри R. Далее, если у вас не установлен Python запустите процесс установки:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'reticulate'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Импортировать модуль</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/">reticulate</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># установка python</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/install_miniconda.html">install_miniconda</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Создать окружение и установить пакет</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/virtualenv-tools.html">virtualenv_create</a></span><span class="op">(</span><span class="st">"r-telegram-env"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html">use_virtualenv</a></span><span class="op">(</span><span class="st">"r-telegram-env"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_install.html">py_install</a></span><span class="op">(</span><span class="st">"telegramify-markdown"</span><span class="op">)</span></span></code></pre></div>
+<p>Далее мы можем написать R обёртку:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Импортировать модуль</span></span>
+<span><span class="va">telegramify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html">import</a></span><span class="op">(</span><span class="st">"telegramify_markdown"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Функция на R</span></span>
+<span><span class="va">markdown_to_telegram</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">markdown_text</span>, </span>
+<span>                                 <span class="va">max_line_length</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                                 <span class="va">normalize_whitespace</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">converted</span> <span class="op">&lt;-</span> <span class="va">telegramify</span><span class="op">$</span><span class="fu">markdownify</span><span class="op">(</span></span>
+<span>    <span class="va">markdown_text</span>,</span>
+<span>    max_line_length <span class="op">=</span> <span class="va">max_line_length</span>,</span>
+<span>    normalize_whitespace <span class="op">=</span> <span class="va">normalize_whitespace</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">converted</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>И использовать её для конвертации полученного от LLM ответа в корректный Telegram MarkdownV2 внутри нашего <code>message_handler</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># отправляем запрос пользователя в LLM</span></span>
+<span><span class="va">response</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="va">user_message</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># конвертируем в Telegram MarkdownV2</span></span>
+<span><span class="va">tg_response</span> <span class="op">&lt;-</span> <span class="fu">markdown_to_telegram</span><span class="op">(</span><span class="va">response</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="co"># отправляем в чат полученный от LLM ответ</span></span>
+<span><span class="va">bot</span><span class="op">$</span><span class="fu">sendMessage</span><span class="op">(</span></span>
+<span>  chat_id <span class="op">=</span> <span class="va">chat_id</span>, </span>
+<span>  text <span class="op">=</span> <span class="va">tg_response</span>,</span>
+<span>  parse_mode <span class="op">=</span> <span class="st">'MarkdownV2'</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Функция <code>markdown_to_telegram()</code> делает следующее:
+1. Парсит Markdown в AST (Abstract Syntax Tree) с помощью библиотеки mistune
+2. Рендерит каждый элемент отдельно: заголовки, ссылки, списки, таблицы, код
+3. Сохраняет контекст форматирования: отслеживает, находимся ли мы внутри жирного текста, курсива и т.д.
+4. Правильно обрабатывает вложенности: например, <em>bold <em>italic bold</em> bold</em>
+5. Экранирует только нужные символы: внутри кода не экранирует, внутри ссылок экранирует по-особому
+6. Обрабатывает Latex: распознает формулы <span class="math inline">\(...\)</span> и <span class="math display">\[...\]</span>
+7. Работает с таблицами: конвертирует их в читаемый формат
+8. Обрабатывает цитаты: правильно форматирует &gt; блоки
+9. Тестирована на тысячах реальных случаев</p>
+<p>Т.е. является полноценным, стабильно работающим, и постоянно обновляющимся конвертером полученных от LLM ответов в корректный Telegram MarkdownV2.</p>
+</div>
+</div>
+<div id="заключение-1" class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> Заключение<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Теперь ваш бот — это не просто скрипт, а интеллектуальный собеседник с “долгой памятью”. Мы научили его узнавать пользователей и сохранять контекст в RDS-файлы.</p>
+<p>Однако пока наш бот заперт внутри своих знаний и того, что мы передали ему в промпте. Он не может заглянуть в вашу базу данных или прочитать свежую Google-таблицу. В следующей главе мы сотрем эти границы. Мы разберем протокол MCP (Model Context Protocol) и научим бота выходить во “внешний мир”: выполнять ваши функции на R, ходить по API и работать с реальными файлами на сервере. Время дать вашему ассистенту настоящие руки!</p>
+</div>
+<div id="вопросы-для-самопроверки-1" class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-1"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><details><summary><strong>Почему нельзя использовать один глобальный объект chat для всех пользователей Telegram-бота?</strong>
+</summary>
+Контексты сообщений от разных людей перемешаются в одной сессии. Модель будет пытаться связать вопрос Пользователя Б с ответом, который она только что дала Пользователю А, что приведет к путанице и потере логики диалога.
+</details></li>
+<li><details><summary><strong>Какую роль играет ID чата (<code>chat_id</code>) в архитектуре хранения сессий?</strong>
+</summary>
+Он служит уникальным ключом. По этому идентификатору бот понимает, какой именно объект чата (из списка в памяти или из файла RDS) нужно подтянуть для текущего собеседника.
+</details></li>
+<li><details><summary><strong>Зачем в системном промпте бота рекомендуется ограничивать длину ответа (например, до 3000 символов)?</strong>
+</summary>
+Это техническая подстраховка. Лимит одного сообщения в Telegram — 4096 символов. Если модель сгенерирует слишком длинный текст (например, большой кусок кода с пояснениями), бот выдаст ошибку при попытке отправить такое сообщение.
+</details></li>
+<li><details><summary><strong>В чем преимущество хранения объектов чата в RDS-файлах по сравнению со списком в оперативной памяти?</strong>
+</summary>
+Это обеспечивает «персистентность» (постоянство) данных. Если сервер или скрипт перезагрузится, данные в оперативной памяти (список <code>sessions</code>) сотрутся, а файлы на диске останутся. Бот сможет продолжить диалог с того же места.
+</details></li>
+<li><details><summary><strong>Какая функция в пакете <code>ellmer</code> отвечает за отправку сообщения и получение ответа?</strong>
+</summary>
+Метод <code>$chat()</code> (например, <code>chat$chat(user_message)</code>). Он отправляет текст провайдеру LLM и возвращает строку с ответом.
+</details></li>
+<li><details><summary><strong>Зачем ограничивать длину ответа и как это сделать надежнее всего?</strong>
+</summary>
+Лимит сообщения в Telegram — 4096 символов. Надежнее всего использовать комбинацию: просить модель быть краткой в system_prompt и выставлять жесткий лимит через api_args = list(max_output_tokens = 1500).
+</details></li>
+</ol>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></div>
+<div class="next"><a href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-1"><span class="header-section-number">2.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-1"><span class="header-section-number">2.1.1</span> Тайм коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-1"><span class="header-section-number">2.2</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-1"><span class="header-section-number">2.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8-%D0%B2-%D0%B1%D0%BE%D1%82"><span class="header-section-number">2.3.1</span> Интеграция LLM модели в бот</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D0%B2%D0%B5%D1%80%D1%82%D0%B0%D1%86%D0%B8%D1%8F-%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%B0-%D0%BE%D1%82-llm-%D0%B2-telegram-markdownv2"><span class="header-section-number">2.3.2</span> Конвертация ответа от LLM в Telegram MarkdownV2</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-1"><span class="header-section-number">2.4</span> Заключение</a></li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-1"><span class="header-section-number">2.5</span> Вопросы для самопроверки</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/02_llm_telegram_bot.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/02_llm_telegram_bot.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-09.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

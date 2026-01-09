@@ -1,0 +1,8 @@
+book_filename: "build_ai_tools_using_r"
+new_session: true
+before_chapter_script: _common.R
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: "Глава "
+output_dir: "docs"
