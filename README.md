@@ -1,13 +1,19 @@
-Welcome! 
+## Репозиторий курса "Язык R для разработки AI инструментов"
+<a href="https://selesnow.github.io/build_ai_tools_using_r"><img src="img/cover.png" align="left" alt="Cover image" class="cover" width="230" height="366" /></a>Пройдя данный курс вы разберётесь со всем процессом создания AI инструментов на языке R, курс и все сопутствующие материалы вы найдёте по [ссылке](https://selesnow.github.io/build_ai_tools_using_r).
 
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
+## Программа курса
+На данный момент курс находится в стадии разработки, опубликовано 4 урока, пройдя которые вы закроете 90% всех вопросов, которые у вас могут вознкнуть при разработке AI инструментов на языке R.
 
-This template provides a skeleton file structure that you can edit to create your book. 
+1. Введение в разработку AI инструментов на языке R (ellmer, shinychat)
+2. Встраиваем LLM модель в telegram бота
+3. Разработка AI ассистента, работа с MCP серверами
+4. RAG: Подключаем LLM модель к собственной базе знаний
 
-The contents inside the .Rmd files provide some pointers to help you get started, but feel free to also delete the content in each file and start fresh.
-
-Additional resources:
-
-The **bookdown** book: https://bookdown.org/yihui/bookdown/
-
-The **bookdown** package reference site: https://pkgs.rstudio.com/bookdown
+## Автор курса
+Алексей Селезнёв, Head of analytics dept. at [Netpeak](https://netpeak.net)
+<Br>Telegram канал автора: [R4marketing](https://t.me/R4marketing)
+<Br>Сайт с документацией к пакетам: [selesnow.github.io](https://selesnow.github.io)
+<Br>email: selesnow@gmail.com
+<Br>facebook: [facebook.com/selesnow](https://facebook.com/selesnow)
+<Br>linkedin: [linkedin.com/in/selesnow](https://linkedin.com/in/selesnow)
+<Br>blog: [alexeyseleznev.wordpress.com](https://alexeyseleznev.wordpress.com/)
