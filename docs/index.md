@@ -1,10 +1,10 @@
 --- 
 title: "Курс 'Язык R для разработки AI инструментов'"
 author: "Алексей Селезнёв"
-date: "2026-01-09"
+date: "2026-01-11"
 site: bookdown::bookdown_site
 documentclass: book
-url: https://selesnow.github.io/r_package_course
+url: https://selesnow.github.io/build_ai_tools_using_r
 cover-image: img/cover.jpg
 description: |
   Бесплатный видео курс по разработке AI инструментов на языке R.
@@ -56,7 +56,7 @@ description: |
 
 1. Посмотрите полное видео лекции.
 2. Ответьте на проверочные вопросы.
-3. В дальнейшем, при разработке AI инструментов на языке R обращайтесь к конспекту нужного вам урока для поиска нужной информации.
+3. В дальнейшем, при разработке AI инструментов на языке R обращайтесь к конспекту нужного вам урока для поиска нужной информации и тайм кодам к видео, что бы перейти к нужной вам части видео урока.
 
 ## Об авторе {-}
 Меня зовут Алексей Селезнёв, с 2008 года я являюсь практикующим аналитиком. На данный момент основной моей деятельностью является развитие отдела аналитики в одной из крупнейших украинских IT компаний - [Netpeak](https://https://netpeak.group/).
@@ -90,23 +90,13 @@ description: |
 
 ## Программа курса {-}
 
-1. Введение в разработку AI инструментов на языке R (ellmer, shinychat)
-2. Встраиваем LLM модель в telegram бота
-3. Разработка AI ассистента, работа с MCP серверами
-4. RAG: Подключаем LLM модель к собственной базе знаний
+1. [Введение в разработку AI инструментов на языке R (ellmer, shinychat)]
+2. [Встраиваем LLM модель в Telegram бота]
+3. [Язык R как MCP сервер и MCP клиент]
+4. [RAG: Подключаем LLM модель к собственной базе знаний]
 
 <Br>
-_Дата обновления курса: 09.01.2026_
-
-## Благодарности автору {-}
-Курс, и все сопутствующие материалы предоставляются бесплатно, но если у вас есть желание отблагодарить автора за этот видео курс вы можете перечислить любую произвольную сумму на [этой странице](https://secure.wayforpay.com/payment/r4excel_users).
-
-Либо с помощью кнопки:
-<center>
-<script type="text/javascript" id="widget-wfp-script" src="https://secure.wayforpay.com/server/pay-widget.js?ref=button"></script> <script type="text/javascript">function runWfpWdgt(url){var wayforpay=new Wayforpay();wayforpay.invoice(url);}</script> <button type="button" onclick="runWfpWdgt('https://secure.wayforpay.com/button/b9c8a14345975');" style="display:inline-block!important;background:#2B3160 url('https://s3.eu-central-1.amazonaws.com/w4p-merch/button/bg2x2.png') no-repeat center right;background-size:cover;width: 256px!important;height:54px!important;border:none!important;border-radius:14px!important;padding:18px!important;box-shadow:3px 2px 8px rgba(71,66,66,0.22)!important;text-align:left!important;box-sizing:border-box!important;" onmouseover="this.style.opacity='0.8';" onmouseout="this.style.opacity='1';"><span style="font-family:Verdana,Arial,sans-serif!important;font-weight:bold!important;font-size:14px!important;color:#ffffff!important;line-height:18px!important;vertical-align:middle!important;">Оплатить</span></button>
-</center>
-
-Так же вы можете поделиться ссылкой на курс у себя в соц сетях, за что я тоже буду вам благдарен!
+_Дата обновления курса: 11.01.2026_
 
 ------
 
