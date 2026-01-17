@@ -6,7 +6,7 @@
 В этом уроке мы разберем, как аналитику на языке R «приручить» эти модели для решения ежедневных задач: от автоматического анализа логов на сервере до написания кода с учетом ваших внутренних библиотек. Мы не будем тратить время на теорию нейросетей — мы сразу перейдем к сборке работающего инструмента на базе пакетов `ellmer` и `shinychat`. Главная цель этой главы — показать, что современный AI-стек доступен любому R-разработчику бесплатно и без необходимости переходить на Python.
 
 ## Видео
-<iframe width="560" height="315" src="https://www.youtube.com/embed/J7q4pfSDpgU?si=h2yvo2MBTVf9NeAO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/J7q4pfSDpgU?si=h2yvo2MBTVf9NeAO?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Тайм коды
 * [**00:00**](https://youtu.be/J7q4pfSDpgU?t=0) — О чём это видео
@@ -235,7 +235,7 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-Представленный выше код Shiny приложения запустит интерфейс для вашего чата.
+Представленный выше код Shiny приложения запустит интерфейс для вашего чата. Более подробно настройку и кастомизацию интерфейса чата мы будем разбирать в 5 главе [Кастомизация интерфейса AI чата (пакет shinychat)].
 
 ### Как дообучить модель своими данными
 

@@ -4,7 +4,7 @@
 В этой главе мы освоим Model Context Protocol (MCP) — открытый стандарт, который позволяет языковым моделям бесшовно подключаться к вашим R-функциям. Мы пройдем путь от написания своего MCP-сервера на языке R до подключения его к профессиональным инструментам вроде Claude Desktop. Вы увидите, как превратить обычную библиотеку для работы с Google Таблицами в мощный AI-инструмент, который выполняет ваши команды в реальном времени.
 
 ## Видео
-<iframe width="560" height="315" src="https://www.youtube.com/embed/460ZySMbpuI?si=57sOVxW1XeB2vlz5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/460ZySMbpuI?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### Тайм коды
 * [**00:00**](https://youtu.be/460ZySMbpuI?t=0) — О чём это видео
