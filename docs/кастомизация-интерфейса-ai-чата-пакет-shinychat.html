@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 5 Кастомизация интерфейса AI чата (пакет shinychat) | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="На предыдущих этапах мы научились создавать «мозг» нашего ассистента: подключать языковые модели, настраивать инструменты и базы знаний. Однако для конечного пользователя важна не только логика,...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 5 Кастомизация интерфейса AI чата (пакет shinychat) | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/build_ai_tools_using_r/кастомизация-интерфейса-ai-чата-пакет-shinychat.html">
+<meta property="og:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta property="og:description" content="На предыдущих этапах мы научились создавать «мозг» нашего ассистента: подключать языковые модели, настраивать инструменты и базы знаний. Однако для конечного пользователя важна не только логика,...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 5 Кастомизация интерфейса AI чата (пакет shinychat) | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="На предыдущих этапах мы научились создавать «мозг» нашего ассистента: подключать языковые модели, настраивать инструменты и базы знаний. Однако для конечного пользователя важна не только логика,...">
+<meta name="twitter:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="active" href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html"><span class="header-section-number">6</span> Заключение</a></li>
+<li><a class="" href="%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8-%D0%BA%D1%83%D1%80%D1%81%D0%B0.html">Новости Курса</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="кастомизация-интерфейса-ai-чата-пакет-shinychat" class="section level1" number="5">
+<h1>
+<span class="header-section-number">Глава 5</span> Кастомизация интерфейса AI чата (пакет shinychat)<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat"><i class="fas fa-link"></i></a>
+</h1>
+<p>На предыдущих этапах мы научились создавать «мозг» нашего ассистента: подключать языковые модели, настраивать инструменты и базы знаний. Однако для конечного пользователя важна не только логика, но и удобство взаимодействия. Пакет <code>shinychat</code> предоставляет мощный инструментарий для создания современных чат-интерфейсов в стиле ChatGPT прямо внутри Shiny-приложений.</p>
+<p>В этом уроке мы разберем, как выйти за рамки стандартных настроек: научимся менять визуальный стиль, добавлять интерактивные подсказки, гибко управлять отображением работы инструментов и встраивать чат в сложные модульные приложения.</p>
+<div id="видео-4" class="section level2" number="5.1">
+<h2>
+<span class="header-section-number">5.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-4"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/xxk-sxKSoII?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div id="тайм-коды-4" class="section level3" number="5.1.1">
+<h3>
+<span class="header-section-number">5.1.1</span> Тайм-коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-4"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=0"><strong>00:00</strong></a> — Введение</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=64"><strong>01:04</strong></a> — План урока</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=185"><strong>03:05</strong></a> — Базовый интерфейс: кастомизация иконки и приветствие</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=363"><strong>06:03</strong></a> — Добавление в чат подсказок (suggestions)</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=443"><strong>07:23</strong></a> — Темы bslib и закрепление поля ввода внизу страницы</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=573"><strong>09:33</strong></a> — Расположение интерфейса чата в sidebar</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=649"><strong>10:49</strong></a> — Как поместить интерфейс чата в карточку (card)</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=690"><strong>11:30</strong></a> — Отображение в чате вызываемых моделью инструментов</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=850"><strong>14:10</strong></a> — Кастомизация иконки и описания инструментов</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=1048"><strong>17:28</strong></a> — Кастомизация вывода результата (HTML, Markdown)</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=1213"><strong>20:13</strong></a> — Глобальные опции управления отображением инструментов</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=1294"><strong>21:34</strong></a> — Восстановление и сброс диалога (chat_restore, chat_clear)</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=1491"><strong>24:51</strong></a> — Использование shinychat в модульных приложениях</li>
+<li>
+<a href="https://youtu.be/xxk-sxKSoII?t=1676"><strong>27:56</strong></a> — Заключение</li>
+</ul>
+</div>
+</div>
+<div id="презентация-4" class="section level2" number="5.2">
+<h2>
+<span class="header-section-number">5.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-4"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/hxHKOvkuaCpbgz?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект-4" class="section level2" number="5.3">
+<h2>
+<span class="header-section-number">5.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-4"><i class="fas fa-link"></i></a>
+</h2>
+<div id="кастомизация-интерфейса-чата" class="section level3" number="5.3.1">
+<h3>
+<span class="header-section-number">5.3.1</span> Кастомизация интерфейса чата<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-%D1%87%D0%B0%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h3>
+<div id="базовый-интерфейс-с-кастомизацией-иконки-ассистента" class="section level4" number="5.3.1.1">
+<h4>
+<span class="header-section-number">5.3.1.1</span> Базовый интерфейс с кастомизацией иконки ассистента<a class="anchor" aria-label="anchor" href="#%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%B9-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%81-%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B5%D0%B9-%D0%B8%D0%BA%D0%BE%D0%BD%D0%BA%D0%B8-%D0%B0%D1%81%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BD%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h4>
+<p>Пакет <code>shinychat</code> позволяет быстро построить графический интерфейс чата, минимальный пример кода выглядит примерно так:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html">page_fluid</a></span><span class="op">(</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="st">"**Привет!** Я ассистент по разработке кода на языке R. Чем могу помочь?"</span>,</span>
+<span>    icon_assistant <span class="op">=</span> <span class="fu">htmltools</span><span class="fu">::</span><span class="va"><a href="https://rstudio.github.io/htmltools/reference/builder.html">tags</a></span><span class="op">$</span><span class="fu">img</span><span class="op">(</span></span>
+<span>      src <span class="op">=</span> <span class="st">"https://cdn.pixabay.com/photo/2017/03/31/23/11/robot-2192617_960_720.png"</span>,</span>
+<span>      width <span class="op">=</span> <span class="st">"40px"</span>,</span>
+<span>      height <span class="op">=</span> <span class="st">"40px"</span></span>
+<span>    <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>    <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Функция <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui()</a></code> создаёт интерфейс чата, с помощью аргумента <code>messages</code> вы можете задавать приветственное сообщение, аргумент <code>icon_assistant</code> позволяет задавать собственную иконку AI ассистента обернув её в <code>htmltools::tags$img()</code>.</p>
+<p>В серверной части вашего приложения с помощью пакета <code>ellmer</code> вам необходимо создать объект chat, и далее через <code>observeEvent</code> реагировать на отправку пользователем сообщений.</p>
+<p>Показанный выше пример кода создаёт следующий интерфейс:</p>
+<div class="inline-figure"><img src="img/5-1.png" align="middle" width="640"></div>
+</div>
+<div id="добаление-подсказок-в-чат" class="section level4" number="5.3.1.2">
+<h4>
+<span class="header-section-number">5.3.1.2</span> Добаление подсказок в чат<a class="anchor" aria-label="anchor" href="#%D0%B4%D0%BE%D0%B1%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B7%D0%BE%D0%BA-%D0%B2-%D1%87%D0%B0%D1%82"><i class="fas fa-link"></i></a>
+</h4>
+<p>Пакет <code>shinychat</code> поддерживает добавление в чат подсказок, создать которые можно с помощью тега <code>&lt;span&gt;</code> с классом <code>suggestion</code> и <code>suggestion submit</code> для мгновенной отправки текста подсказки в чат.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">messages</span> <span class="op">&lt;-</span></span>
+<span>  <span class="st">'</span></span>
+<span><span class="st">  **Привет!** Я ассистент по разработке кода на языке R. Чем могу помочь?</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  Возможно вас интересует:</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  * &lt;span class="suggestion submit"&gt;Что такое язык R?&lt;/span&gt;</span></span>
+<span><span class="st">  * &lt;span class="suggestion"&gt;Напиши код на языке R, который &lt;/span&gt;</span></span>
+<span><span class="st">  '</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html">page_fluid</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="va">messages</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>    <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="img/5-2.png" align="middle" width="640"></div>
+<p>Использование подсказок ассистентом также можно указать в системном промпте, например:</p>
+<pre><code>Если ты считаешь уместным предложить пользователю варианты ответов, которые он может захотеть написать, заключи текст каждого варианта в теги `&lt;span class="suggestion"&gt;`.
+
+Также используйте `"Предлагаемые следующие шаги:"` для представления предложений. Например:
+
+1. &lt;span class="suggestion"&gt;Вариант 1.&lt;/span&gt;
+2. &lt;span class="suggestion"&gt;Вариант 2.&lt;/span&gt;
+3. &lt;span class="suggestion"&gt;Вариант 3.&lt;/span&gt;
+</code></pre>
+</div>
+<div id="закрепить-поле-ввода-запроса-в-нижней-части-экрана-и-настройка-тем" class="section level4" number="5.3.1.3">
+<h4>
+<span class="header-section-number">5.3.1.3</span> Закрепить поле ввода запроса в нижней части экрана и настройка тем<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%BA%D1%80%D0%B5%D0%BF%D0%B8%D1%82%D1%8C-%D0%BF%D0%BE%D0%BB%D0%B5-%D0%B2%D0%B2%D0%BE%D0%B4%D0%B0-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0-%D0%B2-%D0%BD%D0%B8%D0%B6%D0%BD%D0%B5%D0%B9-%D1%87%D0%B0%D1%81%D1%82%D0%B8-%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
+</h4>
+<p>В графических интерфейсах большинства LLM провайдеров окно ввода запроса закрепляется в нижней части окна, <code>shinychat</code> так же позволяет повторить это поведение.</p>
+<p>Для этого рендеринг страницы реализуйте с помощью функции <code><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">bslib::page_fillable()</a></code> и используйте её аргумент <code>fillable_mobile = TRUE</code>.
+Все функции рендеринга страниц <code>page_*()</code> из пакета <code>bslib</code> имеют аргумент <code>theme</code>, который позволяет кастомировать тему вашей страницы. В данный аргумент необходимо передавать функцию <code><a href="https://rstudio.github.io/bslib/reference/bs_theme.html">bslib::bs_theme()</a></code>, с помощью аргументов которой можно либо настроить тему самостоятельно, либо передать в аргумент <code>preset</code> название одной из преднастроенных тем, полный список преднастроенных тем можно получить с помощью функции <code><a href="https://rstudio.github.io/bslib/reference/bootswatch_themes.html">bslib::bootswatch_themes()</a></code>.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/">bslib</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">page_fillable</a></span><span class="op">(</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="st">"**Привет!** Я ассистент по разработке кода на язке R. Чем могу помочь?"</span></span>
+<span>  <span class="op">)</span>, </span>
+<span>  fillable_mobile <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  theme <span class="op">=</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/bs_theme.html">bs_theme</a></span><span class="op">(</span>preset <span class="op">=</span> <span class="st">"darkly"</span><span class="op">)</span> <span class="co"># просмотрт доступных пресетов bslib::bootswatch_themes()</span></span>
+<span>  </span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Данный интерфейс имеет тёмную тему, и окно ввода запроса всегда располагается в нижней части окна:</p>
+<div class="inline-figure"><img src="img/5-3.png" align="middle" width="640"></div>
+</div>
+<div id="распологаем-интерфейс-чата-в-sidebar" class="section level4" number="5.3.1.4">
+<h4>
+<span class="header-section-number">5.3.1.4</span> Распологаем интерфейс чата в sidebar<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B3%D0%B0%D0%B5%D0%BC-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%87%D0%B0%D1%82%D0%B0-%D0%B2-sidebar"><i class="fas fa-link"></i></a>
+</h4>
+<p>В плане интерфейса-помощника иногда удобно распологать чат в боковой панели (sidebar), для рендеринга в таком случае используйте <code><a href="https://rstudio.github.io/bslib/reference/page_sidebar.html">bslib::page_sidebar()</a></code>, а интерфейс чата (функцию <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui()</a></code>) передавайте передавайте в аргумент <code>sidebar</code>, также предварительно завернув в функцию <code><a href="https://rstudio.github.io/bslib/reference/sidebar.html">sidebar()</a></code>.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/">bslib</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_sidebar.html">page_sidebar</a></span><span class="op">(</span></span>
+<span>  sidebar <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/sidebar.html">sidebar</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>      <span class="st">"chat"</span>,</span>
+<span>      messages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>        <span class="st">"**Привет!** Я ассистент по разработке кода на язке R. Чем могу помочь? &lt;span class='suggestion'&gt;suggestion&lt;/span&gt;."</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      height <span class="op">=</span> <span class="st">"100%"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    width <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>    style <span class="op">=</span> <span class="st">"height: 100%;"</span>,</span>
+<span>    position <span class="op">=</span> <span class="st">'right'</span>, </span>
+<span>    title <span class="op">=</span> <span class="st">'AI ассистент'</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"Main content"</span>,</span>
+<span>  fillable <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="img/5-4.png" align="middle" width="640"></div>
+</div>
+<div id="интерфейс-чата-внутри-карточки" class="section level4" number="5.3.1.5">
+<h4>
+<span class="header-section-number">5.3.1.5</span> Интерфейс чата внутри карточки<a class="anchor" aria-label="anchor" href="#%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D1%87%D0%B0%D1%82%D0%B0-%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B8-%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Иногда вам может понадобится отделить интерфейс чата от остальных элементов вашего приложения, для этого удобно поместить его в карточку с помощью функции <code><a href="https://rstudio.github.io/bslib/reference/card.html">card()</a></code>.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/">bslib</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">page_fillable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card.html">card</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html">card_header</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Welcome to Posit chat"</span>,</span>
+<span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/tooltip.html">tooltip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html">icon</a></span><span class="op">(</span><span class="st">"question"</span><span class="op">)</span>, <span class="st">"This chat is brought to you by Posit."</span><span class="op">)</span>,</span>
+<span>      class <span class="op">=</span> <span class="st">"d-flex justify-content-between align-items-center"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>      id <span class="op">=</span> <span class="st">"chat"</span>,</span>
+<span>      messages <span class="op">=</span> <span class="st">"Hello! How can I help you today?"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  fillable_mobile <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="img/5-5.png" align="middle" width="640"></div>
+</div>
+</div>
+<div id="кастомизация-вызова-инструментов" class="section level3" number="5.3.2">
+<h3>
+<span class="header-section-number">5.3.2</span> Кастомизация вызова инструментов<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2%D1%8B%D0%B7%D0%BE%D0%B2%D0%B0-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2"><i class="fas fa-link"></i></a>
+</h3>
+<p>В предыдущих уроках мы с вами разобрались с тем, как добавить в модель возможность вызова различных инструментов. Но, по умолчанию в интерфейсе чата вы не видите, когда и какие инструменты ассистенты использует, и тем более не видите какие аргументы в функции вызова инструментов передаются, и какой результат от вызова инструмента модель получила. А вся эта информация полезна как на этапе отладки вашего приложения, так и в целом пользователям вашего AI ассистента.</p>
+<p>Пакет <code>shinychat</code> позволяет добавлять в интерфейс чата информацию о вызываемых моделью инструментов. В этом примере мы напишем небольшую функцию для запроса прогноза погоды в которую необходимо передать координаты населёного пункта.</p>
+<p>Код инструмента выглядит следующим образом:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JeffreyFowler/weathR">weathR</a></span><span class="op">)</span> <span class="co"># for forecasts via `point_tomorrow()`</span></span>
+<span></span>
+<span><span class="va">get_weather_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/weathR/man/point_tomorrow.html">point_tomorrow</a></span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, short <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_forecast"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Get the weather forecast for a location."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    lat <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Latitude"</span><span class="op">)</span>,</span>
+<span>    lon <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Longitude"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  annotations <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool_annotations.html">tool_annotations</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Запрос прогноза погоды"</span>,</span>
+<span>    icon <span class="op">=</span> <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"cloud-sun"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Аргумент <code>annotations</code> принимает описание название и иконки вызыввемого инструмента, обёрнутых в функцию <code><a href="https://ellmer.tidyverse.org/reference/tool_annotations.html">tool_annotations()</a></code>.</p>
+<p>Для того, что бы вызов инструмента отображлся в интерфейсе чата, в серверной части приложения в <code>chat$stream_async()</code> необходимо передать <code>stream = "content"</code>.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JeffreyFowler/weathR">weathR</a></span><span class="op">)</span> <span class="co"># for forecasts via `point_tomorrow()`</span></span>
+<span></span>
+<span><span class="va">get_weather_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/weathR/man/point_tomorrow.html">point_tomorrow</a></span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, short <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_forecast"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Get the weather forecast for a location."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    lat <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Latitude"</span><span class="op">)</span>,</span>
+<span>    lon <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Longitude"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  annotations <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool_annotations.html">tool_annotations</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Запрос прогноза погоды"</span>,</span>
+<span>    icon <span class="op">=</span> <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"cloud-sun"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html">page_fluid</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="st">"Я могу рассказать вам прогноз погоды на ближайшее время в любом регтоне."</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты ассситент который умеет искать прогноз погоды по заданному региону или локации. По заданной локации ты ищешь координаты, и далее определяешь прогноз погоды.'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># добавляем инструмент</span></span>
+<span>  <span class="va">chat</span><span class="op">$</span><span class="fu">register_tool</span><span class="op">(</span><span class="va">get_weather_forecast</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, stream <span class="op">=</span> <span class="st">"content"</span><span class="op">)</span> <span class="co"># для отображения инструмента необходимо включить stream = "content"</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Теперь в чате будет отображаться вызов инструментов, аргументы, которые модель передала при вызове, и полученный результат:</p>
+<div class="inline-figure"><img src="img/5-6.png" align="middle" width="640"></div>
+<p>По умолчанию иконкой вызываемого инструмента является гаечный ключ, а в качестве названия выводится название вызываемой моделью фукнции. Но при создании инструмента мы передали в аргумент <code>annotations</code> кастомную иконку, и подпись. Но, вы можете более гибко управлять как самой иконкой, так и описанием. В нашем случае в описание мы можем добавить передачу названия населённого пункта по которому запрашиваем погоду, а иконку менять в зависимости от того какая в населённом пункте погода, если тепло подставить солнце, если холодно то снег, а если идёт дождь то подставить тучи с дождём. Для реализации такого подхода внутри инструмента вам необходимо использовать конструктор <code><a href="https://ellmer.tidyverse.org/reference/Content.html">ContentToolResult()</a></code>.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_weather_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, <span class="va">location_name</span>, <span class="va">`_intent`</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/weathR/man/point_tomorrow.html">point_tomorrow</a></span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, short <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="va">icon</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html">any</a></span><span class="op">(</span><span class="va">forecast</span><span class="op">$</span><span class="va">temp</span> <span class="op">&gt;</span> <span class="fl">70</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"sun-fill"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html">any</a></span><span class="op">(</span><span class="va">forecast</span><span class="op">$</span><span class="va">temp</span> <span class="op">&lt;</span> <span class="fl">45</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"snow"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>      <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"cloud-sun-fill"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://ellmer.tidyverse.org/reference/Content.html">ContentToolResult</a></span><span class="op">(</span></span>
+<span>      <span class="va">forecast</span>,</span>
+<span>      extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>        display <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>          title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Прогноз погоды для"</span>, <span class="va">location_name</span><span class="op">)</span>,</span>
+<span>          icon <span class="op">=</span> <span class="va">icon</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_forecast"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Get the weather forecast for a location."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    lat <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Latitude"</span><span class="op">)</span>,</span>
+<span>    lon <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Longitude"</span><span class="op">)</span>,</span>
+<span>    location_name <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name of the location for display to the user"</span><span class="op">)</span>,</span>
+<span>    `_intent` <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span>                                                        <span class="co"># дополнительная подсказка в интерфейсе</span></span>
+<span>      <span class="st">"A short snippet used for display purposes to explain the call to the user."</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  annotations <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool_annotations.html">tool_annotations</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Запрос прогноза погоды"</span>,</span>
+<span>    icon <span class="op">=</span> <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"cloud-sun"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="img/5-7.png" align="middle" width="640"></div>
+<p>Теперь иконка вызываемого инструмента меняется в зависимости от текущей погоды, в описании указывается название населённого пункта, а в правой части описания отдельно указана причина, по которой модель решила вызвать этот инструмент. Добавление этого описания реализовано через специальный аргумент <code>_intent</code>, который вам надо добавить в функцию вызываемую инструментом, и в аннотации с описанием аргументов указать, что модель должна указывать в жтом аргументе причину вызова инструмента.</p>
+<p>Динамически изменяющуюся иконку и описание инструмента мы реализовали с помощью конструктора <code><a href="https://ellmer.tidyverse.org/reference/Content.html">ContentToolResult()</a></code>, передав в аргумент <code>extra</code> описание через список <code>display</code> и его элементы <code>title</code> и <code>icon</code>. Список <code>display</code> также позволяет кастомизировать и вывод полученного инструментом результата, по умолчанию полученный результат выводится в виде блока кода, но используя элементы <code>html</code>, <code>markdown</code> и <code>text</code> списка <code>display</code> вы можете отформатировать вывод результат.</p>
+<p>Ниже пример вызываемого инструмента, в котором вывод прогноза погоды приводится к табличному виду:</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_weather_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, <span class="va">location_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">forecast_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/weathR/man/point_tomorrow.html">point_tomorrow</a></span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, short <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    <span class="va">forecast_table</span> <span class="op">&lt;-</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/as_raw_html.html">as_raw_html</a></span><span class="op">(</span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html">gt</a></span><span class="op">(</span><span class="va">forecast_data</span><span class="op">)</span><span class="op">)</span> <span class="co"># формируем HTML таблицу</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://ellmer.tidyverse.org/reference/Content.html">ContentToolResult</a></span><span class="op">(</span></span>
+<span>      <span class="va">forecast_data</span>,</span>
+<span>      extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>        display <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>          html <span class="op">=</span> <span class="va">forecast_table</span>,                             <span class="co"># кастомизируем вывод инструмента</span></span>
+<span>          title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Weather Forecast for"</span>, <span class="va">location_name</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_forecast"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Get the weather forecast for a location."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    lat <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Latitude"</span><span class="op">)</span>,</span>
+<span>    lon <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Longitude"</span><span class="op">)</span>,</span>
+<span>    location_name <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name of the location for display to the user"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  annotations <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool_annotations.html">tool_annotations</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Weather Forecast"</span>,</span>
+<span>    icon <span class="op">=</span> <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"cloud-sun"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Теперь вывод информации о погоде выглядит так:</p>
+<div class="inline-figure"><img src="img/5-8.png" align="middle" width="640"></div>
+<p>Так же вы можете отформатировать вывод результата через Markdown:</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_weather_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, <span class="va">location_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">forecast_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/weathR/man/point_tomorrow.html">point_tomorrow</a></span><span class="op">(</span><span class="va">lat</span>, <span class="va">lon</span>, short <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">temp_current</span> <span class="op">&lt;-</span> <span class="va">forecast_data</span><span class="op">$</span><span class="va">temp</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span>    <span class="va">skies_current</span> <span class="op">&lt;-</span> <span class="va">forecast_data</span><span class="op">$</span><span class="va">skies</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span>    <span class="va">temp_high</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">forecast_data</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span></span>
+<span>    <span class="va">temp_low</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">forecast_data</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">humidity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">forecast_data</span><span class="op">$</span><span class="va">humidity</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">skies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">forecast_data</span><span class="op">$</span><span class="va">skies</span><span class="op">)</span></span>
+<span>    <span class="va">skies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">skies</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">skies</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span>    <span class="va">forecast_summary</span> <span class="op">&lt;-</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span></span>
+<span>      <span class="st">"В **{location_name}** сейчас {temp_current}°F, _{tolower(skies_current)}_ небо. "</span>,</span>
+<span>      <span class="st">"Сегодня максимальная температура {temp_high}°F, минимальная — {temp_low}°F. "</span>,</span>
+<span>      <span class="st">"Влажность около {humidity}%. "</span>,</span>
+<span>      <span class="st">"В течение дня ожидается **{tolower(skies)}** небо."</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://ellmer.tidyverse.org/reference/Content.html">ContentToolResult</a></span><span class="op">(</span></span>
+<span>      <span class="va">forecast_data</span>,</span>
+<span>      extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>        display <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>          markdown <span class="op">=</span> <span class="va">forecast_summary</span>,</span>
+<span>          title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Weather Forecast for"</span>, <span class="va">location_name</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_forecast"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Get the weather forecast for a location."</span>,</span>
+<span>  arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    lat <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Latitude"</span><span class="op">)</span>,</span>
+<span>    lon <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_number</a></span><span class="op">(</span><span class="st">"Longitude"</span><span class="op">)</span>,</span>
+<span>    location_name <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/type_boolean.html">type_string</a></span><span class="op">(</span><span class="st">"Name of the location for display to the user"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  annotations <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool_annotations.html">tool_annotations</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Weather Forecast"</span>,</span>
+<span>    icon <span class="op">=</span> <span class="fu">bsicons</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bsicons/man/bs_icon.html">bs_icon</a></span><span class="op">(</span><span class="st">"cloud-sun"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="img/5-9.png" align="middle" width="640"></div>
+<p>Глобально управлять настройками отображения вызываемых инструментов можно с помощью опции <code>shinychat.tool_display</code> или переменной среды <code>SHINYCHAT_TOOL_DISPLAY</code>:</p>
+<ul>
+<li>
+<code>options(shinychat.tool_display = "none")</code>: отключить вывод информации о вызываемом инструменте</li>
+<li>
+<code>options(shinychat.tool_display = "basic")</code>: вывод базовой информации</li>
+<li>
+<code>options(shinychat.tool_display = "rich")</code>: вывод полный информации (значение по умолчанию)</li>
+</ul>
+</div>
+<div id="настройка-серверной-части" class="section level3" number="5.3.3">
+<h3>
+<span class="header-section-number">5.3.3</span> Настройка серверной части<a class="anchor" aria-label="anchor" href="#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%BD%D0%BE%D0%B9-%D1%87%D0%B0%D1%81%D1%82%D0%B8"><i class="fas fa-link"></i></a>
+</h3>
+<div id="восстановление-чата" class="section level4" number="5.3.3.1">
+<h4>
+<span class="header-section-number">5.3.3.1</span> Восстановление чата<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D1%87%D0%B0%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h4>
+<p>По умолчанию если вы обновите вкладку браузера вся история вашего диалога с ассистентом сбросится, но с помощью функции <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_restore.html">chat_restore()</a></code> это поведение можно исправить. Добавив её в серверную часть вашего приложения история вашей переписки будет фиксироваться в URL параметрах, после чего вы сможете по ссылке восстанавливать ваши диалоги, и при этом обновление вкладки так, же не сбросит историю:</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">request</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html">page_fluid</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>      <span class="st">"chat"</span>,</span>
+<span>      messages <span class="op">=</span> <span class="st">"**Привет!** Я ассистент по разработке кода на языке R. Чем могу помочь?"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat_client</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_restore.html">chat_restore</a></span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="st">"chat"</span>,</span>
+<span>    client <span class="op">=</span> <span class="va">chat_client</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat_client</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="сброс-чата" class="section level4" number="5.3.3.2">
+<h4>
+<span class="header-section-number">5.3.3.2</span> Сброс чата<a class="anchor" aria-label="anchor" href="#%D1%81%D0%B1%D1%80%D0%BE%D1%81-%D1%87%D0%B0%D1%82%D0%B0"><i class="fas fa-link"></i></a>
+</h4>
+<p>Реализовать функционал сброса чата можно добавив в серверную часть модуля вызов функции <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_clear.html">chat_clear()</a></code>.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">request</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html">page_fluid</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>      <span class="st">"chat"</span>,</span>
+<span>      messages <span class="op">=</span> <span class="st">"**Привет!** Я ассистент по разработке кода на языке R. Чем могу помочь?"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html">actionButton</a></span><span class="op">(</span><span class="st">"clear"</span>, <span class="st">"Clear chat"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">chat_client</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="st">'Ты помощник по разработке кода на языке R.'</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">clear</span>, <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_clear.html">chat_clear</a></span><span class="op">(</span><span class="st">"chat"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">chat_client</span><span class="op">$</span><span class="fu">stream_async</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span>, enableBookmarking <span class="op">=</span> <span class="st">"url"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="использование-shinychat-с-модульными-shiny-приложениями" class="section level4" number="5.3.3.3">
+<h4>
+<span class="header-section-number">5.3.3.3</span> Использование shinychat с модульными Shiny приложениями<a class="anchor" aria-label="anchor" href="#%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-shinychat-%D1%81-%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%D0%B8-shiny-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Всё, что мы рассматривали выше будет работать с простыми Shiny приложениями, но функции <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui()</a></code> не работает с модулями, т.к. она не поддерживает автоматический namespace модулей.</p>
+<p>В сложных, больших приложениях реализованных через модульную систему Shiny вам необходимо использовать отдельные функции <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_ui()</a></code> + <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_server()</a></code>. Эти функции специально созданы для работы с модулями Shiny.</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/">bslib</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ===== UI МОДУЛЯ =====</span></span>
+<span><span class="va">chatModuleUI</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">greeting</span> <span class="op">=</span> <span class="st">"Привет! Чем могу помочь?"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_ui</a></span><span class="op">(</span></span>
+<span>    <span class="va">id</span>, </span>
+<span>    messages <span class="op">=</span> <span class="va">greeting</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># ===== SERVER МОДУЛЯ =====</span></span>
+<span><span class="va">chatModuleServer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">system_prompt</span> <span class="op">=</span> <span class="st">"Ты помощник."</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Создаём клиент</span></span>
+<span>  <span class="va">chat_client</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    system_prompt <span class="op">=</span> <span class="va">system_prompt</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Запускаем chat_mod_server (он сам создаёт moduleServer внутри)</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_server</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">chat_client</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># ===== ГЛАВНОЕ ПРИЛОЖЕНИЕ =====</span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">page_fillable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/titlePanel.html">titlePanel</a></span><span class="op">(</span><span class="st">"Пример чата с модулями Shiny"</span><span class="op">)</span>,</span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rstudio.github.io/bslib/reference/layout_columns.html">layout_columns</a></span><span class="op">(</span></span>
+<span>    col_widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>    </span>
+<span>    <span class="co"># Первый чат</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card.html">card</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html">card_header</a></span><span class="op">(</span><span class="st">"Чат 1 - Помощник по R"</span><span class="op">)</span>,</span>
+<span>      <span class="fu">chatModuleUI</span><span class="op">(</span></span>
+<span>        id <span class="op">=</span> <span class="st">"chat1"</span>,</span>
+<span>        greeting <span class="op">=</span> <span class="st">"Привет! Я помогу с вопросами по R."</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    </span>
+<span>    <span class="co"># Второй чат</span></span>
+<span>    <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card.html">card</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html">card_header</a></span><span class="op">(</span><span class="st">"Чат 2 - Помощник по Python"</span><span class="op">)</span>,</span>
+<span>      <span class="fu">chatModuleUI</span><span class="op">(</span></span>
+<span>        id <span class="op">=</span> <span class="st">"chat2"</span>,</span>
+<span>        greeting <span class="op">=</span> <span class="st">"Привет! Я помогу с вопросами по Python."</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Инициализируем модули</span></span>
+<span>  <span class="fu">chatModuleServer</span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="st">"chat1"</span>,</span>
+<span>    system_prompt <span class="op">=</span> <span class="st">"Ты эксперт по языку программирования R."</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu">chatModuleServer</span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="st">"chat2"</span>,</span>
+<span>    system_prompt <span class="op">=</span> <span class="st">"Ты эксперт по языку программирования Python."</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Таким образом мы реализовали модульную логику, создали модуль создания чата, и в основном приложении дважды вызвали его, создав два парллельных чата, один как ассистент по разработке на языке R, второй по python.</p>
+<div class="inline-figure"><img src="img/5-10.png" align="middle" width="640"></div>
+<p>Функция <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_ui()</a></code>:</p>
+<ol style="list-style-type: decimal">
+<li>Автоматически создаёт <code>ns &lt;- NS(id)</code>
+</li>
+<li>Применяет <code>namespace</code> ко ВСЕМ внутренним элементам</li>
+<li>Возвращает готовый UI с правильными ID</li>
+</ol>
+<p>Функция <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_server()</a></code>:</p>
+<ol style="list-style-type: decimal">
+<li>Автоматически вызывает <code>moduleServer(id, function(...) {...})</code>
+</li>
+<li>Настраивает <code>observeEvent</code> для обработки сообщений</li>
+<li>Обрабатывает стриминг ответов от LLM</li>
+<li>Возвращает объект с методами для управления чатом</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="заключение-4" class="section level2" number="5.4">
+<h2>
+<span class="header-section-number">5.4</span> Заключение<a class="anchor" aria-label="anchor" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4"><i class="fas fa-link"></i></a>
+</h2>
+<p>Мы рассмотрели возможности пакета <code>shinychat</code>, которые позволяют превратить простой чат в полноценное бизнес-приложение. Теперь вы знаете, как кастомизировать внешний вид ассистента, использовать систему подсказок, делать работу инструментов прозрачной для пользователя и масштабировать чат в рамках сложных модульных систем Shiny.</p>
+<p>Грамотно настроенный интерфейс не только радует глаз, но и значительно снижает порог входа для пользователей вашего AI-инструмента.</p>
+</div>
+<div id="вопросы-для-самопроверки-4" class="section level2" number="5.5">
+<h2>
+<span class="header-section-number">5.5</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-4"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><details><summary><strong>В чем принципиальная разница между классами <code>suggestion</code> и <code>suggestion submit</code> в подсказках?</strong>
+</summary>
+Класс <code>suggestion</code> просто подставляет текст подсказки в поле ввода, позволяя пользователю его дополнить или отредактировать. Класс <code>suggestion submit</code> не только подставляет текст, но и мгновенно отправляет его в чат как готовый запрос.
+</details></li>
+<li><details><summary><strong>Зачем в методе <code>stream_async()</code> указывать аргумент <code>stream = "content"</code>, если мы работаем с инструментами?</strong>
+</summary>
+По умолчанию <code>shinychat</code> скрывает технические подробности вызова инструментов. Установка <code>stream = "content"</code> активирует отображение специальных карточек в чате, которые показывают пользователю (или разработчику при отладке), какой инструмент вызван, с какими аргументами и какой результат получен.
+</details></li>
+<li><details><summary><strong>Как аргумент <code>_intent</code> внутри функции-инструмента помогает улучшить UI чата?</strong>
+</summary>
+Если добавить этот аргумент в функцию и описать его в <code>arguments</code>, модель сама сгенерирует краткое пояснение (намерение), зачем она вызывает этот инструмент. Это пояснение отобразится в заголовке карточки инструмента в интерфейсе, делая работу AI более прозрачной для пользователя.
+</details></li>
+<li><details><summary><strong>Какую роль играет функция <code>chat_restore()</code> и почему для её работы нужен <code>enableBookmarking = "url"</code>?</strong>
+</summary><code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_restore.html">chat_restore()</a></code> извлекает историю переписки из URL-параметров при загрузке страницы. Чтобы Shiny мог сохранять и считывать эти данные в адресной строке, в функции <code>shinyApp</code> обязательно должен быть включен механизм букмаркинга.
+</details></li>
+<li><details><summary><strong>Почему в больших проектах нельзя просто использовать <code>chat_ui()</code> внутри модулей Shiny?</strong>
+</summary>
+Обычная <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui()</a></code> не умеет автоматически работать с пространствами имен (<code>ns()</code>). Из-за этого ID элементов внутри модуля могут конфликтовать или не считываться сервером. Специальные функции <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_ui()</a></code> и <code><a href="https://posit-dev.github.io/shinychat/r/reference/chat_app.html">chat_mod_server()</a></code> созданы специально для бесшовной интеграции чата в модульную структуру Shiny.
+</details></li>
+</ol>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></div>
+<div class="next"><a href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html"><span class="header-section-number">6</span> Заключение</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-4"><span class="header-section-number">5.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-4"><span class="header-section-number">5.1.1</span> Тайм-коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-4"><span class="header-section-number">5.2</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-4"><span class="header-section-number">5.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-%D1%87%D0%B0%D1%82%D0%B0"><span class="header-section-number">5.3.1</span> Кастомизация интерфейса чата</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2%D1%8B%D0%B7%D0%BE%D0%B2%D0%B0-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2"><span class="header-section-number">5.3.2</span> Кастомизация вызова инструментов</a></li>
+<li><a class="nav-link" href="#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%BD%D0%BE%D0%B9-%D1%87%D0%B0%D1%81%D1%82%D0%B8"><span class="header-section-number">5.3.3</span> Настройка серверной части</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4"><span class="header-section-number">5.4</span> Заключение</a></li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-4"><span class="header-section-number">5.5</span> Вопросы для самопроверки</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/05_shinychat.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/05_shinychat.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-20.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 --- 
 title: "Курс 'Язык R для разработки AI инструментов'"
 author: "Алексей Селезнёв"
-date: "2026-01-11"
+date: "2026-01-20"
 site: bookdown::bookdown_site
 documentclass: book
 url: https://selesnow.github.io/build_ai_tools_using_r
@@ -94,9 +94,10 @@ description: |
 2. [Встраиваем LLM модель в Telegram бота]
 3. [Язык R как MCP сервер и MCP клиент]
 4. [RAG: Подключаем LLM модель к собственной базе знаний]
+5. [Кастомизация интерфейса AI чата (пакет shinychat)]
 
 <Br>
-_Дата обновления курса: 11.01.2026_
+_Дата обновления курса: 20.01.2026_
 
 ------
 

@@ -57,7 +57,9 @@
 <li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
 <li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
 <li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
-<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-4.html"><span class="header-section-number">5</span> Заключение</a></li>
+<li><a class="" href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html"><span class="header-section-number">6</span> Заключение</a></li>
+<li><a class="" href="%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8-%D0%BA%D1%83%D1%80%D1%81%D0%B0.html">Новости Курса</a></li>
 </ul>
 
         <div class="book-extra">
@@ -80,7 +82,7 @@
 <h2>
 <span class="header-section-number">1.2</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE"><i class="fas fa-link"></i></a>
 </h2>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/J7q4pfSDpgU?si=h2yvo2MBTVf9NeAO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/J7q4pfSDpgU?si=h2yvo2MBTVf9NeAO?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
 </iframe>
 <div id="тайм-коды" class="section level3" number="1.2.1">
 <h3>
@@ -178,8 +180,8 @@
 <p>Под каждый провайдер есть свой конструктор, на данный момент ellmer поддерживает работу со следующими провайдерами LLM моделей:</p>
 <ul>
 <li>Anthropic’s Claude: <code><a href="https://ellmer.tidyverse.org/reference/chat_anthropic.html">chat_anthropic()</a></code>.</li>
-<li>AWS Bedrock: <code><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_bedrock()</a></code>.</li>
-<li>Azure OpenAI: <code><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_azure()</a></code>.</li>
+<li>AWS Bedrock: <code>chat_bedrock()</code>.</li>
+<li>Azure OpenAI: <code>chat_azure()</code>.</li>
 <li>Databricks: <code><a href="https://ellmer.tidyverse.org/reference/chat_databricks.html">chat_databricks()</a></code>.</li>
 <li>DeepSeek: <code><a href="https://ellmer.tidyverse.org/reference/chat_deepseek.html">chat_deepseek()</a></code>.</li>
 <li>GitHub model marketplace: <code><a href="https://ellmer.tidyverse.org/reference/chat_github.html">chat_github()</a></code>.</li>
@@ -200,7 +202,7 @@
 <span><span class="co"># API ключ</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>GOOGLE_API_KEY <span class="op">=</span> <span class="st">'ВАШ API ТОКЕН'</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_gemini</span><span class="op">(</span></span>
 <span>  system_prompt <span class="op">=</span> </span>
 <span>    <span class="st">'Ты специалист по анализу данных, и разработчик на языке R. </span></span>
 <span><span class="st">     В этом чате ты помогаешь генерировать код на языке R.'</span></span>
@@ -297,7 +299,7 @@
 </h3>
 <p>Метод <code>$register_tool()</code> позволяет вам встраивать в ваш чат дополнительные инструменты, например интеграцию с любыми другими API, или в целом описать любой другой инструментарий посредствам создания обычных R функций, которые вы добавите в чат. Например, ни одна LLM модель не может получить данные в реальном времени, она не знает даже текущего времени, не может дать вам информацию о текущей погоде в каком либо городе. Но вы можете обучить этому свой чат, добавив в него функции:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">chat_gemini</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">chat</span><span class="op">$</span><span class="fu">chat</span><span class="op">(</span><span class="st">'Какое текущее время сейчас по Киеву?'</span><span class="op">)</span></span>
 <span></span>
@@ -338,7 +340,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<span>  <span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu">chat_gemini</span><span class="op">(</span></span>
 <span>    system_prompt <span class="op">=</span> <span class="st">"Ты специалист по разработке кода и анализу данных на языке R"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  </span>
@@ -349,7 +351,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
-<p>Представленный выше код Shiny приложения запустит интерфейс для вашего чата.</p>
+<p>Представленный выше код Shiny приложения запустит интерфейс для вашего чата. Более подробно настройку и кастомизацию интерфейса чата мы будем разбирать в 5 главе <a href="#%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat">Кастомизация интерфейса AI чата (пакет shinychat)</a>.</p>
 </div>
 <div id="как-дообучить-модель-своими-данными" class="section level3" number="1.4.7">
 <h3>
@@ -398,7 +400,7 @@
     * поле 2 - описание</code></pre>
 <p>Далее вы передаёте этот .md файл в аргумент <code>system_prompt</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/deprecated.html">chat_gemini</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu">chat_gemini</span><span class="op">(</span></span>
 <span>    system_prompt <span class="op">=</span> <span class="fu"><a href="https://ellmer.tidyverse.org/reference/interpolate.html">interpolate_file</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">'system_prompt.md'</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>После чего ваш чат будет обучен на основе ваших данных, и будет помогать как в генерации кода, так и в исправлении ошибок при запуске созданных ранее скриптов.</p>
@@ -486,7 +488,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-11.</p>
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-01-20.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
