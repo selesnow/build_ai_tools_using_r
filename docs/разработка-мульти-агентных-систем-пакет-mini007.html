@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 6 Разработка мульти агентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 6 Разработка мульти агентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/build_ai_tools_using_r/разработка-мульти-агентных-систем-пакет-mini007.html">
+<meta property="og:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta property="og:description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 6 Разработка мульти агентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="twitter:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="" href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></li>
+<li><a class="active" href="%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007.html"><span class="header-section-number">6</span> Разработка мульти агентных систем (пакет mini007)</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html"><span class="header-section-number">7</span> Заключение</a></li>
+<li><a class="" href="%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8-%D0%BA%D1%83%D1%80%D1%81%D0%B0.html">Новости Курса</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="разработка-мульти-агентных-систем-пакет-mini007" class="section level1" number="6">
+<h1>
+<span class="header-section-number">Глава 6</span> Разработка мульти агентных систем (пакет mini007)<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><i class="fas fa-link"></i></a>
+</h1>
+<div id="видео-5" class="section level2" number="6.1">
+<h2>
+<span class="header-section-number">6.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-5"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7YLlot7-d4M?si=rX8q3lCjrN7JdR4N&amp;enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div id="тайм-коды-5" class="section level3" number="6.1.1">
+<h3>
+<span class="header-section-number">6.1.1</span> Тайм-коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-5"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=0"><strong>00:00</strong></a> — Введение</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=68"><strong>01:08</strong></a> — Создание объекта класса Agent</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=193"><strong>03:13</strong></a> — Суммаризация и очистка переписки с агентом</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=288"><strong>04:48</strong></a> — Добавление сообщений в переписку с агентом</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=360"><strong>06:00</strong></a> — Обновление системного промпта агента</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=390"><strong>06:30</strong></a> — Экспорт и импорт истории переписки с агентом</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=429"><strong>07:09</strong></a> — Управление бюджетом агента (лимиты токенов)</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=560"><strong>09:20</strong></a> — Генерация и выполнение R-кода с помощью агента</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=703"><strong>11:43</strong></a> — Проверка качества ответов модели (LLM-as-a-judge)</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=917"><strong>15:17</strong></a> — Создание и добавление агенту инструментов</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1136"><strong>18:56</strong></a> — Как устроены мультиагентные системы (теория)</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1243"><strong>20:43</strong></a> — Создание мультиагентной системы с помощью пакета mini007</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1498"><strong>24:58</strong></a> — В чём преимущества мультиагентных систем</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1556"><strong>25:56</strong></a> — Broadcasting: отправка одного запроса каждому агенту</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1747"><strong>29:07</strong></a> — Human-in-the-loop: контроль системы человеком</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=2024"><strong>33:44</strong></a> — Диалог двух агентов между собой</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=2348"><strong>39:08</strong></a> — Как упаковать мультиагентную систему в интерфейс чата</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=2544"><strong>42:24</strong></a> — Заключение</li>
+</ul>
+</div>
+</div>
+<div id="презентация-5" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-5"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/s3zsiwGW0GFlAT?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект-5" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-5"><i class="fas fa-link"></i></a>
+</h2>
+<div id="что-такое-мультиагентная-система-mas" class="section level3" number="6.3.1">
+<h3>
+<span class="header-section-number">6.3.1</span> Что такое мультиагентная система (MAS)?<a class="anchor" aria-label="anchor" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><i class="fas fa-link"></i></a>
+</h3>
+<p>Если кратко: это экосистема, где несколько специализированных AI-агентов взаимодействуют друг с другом для достижения общей цели. Вместо того чтобы просить одну модель «быть экспертом во всём», мы создаем команду узких специалистов.</p>
+</div>
+<div id="анатомия-системы-разбор-схемы" class="section level3" number="6.3.2">
+<h3>
+<span class="header-section-number">6.3.2</span> Анатомия системы (разбор схемы)<a class="anchor" aria-label="anchor" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><i class="fas fa-link"></i></a>
+</h3>
+<p>Архитектура, которую мы реализуем с помощью пакетов экосистемы ellmer / mini007, строится на четырех «китах»:</p>
+<div class="inline-figure"><img src="img/6-1.jpg" align="middle" width="640"></div>
+<div id="leadagent-оркестратор" class="section level4" number="6.3.2.1">
+<h4>
+<span class="header-section-number">6.3.2.1</span> 1. LeadAgent (Оркестратор)<a class="anchor" aria-label="anchor" href="#leadagent-%D0%BE%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80"><i class="fas fa-link"></i></a>
+</h4>
+<p>Это «директор» системы, реализованный через <strong>R6 класс</strong>. Его задачи:</p>
+<ul>
+<li>
+<strong>Декомпозиция:</strong> Разбить ваш сложный запрос (например, «Проанализируй продажи и напиши отчет») на цепочку понятных задач.</li>
+<li>
+<strong>Делегирование:</strong> Назначить задачу конкретному исполнителю.</li>
+<li>
+<strong>Контроль:</strong> Убедиться, что финальный результат соответствует ожиданиям.</li>
+</ul>
+</div>
+<div id="agent---специализированные-агенты-роли" class="section level4" number="6.3.2.2">
+<h4>
+<span class="header-section-number">6.3.2.2</span> 2. Agent - Специализированные агенты (Роли)<a class="anchor" aria-label="anchor" href="#agent---%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D1%8B-%D1%80%D0%BE%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Каждый агент — это изолированная сущность со своим системным промптом и набором инструментов (tools):</p>
+<ul>
+<li>
+<code>Researcher</code>: Имеет доступ к поиску и базам данных.</li>
+<li>
+<code>Coder</code>: Пишет чистый R-код.</li>
+<li>
+<code>Tester</code>: Запускает этот код и проверяет его на ошибки (Unit testing).</li>
+<li>
+<code>Writer</code>: Агрегирует технические данные в читаемый текст.</li>
+</ul>
+</div>
+<div id="shared-state-общее-пространство-памяти" class="section level4" number="6.3.2.3">
+<h4>
+<span class="header-section-number">6.3.2.3</span> 3. Shared State (Общее пространство памяти)<a class="anchor" aria-label="anchor" href="#shared-state-%D0%BE%D0%B1%D1%89%D0%B5%D0%B5-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Блок <code>agents_interaction</code> — это критически важный элемент. Это общая «память» или контекст, где сохраняется вся история взаимодействия.</p>
+<ul>
+<li>Благодаря этому <strong>Coder</strong> знает, какие данные нашел <strong>Researcher</strong>, а <strong>Tester</strong> понимает, какой именно скрипт ему нужно проверить.</li>
+<li>В R это реализуется через общие объекты состояния, которые обновляются по мере выполнения задач.</li>
+</ul>
+</div>
+<div id="цикл-обратной-связи" class="section level4" number="6.3.2.4">
+<h4>
+<span class="header-section-number">6.3.2.4</span> 4. Цикл обратной связи<a class="anchor" aria-label="anchor" href="#%D1%86%D0%B8%D0%BA%D0%BB-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE%D0%B9-%D1%81%D0%B2%D1%8F%D0%B7%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Обратите внимание на стрелки между агентами и LeadAgent. Система не просто идет «сверху вниз». Если <strong>Tester</strong> находит ошибку в коде, задача возвращается к <strong>Coder</strong> на итерацию. Этот процесс происходит автономно до тех пор, пока результат не будет валидным.</p>
+</div>
+</div>
+<div id="класс-agent" class="section level3" number="6.3.3">
+<h3>
+<span class="header-section-number">6.3.3</span> Класс Agent<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><i class="fas fa-link"></i></a>
+</h3>
+<p>Как я уже упоминал выше, пакет <code>mini007</code> предоставляет нам 2 основных класса: <code>Agent</code> и <code>LeadAgent</code>, для начала разберёмся с <code>Agent</code>.</p>
+<p>Класс <code>Agent</code> строится поверх объекта класса <code>Chat</code> из пакета <code>ellmer</code>.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Создание агента ---------------------------------------------------------</span></span>
+<span><span class="co">## создаём объект chat</span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">'gemini-2.5-flash'</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Создаём агента</span></span>
+<span><span class="va">text_analyzer</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Анализатор тематики текстов"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"ТЫ агент который анализирует длинные тексты, и выдаёт список 5 ключевых поинтов из текста."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">chat</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>При создании агента вам необходимо дать ему имя, в <code>instruction</code> прописать его системный промпт, и передать объект класса <code>Chat</code> в аргумент <code>llm_object</code>.</p>
+<p>С помощью свойства <code>agent_id</code> мы можем получить идентификатор агента, а в <code>llm_object</code> хранится добавленный при создании агента объект чата:</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Основные свойства и методы агента ---------------------------------------</span></span>
+<span><span class="co">## id агента</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">agent_id</span></span>
+<span></span>
+<span><span class="co">## объект chat</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">llm_object</span></span></code></pre></div>
+<p>Для общения с агентом, и очистки диалога используйте следующие методы:
+* <code>invoke()</code> - отправить агенту запрос
+* <code>messages</code> - посмотреть историю сообщений
+* <code>clear_and_summarise_messages()</code> - суммаризация и очистка истории сообщений
+* <code>keep_last_n_messages()</code> - Оставить n последних сообщений диалога
+* <code>reset_conversation_history()</code> - Полная очистка истории диалога</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## запрос агенту</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Прочитай текст по ссылке https://github.com/feddelegrand7/mini007"</span><span class="op">)</span></span>
+<span><span class="co">## история сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## получить содержание переписки и очистить историю сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">clear_and_summarise_messages</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## Оставить только несколько последних сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Прочитай текст по ссылке https://github.com/feddelegrand7/mini007"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Проранжируй их в порядке убываения, от наиболее важного до наименее важного"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Теперь оставь только самый главный поинт, и объясни его подробнее"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">keep_last_n_messages</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## сброс истории переписки</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Так же есть метод <code>add_message()</code>, который позволяет добавлять сообщения в историю диалога с различными ролями, аргументы данного метода:
+* <code>role</code> - “user”, “assistant” или “system”
+* <code>сontent</code> – текст сообщения</p>
+<p>Добавленные сообщение агент будет обрабатывать так же как и сгенерированные через реальный диалог с ним.</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Добавление сообщений в историю агента вручную</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">add_message</span><span class="op">(</span><span class="st">'user'</span>, <span class="st">'Ты бы мог проанализировать какой то текст и выдать основные тезисы?'</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">add_message</span><span class="op">(</span><span class="st">'assistant'</span>, <span class="st">'Конечно, ты можешь предоставить мне ссылку на текст, и я проанализирую его.'</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span><span class="co">## дальнейшее общение может быть продолжено тсходя из добавленных сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Дай краткие итоги о чём мы с тобой общались"</span><span class="op">)</span></span></code></pre></div>
+<p>Метод <code>update_instruction()</code> позволяет вам в любой момент редактировать системный промпт агента:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Обновление системного промпта -------------------------------------------</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">update_instruction</span><span class="op">(</span><span class="st">"Ты специалист по анализу данных на языке R, помогаешь в разработке и анализе кода."</span><span class="op">)</span></span></code></pre></div>
+<p>В отличае от обычного <code>Chat</code> из пакета <code>ellmer</code> агент позволяет вам экспортировать и импортировать в json файлы ваши диалоги:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Экспорт и импорт истории переписки --------------------------------------</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Что такое язык R, его основные предназначения?"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## экспорт истори</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">export_messages_history</span><span class="op">(</span><span class="st">"r_lang_history.json"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## импорт истории</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">load_messages_history</span><span class="op">(</span><span class="st">"r_lang_history.json"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></div>
+<div class="next"><a href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html"><span class="header-section-number">7</span> Заключение</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><span class="header-section-number">6</span> Разработка мульти агентных систем (пакет mini007)</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-5"><span class="header-section-number">6.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-5"><span class="header-section-number">6.1.1</span> Тайм-коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-5"><span class="header-section-number">6.2</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-5"><span class="header-section-number">6.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><span class="header-section-number">6.3.1</span> Что такое мультиагентная система (MAS)?</a></li>
+<li><a class="nav-link" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><span class="header-section-number">6.3.2</span> Анатомия системы (разбор схемы)</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><span class="header-section-number">6.3.3</span> Класс Agent</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/06_multi_agent_systems.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/06_multi_agent_systems.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-02-07.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

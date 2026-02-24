@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Глава 6 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’</title>
+<meta name="author" content="Алексей Селезнёв">
+<meta name="description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="generator" content="bookdown 0.43 with bs4_book()">
+<meta property="og:title" content="Глава 6 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://selesnow.github.io/build_ai_tools_using_r/разработка-мультиагентных-систем-пакет-mini007.html">
+<meta property="og:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta property="og:description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Глава 6 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="twitter:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-114798296-1"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-114798296-1');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Курс ‘Язык R для разработки AI инструментов’</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Введение</a></li>
+<li><a class="" href="%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D1%83-ai-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BD%D0%B0-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-r-ellmer-shinychat.html"><span class="header-section-number">1</span> Введение в разработку AI инструментов на языке R (ellmer, shinychat)</a></li>
+<li><a class="" href="%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B2-telegram-%D0%B1%D0%BE%D1%82%D0%B0.html"><span class="header-section-number">2</span> Встраиваем LLM модель в Telegram бота</a></li>
+<li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
+<li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
+<li><a class="" href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></li>
+<li><a class="active" href="%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007.html"><span class="header-section-number">6</span> Разработка мультиагентных систем (пакет mini007)</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html">Заключение</a></li>
+<li><a class="" href="%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8-%D0%BA%D1%83%D1%80%D1%81%D0%B0.html">Новости Курса</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/selesnow/build_ai_tools_using_r">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="разработка-мультиагентных-систем-пакет-mini007" class="section level1" number="6">
+<h1>
+<span class="header-section-number">Глава 6</span> Разработка мультиагентных систем (пакет mini007)<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><i class="fas fa-link"></i></a>
+</h1>
+<div id="видео-5" class="section level2" number="6.1">
+<h2>
+<span class="header-section-number">6.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-5"><i class="fas fa-link"></i></a>
+</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7YLlot7-d4M?si=rX8q3lCjrN7JdR4N&amp;enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<div id="тайм-коды-5" class="section level3" number="6.1.1">
+<h3>
+<span class="header-section-number">6.1.1</span> Тайм-коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-5"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=0"><strong>00:00</strong></a> — Введение</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=68"><strong>01:08</strong></a> — Создание объекта класса Agent</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=193"><strong>03:13</strong></a> — Суммаризация и очистка переписки с агентом</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=288"><strong>04:48</strong></a> — Добавление сообщений в переписку с агентом</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=360"><strong>06:00</strong></a> — Обновление системного промпта агента</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=390"><strong>06:30</strong></a> — Экспорт и импорт истории переписки с агентом</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=429"><strong>07:09</strong></a> — Управление бюджетом агента (лимиты токенов)</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=560"><strong>09:20</strong></a> — Генерация и выполнение R-кода с помощью агента</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=703"><strong>11:43</strong></a> — Проверка качества ответов модели (LLM-as-a-judge)</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=917"><strong>15:17</strong></a> — Создание и добавление агенту инструментов</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1136"><strong>18:56</strong></a> — Как устроены мультиагентные системы (теория)</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1243"><strong>20:43</strong></a> — Создание мультиагентной системы с помощью пакета mini007</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1498"><strong>24:58</strong></a> — В чём преимущества мультиагентных систем</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1556"><strong>25:56</strong></a> — Broadcasting: отправка одного запроса каждому агенту</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=1747"><strong>29:07</strong></a> — Human-in-the-loop: контроль системы человеком</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=2024"><strong>33:44</strong></a> — Диалог двух агентов между собой</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=2348"><strong>39:08</strong></a> — Как упаковать мультиагентную систему в интерфейс чата</li>
+<li>
+<a href="https://youtu.be/7YLlot7-d4M?t=2544"><strong>42:24</strong></a> — Заключение</li>
+</ul>
+</div>
+</div>
+<div id="презентация-5" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-5"><i class="fas fa-link"></i></a>
+</h2>
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/s3zsiwGW0GFlAT?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
+</iframe>
+</div>
+<div id="конспект-5" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-5"><i class="fas fa-link"></i></a>
+</h2>
+<div id="что-такое-мультиагентная-система-mas" class="section level3" number="6.3.1">
+<h3>
+<span class="header-section-number">6.3.1</span> Что такое мультиагентная система (MAS)?<a class="anchor" aria-label="anchor" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><i class="fas fa-link"></i></a>
+</h3>
+<p>Если кратко: это экосистема, где несколько специализированных AI-агентов взаимодействуют друг с другом для достижения общей цели. Вместо того чтобы просить одну модель «быть экспертом во всём», мы создаем команду узких специалистов.</p>
+</div>
+<div id="анатомия-системы-разбор-схемы" class="section level3" number="6.3.2">
+<h3>
+<span class="header-section-number">6.3.2</span> Анатомия системы (разбор схемы)<a class="anchor" aria-label="anchor" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><i class="fas fa-link"></i></a>
+</h3>
+<p>Архитектура, которую мы реализуем с помощью пакетов экосистемы <code>ellmer</code> / <code>mini007</code>, строится на четырех «китах»:</p>
+<div class="inline-figure"><img src="img/6-1.jpg" align="middle" width="640"></div>
+<div id="leadagent-оркестратор" class="section level4" number="6.3.2.1">
+<h4>
+<span class="header-section-number">6.3.2.1</span> 1. LeadAgent (Оркестратор)<a class="anchor" aria-label="anchor" href="#leadagent-%D0%BE%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80"><i class="fas fa-link"></i></a>
+</h4>
+<p>Это «директор» системы, реализованный через <strong>R6 класс</strong>. Его задачи:</p>
+<ul>
+<li>
+<strong>Декомпозиция:</strong> Разбить ваш сложный запрос (например, «Проанализируй продажи и напиши отчет») на цепочку понятных задач.</li>
+<li>
+<strong>Делегирование:</strong> Назначить задачу конкретному исполнителю.</li>
+<li>
+<strong>Контроль:</strong> Убедиться, что финальный результат соответствует ожиданиям.</li>
+</ul>
+</div>
+<div id="agent---специализированные-агенты-роли" class="section level4" number="6.3.2.2">
+<h4>
+<span class="header-section-number">6.3.2.2</span> 2. Agent - Специализированные агенты (Роли)<a class="anchor" aria-label="anchor" href="#agent---%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D1%8B-%D1%80%D0%BE%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Каждый агент — это изолированная сущность со своим системным промптом и набором инструментов (tools):</p>
+<ul>
+<li>
+<code>Researcher</code>: Имеет доступ к поиску и базам данных.</li>
+<li>
+<code>Coder</code>: Пишет чистый R-код.</li>
+<li>
+<code>Tester</code>: Запускает этот код и проверяет его на ошибки (Unit testing).</li>
+<li>
+<code>Writer</code>: Агрегирует технические данные в читаемый текст.</li>
+</ul>
+</div>
+<div id="shared-state-общее-пространство-памяти" class="section level4" number="6.3.2.3">
+<h4>
+<span class="header-section-number">6.3.2.3</span> 3. Shared State (Общее пространство памяти)<a class="anchor" aria-label="anchor" href="#shared-state-%D0%BE%D0%B1%D1%89%D0%B5%D0%B5-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Блок <code>agents_interaction</code> — это критически важный элемент. Это общая «память» или контекст, где сохраняется вся история взаимодействия.</p>
+<ul>
+<li>Благодаря этому <strong>Coder</strong> знает, какие данные нашел <strong>Researcher</strong>, а <strong>Tester</strong> понимает, какой именно скрипт ему нужно проверить.</li>
+<li>В R это реализуется через общие объекты состояния, которые обновляются по мере выполнения задач.</li>
+</ul>
+</div>
+<div id="цикл-обратной-связи" class="section level4" number="6.3.2.4">
+<h4>
+<span class="header-section-number">6.3.2.4</span> 4. Цикл обратной связи<a class="anchor" aria-label="anchor" href="#%D1%86%D0%B8%D0%BA%D0%BB-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE%D0%B9-%D1%81%D0%B2%D1%8F%D0%B7%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Обратите внимание на стрелки между агентами и LeadAgent. Система не просто идет «сверху вниз». Если <strong>Tester</strong> находит ошибку в коде, задача возвращается к <strong>Coder</strong> на итерацию. Этот процесс происходит автономно до тех пор, пока результат не будет валидным.</p>
+</div>
+</div>
+<div id="класс-agent" class="section level3" number="6.3.3">
+<h3>
+<span class="header-section-number">6.3.3</span> Класс Agent<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><i class="fas fa-link"></i></a>
+</h3>
+<p>Как я уже упоминал выше, пакет <code>mini007</code> предоставляет нам 2 основных класса: <code>Agent</code> и <code>LeadAgent</code>, для начала разберёмся с <code>Agent</code>.</p>
+<p>Класс <code>Agent</code> строится поверх объекта класса <code>Chat</code> из пакета <code>ellmer</code>.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Создание агента ---------------------------------------------------------</span></span>
+<span><span class="co">## создаём объект chat</span></span>
+<span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">'gemini-2.5-flash'</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Создаём агента</span></span>
+<span><span class="va">text_analyzer</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Анализатор тематики текстов"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"ТЫ агент который анализирует длинные тексты, и выдаёт список 5 ключевых поинтов из текста."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">chat</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>При создании агента вам необходимо дать ему имя, в <code>instruction</code> прописать его системный промпт, и передать объект класса <code>Chat</code> в аргумент <code>llm_object</code>.</p>
+<p>С помощью свойства <code>agent_id</code> мы можем получить идентификатор агента, а в <code>llm_object</code> хранится добавленный при создании агента объект чата:</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Основные свойства и методы агента ---------------------------------------</span></span>
+<span><span class="co">## id агента</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">agent_id</span></span>
+<span></span>
+<span><span class="co">## объект chat</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">llm_object</span></span></code></pre></div>
+<div id="отправка-запроса-и-управление-историей-диалога" class="section level4" number="6.3.3.1">
+<h4>
+<span class="header-section-number">6.3.3.1</span> Отправка запроса и управление историей диалога<a class="anchor" aria-label="anchor" href="#%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0-%D0%B8-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B5%D0%B9-%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0"><i class="fas fa-link"></i></a>
+</h4>
+<p>Для общения с агентом, и очистки диалога используйте следующие методы:
+* <code>invoke()</code> - отправить агенту запрос
+* <code>messages</code> - посмотреть историю сообщений
+* <code>clear_and_summarise_messages()</code> - суммаризация и очистка истории сообщений
+* <code>keep_last_n_messages()</code> - Оставить n последних сообщений диалога
+* <code>reset_conversation_history()</code> - Полная очистка истории диалога</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## запрос агенту</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Прочитай текст по ссылке https://github.com/feddelegrand7/mini007"</span><span class="op">)</span></span>
+<span><span class="co">## история сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## получить содержание переписки и очистить историю сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">clear_and_summarise_messages</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## Оставить только несколько последних сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Прочитай текст по ссылке https://github.com/feddelegrand7/mini007"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Проранжируй их в порядке убываения, от наиболее важного до наименее важного"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Теперь оставь только самый главный поинт, и объясни его подробнее"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">keep_last_n_messages</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## сброс истории переписки</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Так же есть метод <code>add_message()</code>, который позволяет добавлять сообщения в историю диалога с различными ролями, аргументы данного метода:
+* <code>role</code> - “user”, “assistant” или “system”
+* <code>сontent</code> – текст сообщения</p>
+<p>Добавленные сообщение агент будет обрабатывать так же как и сгенерированные через реальный диалог с ним.</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Добавление сообщений в историю агента вручную</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">add_message</span><span class="op">(</span><span class="st">'user'</span>, <span class="st">'Ты бы мог проанализировать какой то текст и выдать основные тезисы?'</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">add_message</span><span class="op">(</span><span class="st">'assistant'</span>, <span class="st">'Конечно, ты можешь предоставить мне ссылку на текст, и я проанализирую его.'</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span><span class="co">## дальнейшее общение может быть продолжено тсходя из добавленных сообщений</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Дай краткие итоги о чём мы с тобой общались"</span><span class="op">)</span></span></code></pre></div>
+<p>Метод <code>update_instruction()</code> позволяет вам в любой момент редактировать системный промпт агента:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Обновление системного промпта -------------------------------------------</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">update_instruction</span><span class="op">(</span><span class="st">"Ты специалист по анализу данных на языке R, помогаешь в разработке и анализе кода."</span><span class="op">)</span></span></code></pre></div>
+<p>В отличае от обычного <code>Chat</code> из пакета <code>ellmer</code> агент позволяет вам экспортировать и импортировать в json файлы ваши диалоги:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Экспорт и импорт истории переписки --------------------------------------</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Что такое язык R, его основные предназначения?"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## экспорт истори</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">export_messages_history</span><span class="op">(</span><span class="st">"r_lang_history.json"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span>
+<span></span>
+<span><span class="co">## импорт истории</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">load_messages_history</span><span class="op">(</span><span class="st">"r_lang_history.json"</span><span class="op">)</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span></code></pre></div>
+</div>
+<div id="управление-бюджетом" class="section level4" number="6.3.3.2">
+<h4>
+<span class="header-section-number">6.3.3.2</span> Управление бюджетом<a class="anchor" aria-label="anchor" href="#%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D0%BE%D0%BC"><i class="fas fa-link"></i></a>
+</h4>
+<p>Отдельные методы позволяют управлять бюджетом на использование API:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># управление бюджетом -----------------------------------------------------</span></span>
+<span><span class="co">## установка бюджета в 5$</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">set_budget</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">## что делать при достижении бюджета</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">set_budget_policy</span><span class="op">(</span>on_exceed <span class="op">=</span> <span class="st">"ask"</span>, warn_at <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span>
+<span><span class="co">## проверка расходов</span></span>
+<span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">get_usage_stats</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="генерация-и-выполнение-r-кода" class="section level4" number="6.3.3.3">
+<h4>
+<span class="header-section-number">6.3.3.3</span> Генерация и выполнение R кода<a class="anchor" aria-label="anchor" href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-r-%D0%BA%D0%BE%D0%B4%D0%B0"><i class="fas fa-link"></i></a>
+</h4>
+<p>Агенты могут по вашему запросу генерировать, и сразу выполнять R код:</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># выполнение R кода -------------------------------------------------------</span></span>
+<span><span class="co">## создаём агента-разработчика на языке R</span></span>
+<span><span class="va">r_assistant</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"R Code Assistant"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты эксперт в разработке и аналитике на языке R."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">chat</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">## задаём промпт для разработки кода</span></span>
+<span><span class="va">r_assistant</span><span class="op">$</span><span class="fu">generate_execute_r_code</span><span class="op">(</span></span>
+<span>  code_description <span class="op">=</span> </span>
+<span>    <span class="st">"Используй ggplot2, сгенерируй график типа scatterplot по расходу топлива на шоссе </span></span>
+<span><span class="st">     и расход топливау в городе используя набор данных mpg, </span></span>
+<span><span class="st">     цвет точек сделай красным"</span>, </span>
+<span>  validate <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  execute <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="проверка-качества-ответов-от-llm-модели" class="section level4" number="6.3.3.4">
+<h4>
+<span class="header-section-number">6.3.3.4</span> Проверка качества ответов от LLM модели<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BE%D0%B2-%D0%BE%D1%82-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Метод <code>$validate_response()</code> позволяет проверить качество полученного ответа, и имеет следующие аргументы:</p>
+<ul>
+<li>
+<code>prompt</code> – Запрос пользователя</li>
+<li>
+<code>response</code> – Текст ответа модели для проверки</li>
+<li>
+<code>validation_criteria</code> – Описание критериев проверки</li>
+<li>
+<code>validation_score</code> – Пороговое значение, при котором ответ считается корректным (по умолчанию 0.8)</li>
+</ul>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Пример - 1: проверка достоверности</span></span>
+<span><span class="va">fact_checker</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"fact_checker"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты ассистент по проверке фактов."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">chat</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">prompt</span> <span class="op">&lt;-</span> <span class="st">"Какая столица Алжира?"</span></span>
+<span><span class="va">response</span> <span class="op">&lt;-</span> <span class="va">fact_checker</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="va">prompt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">validation</span> <span class="op">&lt;-</span> <span class="va">fact_checker</span><span class="op">$</span><span class="fu">validate_response</span><span class="op">(</span></span>
+<span>  prompt <span class="op">=</span> <span class="va">prompt</span>,</span>
+<span>  response <span class="op">=</span> <span class="va">response</span>,</span>
+<span>  validation_criteria <span class="op">=</span> <span class="st">"Ответ должен быть точным, и в качестве столицы надо указать Алжир"</span>,</span>
+<span>  validation_score <span class="op">=</span> <span class="fl">0.8</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">validation</span></span>
+<span></span>
+<span><span class="co">## Пример -2: Проверка длинны и стиля текста</span></span>
+<span><span class="va">content_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"content_creator"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты ассистент по разработке рекламных текстов"</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">chat</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">prompt</span> <span class="op">&lt;-</span> <span class="st">"Напиши рекламное объявление об Алжирских фиников, длинной не более одного предложения."</span></span>
+<span></span>
+<span><span class="va">response</span> <span class="op">&lt;-</span> <span class="va">content_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="va">prompt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">validation</span> <span class="op">&lt;-</span> <span class="va">content_agent</span><span class="op">$</span><span class="fu">validate_response</span><span class="op">(</span></span>
+<span>  prompt <span class="op">=</span> <span class="va">prompt</span>,</span>
+<span>  response <span class="op">=</span> <span class="va">response</span>,</span>
+<span>  validation_criteria <span class="op">=</span> <span class="st">"Ответ должен быть не более 15 слов, написан профессиональным тоном и рекламировать Алжирские финики"</span>,</span>
+<span>  validation_score <span class="op">=</span> <span class="fl">0.75</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">validation</span><span class="op">$</span><span class="va">feedback</span></span></code></pre></div>
+<p><strong>Варианты использования:</strong></p>
+<ul>
+<li>
+<strong>Контроль качества</strong> - Перед публикацией необходимо убедиться, что ответы соответствуют стандартам содержания.</li>
+<li>
+<strong>Проверка фактов</strong> - Убедитесь, что ответы содержат достоверную информацию.</li>
+<li>
+<strong>Соответствие стилю</strong> - Проверьте, соответствуют ли ответы требованиям к тону, длине или формату.</li>
+<li>
+<strong>Фильтрация по безопасности</strong> - Проверка соответствия контента критериям безопасности и уместности.</li>
+<li>
+<strong>A/B-тестирование</strong> - сравнение качества ответов в разных моделях или при использовании разных запросов.</li>
+</ul>
+</div>
+<div id="работа-с-инструментами" class="section level4" number="6.3.3.5">
+<h4>
+<span class="header-section-number">6.3.3.5</span> Работа с инструментами<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8"><i class="fas fa-link"></i></a>
+</h4>
+<p>Так же как и в обычный <code><a href="https://ellmer.tidyverse.org/reference/Chat.html">ellmer::Chat</a></code>, в <code>Agent</code> можно добавить любое количество инструментов:</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Создаём агента</span></span>
+<span><span class="va">weather_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"weather_assistant"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты ассистент по прогнозу погоды."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">chat</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## создаём инструменты</span></span>
+<span><span class="va">weather_function_algiers</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span></span>
+<span>    <span class="st">"35 градусов по цельсию, солнечно и без осадков."</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">msg</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">get_weather_in_algiers</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  fun <span class="op">=</span> <span class="va">weather_function_algiers</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_in_algiers"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Запрос данных о погоде в Алжире."</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">weather_function_berlin</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span></span>
+<span>    <span class="st">"10 градусов по цельсию, холодная погода"</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">msg</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">get_weather_in_berlin</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/tool.html">tool</a></span><span class="op">(</span></span>
+<span>  fun <span class="op">=</span> <span class="va">weather_function_berlin</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"get_weather_in_berlin"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"Предоставляет данные о погоде в Берлине, Германия."</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">register_tools</span><span class="op">(</span></span>
+<span>  tools <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="va">get_weather_in_algiers</span>, </span>
+<span>    <span class="va">get_weather_in_berlin</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Посмотреть список инструментов</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">list_tools</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">## вызов инструментов</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Какая погода в Алжире?"</span><span class="op">)</span></span>
+<span><span class="co">## удаление инструментов</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">remove_tools</span><span class="op">(</span><span class="st">'get_weather_in_algiers'</span><span class="op">)</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">list_tools</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">clear_tools</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">list_tools</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Но <code>Agent</code>, в отличие от <code><a href="https://ellmer.tidyverse.org/reference/Chat.html">ellmer::Chat</a></code>, умеет самостоятельно разрабатывать и добавлять в свой арсенал иснтрументы:</p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## автоматическое создание инструмента</span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">generate_and_register_tool</span><span class="op">(</span></span>
+<span>  description <span class="op">=</span> <span class="st">"Создай инструмент, который использует httr для вызова API open-meteo https://open-meteo.com/en/docs, чтобы получить текущую погоду в любом городе мира"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">list_tools</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span></span>
+<span>  prompt <span class="op">=</span> <span class="st">"Какая сейчас погода в Хургаде (Hurghada), Египет?"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div id="класс-leadagent-разработка-мультиагентных-систем" class="section level3" number="6.3.4">
+<h3>
+<span class="header-section-number">6.3.4</span> Класс LeadAgent: Разработка мультиагентных систем<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-leadagent-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
+</h3>
+<p>Если <code>Agent</code> является базовой объектной единицой в мультиагентных системах, то <code>LeadAgent</code> это оркестратор, который реализует:</p>
+<ul>
+<li>Память и идентификация каждого агента посредством uuidистории сообщений.</li>
+<li>Встроенная декомпозиция и делегирование задач с помощью LLM.</li>
+<li>Координация действий между агентами с цепочкой результатов.</li>
+</ul>
+<p>Для создания мульти агентной системы вам необходимо создать одного <code>LeadAgent</code>, и отдельно любое количество узкоспециализированных <code>Agent</code>.</p>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## создаём объект chat</span></span>
+<span><span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"gemini-2.5-flash"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">business_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"business"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты анализируешь бизнес-контекст и цели. Сфокусируйся на смысле бизнеса, а не на технических деталях."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metrics_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"metrics"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты опытный data-аналитик. Предлагай осмысленные метрики и KPI на основе бизнес-контекста."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">code_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"code"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты R-разработчик. Пиши чистый, воспроизводимый R-код с использованием tidyverse."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">writer_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"writer"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты пишешь понятные аналитические отчёты для нетехнических менеджеров."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/LeadAgent.html">LeadAgent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"lead"</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">register_agents</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="va">business_agent</span>,</span>
+<span>    <span class="va">metrics_agent</span>,</span>
+<span>    <span class="va">code_agent</span>,</span>
+<span>    <span class="va">writer_agent</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">prompt</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">У нас есть онлайн-сервис по подписке.</span></span>
+<span><span class="st">Пользователи могут оформлять подписку, отменять её и возвращаться после оттока.</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">Подготовь аналитический отчёт:</span></span>
+<span><span class="st">- объясни бизнес-контекст</span></span>
+<span><span class="st">- предложи ключевые метрики</span></span>
+<span><span class="st">- приведи R-код для их расчёта</span></span>
+<span><span class="st">- напиши короткое резюме для менеджмента</span></span>
+<span><span class="st">"</span></span>
+<span></span>
+<span><span class="co"># построение плана выполнения задачи</span></span>
+<span><span class="va">plan</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">generate_plan</span><span class="op">(</span><span class="va">prompt</span><span class="op">)</span></span>
+<span><span class="co"># выполнение задантя</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="va">prompt</span><span class="op">)</span></span>
+<span><span class="co"># посмотреть всю цепочку выполнения</span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="va">agents_interaction</span></span>
+<span><span class="co"># визуализация плана</span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">visualize_plan</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><code>LeadAgent</code> имеет следующие методы:</p>
+<ul>
+<li>
+<code>register_agents()</code> - для регистрации <code>Agent</code>
+</li>
+<li>
+<code>generate_plan()</code> - для генерации плана, т.е. нарезки большой задачи на подзадачи, и распределения их между агентами</li>
+<li>
+<code>visualize_plan()</code> - визуальное отображение цепочки агентов в сгенерированном плане</li>
+<li>
+<code>invoke()</code> - для получение задачи от пользователя</li>
+</ul>
+<div id="broadcasting" class="section level4" number="6.3.4.1">
+<h4>
+<span class="header-section-number">6.3.4.1</span> Broadcasting<a class="anchor" aria-label="anchor" href="#broadcasting"><i class="fas fa-link"></i></a>
+</h4>
+<p>Метод <code>broadcast()</code> позволяет вам передать один и тот же запрос всех зарегестрированным агентам, а метод <code>judge_and_choose_best_response()</code> позволяет <code>LeadAgent</code> выбрать лучший из полученных от разных <code>Agent</code> ответов:</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## создаём объект chat</span></span>
+<span><span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"gemini-2.5-flash"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## создаём объект chat</span></span>
+<span><span class="va">fls_25</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"gemini-2.5-flash"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fls_25_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"flash 2.5"</span>, </span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты разработчик Senior уровня на языке R."</span>, </span>
+<span>  llm_object <span class="op">=</span> <span class="va">fls_25</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fls30</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"gemini-3-flash-preview"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fls_30_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"flash 3"</span>, </span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты разработчик Senior уровня на языке R."</span>, </span>
+<span>  llm_object <span class="op">=</span> <span class="va">fls30</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/LeadAgent.html">LeadAgent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"lead"</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">register_agents</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">fls_25_agent</span>, <span class="va">fls_30_agent</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">broadcast</span><span class="op">(</span>prompt <span class="op">=</span> <span class="st">"Дай мне пример построения графика-воронки (funnel) с помощью пакета ggplot2. Данные: просмотры 1050, сеансы 102, бросили в корзину 30, заказали 5, покупки 2"</span><span class="op">)</span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="va">broadcast_history</span></span>
+<span></span>
+<span><span class="co"># Lead agent сам выбирает лучший ответ</span></span>
+<span><span class="va">best_answer</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">judge_and_choose_best_response</span><span class="op">(</span></span>
+<span>  <span class="st">"Дай мне пример построения графика-воронки (funnel) с помощью пакета ggplot2. Данные: просмотры 1050, сеансы 102, бросили в корзину 30, заказали 5, покупки 2"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co"># выбранный ответ</span></span>
+<span><span class="va">best_answer</span><span class="op">$</span><span class="va">chosen_response</span></span></code></pre></div>
+<p>Кейсы применения:</p>
+<ul>
+<li>Сравнить стили ответов разных агентов (писатель / кодер / менеджер)</li>
+<li>Проверить разные модели / параметры / провайдеры</li>
+<li>Быстрый тест без влияния на основной контекст</li>
+</ul>
+</div>
+<div id="human-in-the-loop" class="section level4" number="6.3.4.2">
+<h4>
+<span class="header-section-number">6.3.4.2</span> Human in the loop<a class="anchor" aria-label="anchor" href="#human-in-the-loop"><i class="fas fa-link"></i></a>
+</h4>
+<p><strong>Human-in-the-Loop (HITL)</strong> — это подход, при котором человек сознательно включён в цикл автоматизированного процесса или системы с ИИ/агентами, чтобы:</p>
+<ul>
+<li>наблюдать за работой системы;</li>
+<li>в нужные моменты вмешиваться;</li>
+<li>подтверждать, корректировать или отклонять предложения, которые делает автоматическая часть.</li>
+</ul>
+<p>По сути, это баланс между автоматизацией и человеческим контролем — машина делает рутинное, а человек остаётся «на страже», особенно в сложных или неоднозначных ситуациях.</p>
+<p>HITL часто используют там, где риск ошибок высок, а контекст важен: безопасность, медицина, финансы, управление автономными агентами и т. д. — именно там человеческий опыт дополняет алгоритмическое принятие решений.</p>
+<p>В примере ниже, я строю мульти агентную систему для написание публикаций в telegram канал. Вся система состоит из следующих агентов:</p>
+<ul>
+<li>Researcher - Акцент на поиске нужной для публикации информации</li>
+<li>Analyst - Анализирует собранный материал</li>
+<li>Summarizer - Делает из большой публикации саммари, для формата поста в telegram</li>
+<li>Editor - Финальная вычитка и правки публикации</li>
+</ul>
+<p>Далее после генерации плана выполнения моей задачи я использую метод <code>set_hitl()</code>, в котором я могу указать номер шага в плане, на котором система должна оставиться, показать мне текущий результат, и спросить что далее делать:</p>
+<ol style="list-style-type: decimal">
+<li>Продолжайте выполнение рабочего процесса в текущем виде;</li>
+<li>Вручную измените ответ на указанном шаге и продолжите выполнение рабочего процесса;</li>
+<li>Остановка выполнения рабочего процесса (жесткая ошибка);</li>
+</ol>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"gemini-2.5-flash"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/LeadAgent.html">LeadAgent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Lead"</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">researcher_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Researcher"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Твоя основная задача - собрать всю необходимую информацию по заданной тематике для написания статьи."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">analysis_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Analyst"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты анализируешь собранные для статьи данные и выделяешь ключевые идеи."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">summary_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Summarizer"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты делаешь краткое и структурированное резюме текста."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">editor_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Editor"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="st">"Ты специалист по написанию контента для технических Telegram каналов. Твоя задача подготовь финальную версию текста для публикации с исправлением всех ошибок."</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">register_agents</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="va">researcher_agent</span>,</span>
+<span>    <span class="va">analysis_agent</span>, </span>
+<span>    <span class="va">summary_agent</span>,</span>
+<span>    <span class="va">editor_agent</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">text_input</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">Напиши пост для моего telegram канала, о том, что такое Google BigQuery. Учти ограничение telegram в 4000 символов на сообщение.</span></span>
+<span><span class="st">Текст доолжен помещаться в 1 сообщение канала.</span></span>
+<span><span class="st">Текст должен быть подготовлен и написан на русском языке.</span></span>
+<span><span class="st">"</span></span>
+<span></span>
+<span><span class="co"># смотрим план выполнения</span></span>
+<span><span class="va">plan</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">generate_plan</span><span class="op">(</span><span class="va">text_input</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ВКЛЮЧАЕМ HITL</span></span>
+<span><span class="co"># Остановка ПОСЛЕ шага Analyst</span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">set_hitl</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="va">text_input</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="диалог-двух-агентов" class="section level4" number="6.3.4.3">
+<h4>
+<span class="header-section-number">6.3.4.3</span> Диалог двух агентов<a class="anchor" aria-label="anchor" href="#%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3-%D0%B4%D0%B2%D1%83%D1%85-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BE%D0%B2"><i class="fas fa-link"></i></a>
+</h4>
+<p>Так же пакет <code>mini007</code> позволяет вам организовать диалог двух агентов, у которых могут быть одинаковые, или же противополжные задачи, как у заказчика и исполнителя, либо как у CEO и CMO.</p>
+<p>В примере ниже я организовал диалог двух агентов:</p>
+<ul>
+<li>barmen - выступает в роли заказчика, это бармен, который хочет заказать разработку веб приложения для выбора коктелей по разным параметрам, ему необходимо сформулировать тезническое задание для исполнителя.</li>
+<li>developer - разработчик Shiny приложений, который будет реализовывать задачу от barmen, ему необходимо проанализировать задачу, и разработать Shiny приложение под требования barmen.</li>
+</ul>
+<p>Для реализации диалога вам необходимо создать 2 <code>Agent</code>, зарегистрировать их в <code>LeadAgent</code>, и инициализировать из диалог с помощью метода <code>agents_dialog</code>.</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="st">"gemini-2.5-flash"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">barmen</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"barmen"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Ты отлично разбираешься в коктейлях, "</span>,</span>
+<span>    <span class="st">"знаешь какие коктейли пользуются наибольшим спросом, "</span>,</span>
+<span>    <span class="st">"понимаешь по каким параметрам надо строить возможность выбора коктейлей, и какие наиболее популярные в них ингридиенты."</span>,</span>
+<span>    <span class="st">"Твоя задача получить приложение, с помощью которого твои гости будут заказывать коктейли."</span>,</span>
+<span>    <span class="st">"Но самостоятельно ты не разрабатываешь код, не программируешь, ты выступаешь в роли заказчика, который только описывает требования к приложению."</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">developer</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"developer"</span>,</span>
+<span>  instruction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Ты разработчик на языке R senior уровня. "</span>, </span>
+<span>    <span class="st">"Специализируешься на разработке Shiny приложений под заказы пользователей. "</span>,</span>
+<span>    <span class="st">"Изначально тебе всегда надо выяснить требования заказчика, и опираясь на них разработать приложение."</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/LeadAgent.html">LeadAgent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Leader"</span>,</span>
+<span>  llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lead_agent</span><span class="op">$</span><span class="fu">register_agents</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">barmen</span>, <span class="va">developer</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">agents_dialog</span><span class="op">(</span></span>
+<span>  prompt <span class="op">=</span> </span>
+<span>    <span class="st">"Напишите простое Shiny приложение для просмотра рецепта коктейлей, которое будет как интерактивное меню в баре. </span></span>
+<span><span class="st">     В результате вы должны предоставить готовый код приложения."</span>,</span>
+<span>  agent_1_id <span class="op">=</span> <span class="va">barmen</span><span class="op">$</span><span class="va">agent_id</span>,</span>
+<span>  agent_2_id <span class="op">=</span> <span class="va">developer</span><span class="op">$</span><span class="va">agent_id</span>,</span>
+<span>  max_iterations <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># информация о диалоге</span></span>
+<span><span class="co">## достингут ли консенсус</span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">consensus_reached</span></span>
+<span></span>
+<span><span class="co">## количество итераций</span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">iterations_used</span></span>
+<span></span>
+<span><span class="co">## результат работы</span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">final_response</span></span></code></pre></div>
+<p>С помощью аргумента <code>max_iterations</code> вы можете ограничить количество итераций диалога. В итоге за указанное количество итераций агенты (<code>Agent</code>) могут либо прийти к общему решению, либо нет, во втором случае окончательное решение будет принимать <code>LeadAgent</code>.</p>
+</div>
+</div>
+<div id="интеграция-между-mini007-и-shinychat" class="section level3" number="6.3.5">
+<h3>
+<span class="header-section-number">6.3.5</span> Интеграция между mini007 и shinychat<a class="anchor" aria-label="anchor" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mini007-%D0%B8-shinychat"><i class="fas fa-link"></i></a>
+</h3>
+<p>На момент записи этого видео урока, и написания этой главы я использовал <code>mini007</code> версии <code>0.3.0</code>, и на данный момент пакет не поддерживает глубокую интеграцию с интерфейсами созданными через <code>shinychat</code>, т.е.:</p>
+<ul>
+<li>сейчас нет возможности из коробки создать асинхронный интерфейс чата</li>
+<li>не поддерживается стримминг, т.е. постепенный вывод полученный от LLM</li>
+</ul>
+<p>Ещё одним минусом мультиагентных систем является скорость их работы, поскольку это целая цепочка запросов, и проверок.
+Но организовать максимально базовый однопоточный интерфейс чата можно:</p>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">bslib</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/bslib/reference/page_fillable.html">page_fillable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_ui.html">chat_ui</a></span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="st">"chat"</span>,</span>
+<span>    messages <span class="op">=</span> <span class="st">"**Hello!** How can I help you today?"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  fillable_mobile <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># объект чата</span></span>
+<span>  <span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    model <span class="op">=</span> <span class="st">"gemini-2.5-flash"</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># оркестратор</span></span>
+<span>  <span class="va">lead_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/LeadAgent.html">LeadAgent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"Lead"</span>,</span>
+<span>    llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># агенты</span></span>
+<span>  <span class="va">researcher_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"Researcher"</span>,</span>
+<span>    instruction <span class="op">=</span> <span class="st">"Твоя основная задача - собрать всю необходимую информацию по заданной тематике для написания статьи."</span>,</span>
+<span>    llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">editor_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"Editor"</span>,</span>
+<span>    instruction <span class="op">=</span> <span class="st">"Ты специалист по написанию контента для тезнических Telegram каналов. Твоя задача подготовь финальную версию текста для публикации с исправлением всех ошибок."</span>,</span>
+<span>    llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">smm_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"smm"</span>,</span>
+<span>    instruction <span class="op">=</span> <span class="st">"Ты специалист в SMM, умеешь подготавливать посты специализированно под каждую социальную сеть в том числе Telegram."</span>,</span>
+<span>    llm_object <span class="op">=</span> <span class="va">llm</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># регистрируем исполнителей</span></span>
+<span>  <span class="va">lead_agent</span><span class="op">$</span><span class="fu">register_agents</span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>      <span class="va">researcher_agent</span>,</span>
+<span>      <span class="va">editor_agent</span>, </span>
+<span>      <span class="va">smm_agent</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span>, <span class="op">{</span></span>
+<span>    <span class="va">stream</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">chat_user_input</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://posit-dev.github.io/shinychat/r/reference/chat_append.html">chat_append</a></span><span class="op">(</span><span class="st">"chat"</span>, <span class="va">stream</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>Т.е. UI часть остаётся такое же как и в чатах создаваемых в интеграции с <code>ellmer</code>, а в серверной части мы используем метод <code>invoke()</code>.</p>
+</div>
+<div id="преимущества-мультиагентных-систем" class="section level3" number="6.3.6">
+<h3>
+<span class="header-section-number">6.3.6</span> Преимущества мультиагентных систем<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B8%D0%BC%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
+</h3>
+<p>Итак, подводя итоги я бы хотел объяснить в чём заключаются преимущества мультиагентных систем.</p>
+<p><strong>Одна LLM</strong>
+* плохо держит роли (аналитик / разработчик / менеджер)
+* смешивает рассуждения
+* код часто «плывёт»
+* отчёт получается либо слишком технический, либо слишком абстрактный</p>
+<p><strong>Мульти агентная система</strong>
+* разделяем роли
+* каждый агент думает в своём контексте
+* <code>LeadAgent</code> собирает и проверяет результат как менеджер</p>
+</div>
+</div>
+<div id="вопросы-для-самопроверки-5" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-5"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li><details><summary><strong>В чем заключается основная роль класса <code>LeadAgent</code> в мультиагентной системе?</strong>
+</summary><code>LeadAgent</code> выступает в роли оркестратора (менеджера). Он декомпозирует сложный запрос пользователя на подзадачи, делегирует их конкретным специализированным агентам и координирует передачу контекста между ними для получения финального результата.
+</details></li>
+<li><details><summary><strong>Какой метод пакета <code>mini007</code> позволяет ограничить расходы на API и что произойдет при достижении лимита?</strong>
+</summary>
+Для управления расходами используется метод <code>$set_budget()</code>, где указывается сумма в долларах. С помощью <code>$set_budget_policy()</code> можно настроить поведение системы: например, выдать предупреждение при достижении 90% лимита (<code>warn_at = 0.9</code>) или запрашивать разрешение пользователя на продолжение работы (<code>on_exceed = "ask"</code>).
+</details></li>
+<li><details><summary><strong>Чем метод <code>broadcast()</code> отличается от стандартного <code>invoke()</code> в работе с LeadAgent?</strong>
+</summary>
+Метод <code>invoke()</code> запускает последовательное выполнение плана, где агенты могут работать цепочкой. Метод <code>broadcast()</code> отправляет один и тот же запрос всем зарегистрированным агентам одновременно. Это полезно для сравнения ответов от разных моделей или агентов с разными ролями, чтобы потом выбрать лучший результат с помощью <code>judge_and_choose_best_response()</code>.
+</details></li>
+<li><details><summary><strong>Как работает механизм Human-in-the-Loop (HITL) в цепочке выполнения задач?</strong>
+</summary>
+С помощью метода <code>$set_hitl(n)</code> можно остановить выполнение плана на определенном шаге. Система поставит процесс на паузу и позволит человеку просмотреть промежуточный результат, после чего пользователь может либо разрешить продолжение, либо скорректировать ответ вручную, либо полностью остановить выполнение.
+</details></li>
+<li><details><summary><strong>В чем преимущество использования специализированных агентов по сравнению с одним общим чат-объектом <code>ellmer</code>?</strong>
+</summary>
+Специализированные агенты лучше удерживают заданную роль и контекст (например, только код или только бизнес-аналитика). Это предотвращает «галлюцинации» и смешивание стилей, а наличие общего пространства памяти (<code>Shared State</code>) позволяет системе проверять и исправлять ошибки одного агента силами другого (например, агент-тестировщик проверяет код агента-разработчика).
+</details></li>
+<li><details><summary><strong>Может ли агент самостоятельно расширять свои возможности без написания кода разработчиком?</strong>
+</summary>
+Да, в <code>mini007</code> есть метод <code>$generate_and_register_tool()</code>. С его помощью агент может на основе текстового описания задачи сам написать R-код функции, превратить её в инструмент (<code>tool</code>) и сразу добавить в свой арсенал для использования.
+</details></li>
+</ol>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></div>
+<div class="next"><a href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html">Заключение</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><span class="header-section-number">6</span> Разработка мультиагентных систем (пакет mini007)</a></li>
+<li>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-5"><span class="header-section-number">6.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-5"><span class="header-section-number">6.1.1</span> Тайм-коды</a></li></ul>
+</li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-5"><span class="header-section-number">6.2</span> Презентация</a></li>
+<li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-5"><span class="header-section-number">6.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><span class="header-section-number">6.3.1</span> Что такое мультиагентная система (MAS)?</a></li>
+<li><a class="nav-link" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><span class="header-section-number">6.3.2</span> Анатомия системы (разбор схемы)</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><span class="header-section-number">6.3.3</span> Класс Agent</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-leadagent-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><span class="header-section-number">6.3.4</span> Класс LeadAgent: Разработка мультиагентных систем</a></li>
+<li><a class="nav-link" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mini007-%D0%B8-shinychat"><span class="header-section-number">6.3.5</span> Интеграция между mini007 и shinychat</a></li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B8%D0%BC%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><span class="header-section-number">6.3.6</span> Преимущества мультиагентных систем</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-5"><span class="header-section-number">6.4</span> Вопросы для самопроверки</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/06_multi_agent_systems.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/06_multi_agent_systems.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-02-24.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
