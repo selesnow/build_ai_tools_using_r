@@ -4,18 +4,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Глава 6 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’</title>
+<title>Глава 7 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’</title>
 <meta name="author" content="Алексей Селезнёв">
-<meta name="description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="description" content="7.1 Видео   7.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
 <meta name="generator" content="bookdown 0.43 with bs4_book()">
-<meta property="og:title" content="Глава 6 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
+<meta property="og:title" content="Глава 7 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://selesnow.github.io/build_ai_tools_using_r/разработка-мультиагентных-систем-пакет-mini007.html">
 <meta property="og:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
-<meta property="og:description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta property="og:description" content="7.1 Видео   7.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Глава 6 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
-<meta name="twitter:description" content="6.1 Видео   6.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
+<meta name="twitter:title" content="Глава 7 Разработка мультиагентных систем (пакет mini007) | Курс ‘Язык R для разработки AI инструментов’">
+<meta name="twitter:description" content="7.1 Видео   7.1.1 Тайм-коды  00:00 — Введение 01:08 — Создание объекта класса Agent 03:13 — Суммаризация и очистка переписки с агентом 04:48 — Добавление сообщений в переписку с агентом 06:00 —...">
 <meta name="twitter:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -58,8 +58,9 @@
 <li><a class="" href="%D1%8F%D0%B7%D1%8B%D0%BA-r-%D0%BA%D0%B0%D0%BA-mcp-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-%D0%B8-mcp-%D0%BA%D0%BB%D0%B8%D0%B5%D0%BD%D1%82.html"><span class="header-section-number">3</span> Язык R как MCP сервер и MCP клиент</a></li>
 <li><a class="" href="rag-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B0%D0%B5%D0%BC-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9-%D0%B1%D0%B0%D0%B7%D0%B5-%D0%B7%D0%BD%D0%B0%D0%BD%D0%B8%D0%B9.html"><span class="header-section-number">4</span> RAG: Подключаем LLM модель к собственной базе знаний</a></li>
 <li><a class="" href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></li>
-<li><a class="active" href="%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007.html"><span class="header-section-number">6</span> Разработка мультиагентных систем (пакет mini007)</a></li>
-<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html">Заключение</a></li>
+<li><a class="" href="shiny-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D0%B4%D0%BB%D1%8F-%D0%BC%D0%B0%D0%BD%D0%B8%D0%BF%D1%83%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC%D0%B8-%D0%BD%D0%B0-%D0%B5%D1%81%D1%82%D0%B5%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%BC-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-querychat.html"><span class="header-section-number">6</span> Shiny интерфейс для манипуляции данными на естественном языке (пакет querychat)</a></li>
+<li><a class="active" href="%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007.html"><span class="header-section-number">7</span> Разработка мультиагентных систем (пакет mini007)</a></li>
+<li><a class="" href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-6.html">Заключение</a></li>
 <li><a class="" href="%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8-%D0%BA%D1%83%D1%80%D1%81%D0%B0.html">Новости Курса</a></li>
 </ul>
 
@@ -68,19 +69,19 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="разработка-мультиагентных-систем-пакет-mini007" class="section level1" number="6">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="разработка-мультиагентных-систем-пакет-mini007" class="section level1" number="7">
 <h1>
-<span class="header-section-number">Глава 6</span> Разработка мультиагентных систем (пакет mini007)<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><i class="fas fa-link"></i></a>
+<span class="header-section-number">Глава 7</span> Разработка мультиагентных систем (пакет mini007)<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><i class="fas fa-link"></i></a>
 </h1>
-<div id="видео-5" class="section level2" number="6.1">
+<div id="видео-6" class="section level2" number="7.1">
 <h2>
-<span class="header-section-number">6.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.1</span> Видео<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-6"><i class="fas fa-link"></i></a>
 </h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/7YLlot7-d4M?si=rX8q3lCjrN7JdR4N&amp;enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
 </iframe>
-<div id="тайм-коды-5" class="section level3" number="6.1.1">
+<div id="тайм-коды-6" class="section level3" number="7.1.1">
 <h3>
-<span class="header-section-number">6.1.1</span> Тайм-коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.1.1</span> Тайм-коды<a class="anchor" aria-label="anchor" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-6"><i class="fas fa-link"></i></a>
 </h3>
 <ul>
 <li>
@@ -122,32 +123,32 @@
 </ul>
 </div>
 </div>
-<div id="презентация-5" class="section level2" number="6.2">
+<div id="презентация-6" class="section level2" number="7.2">
 <h2>
-<span class="header-section-number">6.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.2</span> Презентация<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-6"><i class="fas fa-link"></i></a>
 </h2>
 <iframe src="https://www.slideshare.net/slideshow/embed_code/key/s3zsiwGW0GFlAT?hostedIn=slideshare&amp;page=upload" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no">
 </iframe>
 </div>
-<div id="конспект-5" class="section level2" number="6.3">
+<div id="конспект-6" class="section level2" number="7.3">
 <h2>
-<span class="header-section-number">6.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3</span> Конспект<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-6"><i class="fas fa-link"></i></a>
 </h2>
-<div id="что-такое-мультиагентная-система-mas" class="section level3" number="6.3.1">
+<div id="что-такое-мультиагентная-система-mas" class="section level3" number="7.3.1">
 <h3>
-<span class="header-section-number">6.3.1</span> Что такое мультиагентная система (MAS)?<a class="anchor" aria-label="anchor" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.1</span> Что такое мультиагентная система (MAS)?<a class="anchor" aria-label="anchor" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><i class="fas fa-link"></i></a>
 </h3>
 <p>Если кратко: это экосистема, где несколько специализированных AI-агентов взаимодействуют друг с другом для достижения общей цели. Вместо того чтобы просить одну модель «быть экспертом во всём», мы создаем команду узких специалистов.</p>
 </div>
-<div id="анатомия-системы-разбор-схемы" class="section level3" number="6.3.2">
+<div id="анатомия-системы-разбор-схемы" class="section level3" number="7.3.2">
 <h3>
-<span class="header-section-number">6.3.2</span> Анатомия системы (разбор схемы)<a class="anchor" aria-label="anchor" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.2</span> Анатомия системы (разбор схемы)<a class="anchor" aria-label="anchor" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><i class="fas fa-link"></i></a>
 </h3>
 <p>Архитектура, которую мы реализуем с помощью пакетов экосистемы <code>ellmer</code> / <code>mini007</code>, строится на четырех «китах»:</p>
-<div class="inline-figure"><img src="img/6-1.jpg" align="middle" width="640"></div>
-<div id="leadagent-оркестратор" class="section level4" number="6.3.2.1">
+<div class="inline-figure"><img src="img/7-1.jpg" align="middle" width="640"></div>
+<div id="leadagent-оркестратор" class="section level4" number="7.3.2.1">
 <h4>
-<span class="header-section-number">6.3.2.1</span> 1. LeadAgent (Оркестратор)<a class="anchor" aria-label="anchor" href="#leadagent-%D0%BE%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.2.1</span> 1. LeadAgent (Оркестратор)<a class="anchor" aria-label="anchor" href="#leadagent-%D0%BE%D1%80%D0%BA%D0%B5%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80"><i class="fas fa-link"></i></a>
 </h4>
 <p>Это «директор» системы, реализованный через <strong>R6 класс</strong>. Его задачи:</p>
 <ul>
@@ -159,9 +160,9 @@
 <strong>Контроль:</strong> Убедиться, что финальный результат соответствует ожиданиям.</li>
 </ul>
 </div>
-<div id="agent---специализированные-агенты-роли" class="section level4" number="6.3.2.2">
+<div id="agent---специализированные-агенты-роли" class="section level4" number="7.3.2.2">
 <h4>
-<span class="header-section-number">6.3.2.2</span> 2. Agent - Специализированные агенты (Роли)<a class="anchor" aria-label="anchor" href="#agent---%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D1%8B-%D1%80%D0%BE%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.2.2</span> 2. Agent - Специализированные агенты (Роли)<a class="anchor" aria-label="anchor" href="#agent---%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D1%8B-%D1%80%D0%BE%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
 </h4>
 <p>Каждый агент — это изолированная сущность со своим системным промптом и набором инструментов (tools):</p>
 <ul>
@@ -175,9 +176,9 @@
 <code>Writer</code>: Агрегирует технические данные в читаемый текст.</li>
 </ul>
 </div>
-<div id="shared-state-общее-пространство-памяти" class="section level4" number="6.3.2.3">
+<div id="shared-state-общее-пространство-памяти" class="section level4" number="7.3.2.3">
 <h4>
-<span class="header-section-number">6.3.2.3</span> 3. Shared State (Общее пространство памяти)<a class="anchor" aria-label="anchor" href="#shared-state-%D0%BE%D0%B1%D1%89%D0%B5%D0%B5-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D0%B8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.2.3</span> 3. Shared State (Общее пространство памяти)<a class="anchor" aria-label="anchor" href="#shared-state-%D0%BE%D0%B1%D1%89%D0%B5%D0%B5-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D0%B8"><i class="fas fa-link"></i></a>
 </h4>
 <p>Блок <code>agents_interaction</code> — это критически важный элемент. Это общая «память» или контекст, где сохраняется вся история взаимодействия.</p>
 <ul>
@@ -185,20 +186,20 @@
 <li>В R это реализуется через общие объекты состояния, которые обновляются по мере выполнения задач.</li>
 </ul>
 </div>
-<div id="цикл-обратной-связи" class="section level4" number="6.3.2.4">
+<div id="цикл-обратной-связи" class="section level4" number="7.3.2.4">
 <h4>
-<span class="header-section-number">6.3.2.4</span> 4. Цикл обратной связи<a class="anchor" aria-label="anchor" href="#%D1%86%D0%B8%D0%BA%D0%BB-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE%D0%B9-%D1%81%D0%B2%D1%8F%D0%B7%D0%B8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.2.4</span> 4. Цикл обратной связи<a class="anchor" aria-label="anchor" href="#%D1%86%D0%B8%D0%BA%D0%BB-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE%D0%B9-%D1%81%D0%B2%D1%8F%D0%B7%D0%B8"><i class="fas fa-link"></i></a>
 </h4>
 <p>Обратите внимание на стрелки между агентами и LeadAgent. Система не просто идет «сверху вниз». Если <strong>Tester</strong> находит ошибку в коде, задача возвращается к <strong>Coder</strong> на итерацию. Этот процесс происходит автономно до тех пор, пока результат не будет валидным.</p>
 </div>
 </div>
-<div id="класс-agent" class="section level3" number="6.3.3">
+<div id="класс-agent" class="section level3" number="7.3.3">
 <h3>
-<span class="header-section-number">6.3.3</span> Класс Agent<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.3</span> Класс Agent<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><i class="fas fa-link"></i></a>
 </h3>
 <p>Как я уже упоминал выше, пакет <code>mini007</code> предоставляет нам 2 основных класса: <code>Agent</code> и <code>LeadAgent</code>, для начала разберёмся с <code>Agent</code>.</p>
 <p>Класс <code>Agent</code> строится поверх объекта класса <code>Chat</code> из пакета <code>ellmer</code>.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Создание агента ---------------------------------------------------------</span></span>
@@ -215,16 +216,16 @@
 <span><span class="op">)</span></span></code></pre></div>
 <p>При создании агента вам необходимо дать ему имя, в <code>instruction</code> прописать его системный промпт, и передать объект класса <code>Chat</code> в аргумент <code>llm_object</code>.</p>
 <p>С помощью свойства <code>agent_id</code> мы можем получить идентификатор агента, а в <code>llm_object</code> хранится добавленный при создании агента объект чата:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Основные свойства и методы агента ---------------------------------------</span></span>
 <span><span class="co">## id агента</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">agent_id</span></span>
 <span></span>
 <span><span class="co">## объект chat</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">llm_object</span></span></code></pre></div>
-<div id="отправка-запроса-и-управление-историей-диалога" class="section level4" number="6.3.3.1">
+<div id="отправка-запроса-и-управление-историей-диалога" class="section level4" number="7.3.3.1">
 <h4>
-<span class="header-section-number">6.3.3.1</span> Отправка запроса и управление историей диалога<a class="anchor" aria-label="anchor" href="#%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0-%D0%B8-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B5%D0%B9-%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.3.1</span> Отправка запроса и управление историей диалога<a class="anchor" aria-label="anchor" href="#%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0-%D0%B8-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B5%D0%B9-%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0"><i class="fas fa-link"></i></a>
 </h4>
 <p>Для общения с агентом, и очистки диалога используйте следующие методы:
 * <code>invoke()</code> - отправить агенту запрос
@@ -232,7 +233,7 @@
 * <code>clear_and_summarise_messages()</code> - суммаризация и очистка истории сообщений
 * <code>keep_last_n_messages()</code> - Оставить n последних сообщений диалога
 * <code>reset_conversation_history()</code> - Полная очистка истории диалога</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## запрос агенту</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Прочитай текст по ссылке https://github.com/feddelegrand7/mini007"</span><span class="op">)</span></span>
 <span><span class="co">## история сообщений</span></span>
@@ -256,7 +257,7 @@
 * <code>role</code> - “user”, “assistant” или “system”
 * <code>сontent</code> – текст сообщения</p>
 <p>Добавленные сообщение агент будет обрабатывать так же как и сгенерированные через реальный диалог с ним.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Добавление сообщений в историю агента вручную</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">add_message</span><span class="op">(</span><span class="st">'user'</span>, <span class="st">'Ты бы мог проанализировать какой то текст и выдать основные тезисы?'</span><span class="op">)</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">add_message</span><span class="op">(</span><span class="st">'assistant'</span>, <span class="st">'Конечно, ты можешь предоставить мне ссылку на текст, и я проанализирую его.'</span><span class="op">)</span></span>
@@ -264,11 +265,11 @@
 <span><span class="co">## дальнейшее общение может быть продолжено тсходя из добавленных сообщений</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="st">"Дай краткие итоги о чём мы с тобой общались"</span><span class="op">)</span></span></code></pre></div>
 <p>Метод <code>update_instruction()</code> позволяет вам в любой момент редактировать системный промпт агента:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Обновление системного промпта -------------------------------------------</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">update_instruction</span><span class="op">(</span><span class="st">"Ты специалист по анализу данных на языке R, помогаешь в разработке и анализе кода."</span><span class="op">)</span></span></code></pre></div>
 <p>В отличае от обычного <code>Chat</code> из пакета <code>ellmer</code> агент позволяет вам экспортировать и импортировать в json файлы ваши диалоги:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Экспорт и импорт истории переписки --------------------------------------</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">reset_conversation_history</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -284,12 +285,12 @@
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">load_messages_history</span><span class="op">(</span><span class="st">"r_lang_history.json"</span><span class="op">)</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="va">messages</span></span></code></pre></div>
 </div>
-<div id="управление-бюджетом" class="section level4" number="6.3.3.2">
+<div id="управление-бюджетом" class="section level4" number="7.3.3.2">
 <h4>
-<span class="header-section-number">6.3.3.2</span> Управление бюджетом<a class="anchor" aria-label="anchor" href="#%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D0%BE%D0%BC"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.3.2</span> Управление бюджетом<a class="anchor" aria-label="anchor" href="#%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B1%D1%8E%D0%B4%D0%B6%D0%B5%D1%82%D0%BE%D0%BC"><i class="fas fa-link"></i></a>
 </h4>
 <p>Отдельные методы позволяют управлять бюджетом на использование API:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># управление бюджетом -----------------------------------------------------</span></span>
 <span><span class="co">## установка бюджета в 5$</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">set_budget</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
@@ -298,12 +299,12 @@
 <span><span class="co">## проверка расходов</span></span>
 <span><span class="va">text_analyzer</span><span class="op">$</span><span class="fu">get_usage_stats</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="генерация-и-выполнение-r-кода" class="section level4" number="6.3.3.3">
+<div id="генерация-и-выполнение-r-кода" class="section level4" number="7.3.3.3">
 <h4>
-<span class="header-section-number">6.3.3.3</span> Генерация и выполнение R кода<a class="anchor" aria-label="anchor" href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-r-%D0%BA%D0%BE%D0%B4%D0%B0"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.3.3</span> Генерация и выполнение R кода<a class="anchor" aria-label="anchor" href="#%D0%B3%D0%B5%D0%BD%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8-%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-r-%D0%BA%D0%BE%D0%B4%D0%B0"><i class="fas fa-link"></i></a>
 </h4>
 <p>Агенты могут по вашему запросу генерировать, и сразу выполнять R код:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># выполнение R кода -------------------------------------------------------</span></span>
 <span><span class="co">## создаём агента-разработчика на языке R</span></span>
 <span><span class="va">r_assistant</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -322,9 +323,9 @@
 <span>  interactive <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="проверка-качества-ответов-от-llm-модели" class="section level4" number="6.3.3.4">
+<div id="проверка-качества-ответов-от-llm-модели" class="section level4" number="7.3.3.4">
 <h4>
-<span class="header-section-number">6.3.3.4</span> Проверка качества ответов от LLM модели<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BE%D0%B2-%D0%BE%D1%82-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.3.4</span> Проверка качества ответов от LLM модели<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%BE%D0%B2-%D0%BE%D1%82-llm-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B8"><i class="fas fa-link"></i></a>
 </h4>
 <p>Метод <code>$validate_response()</code> позволяет проверить качество полученного ответа, и имеет следующие аргументы:</p>
 <ul>
@@ -337,7 +338,7 @@
 <li>
 <code>validation_score</code> – Пороговое значение, при котором ответ считается корректным (по умолчанию 0.8)</li>
 </ul>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Пример - 1: проверка достоверности</span></span>
 <span><span class="va">fact_checker</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"fact_checker"</span>,</span>
@@ -390,12 +391,12 @@
 <strong>A/B-тестирование</strong> - сравнение качества ответов в разных моделях или при использовании разных запросов.</li>
 </ul>
 </div>
-<div id="работа-с-инструментами" class="section level4" number="6.3.3.5">
+<div id="работа-с-инструментами" class="section level4" number="7.3.3.5">
 <h4>
-<span class="header-section-number">6.3.3.5</span> Работа с инструментами<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.3.5</span> Работа с инструментами<a class="anchor" aria-label="anchor" href="#%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8"><i class="fas fa-link"></i></a>
 </h4>
 <p>Так же как и в обычный <code><a href="https://ellmer.tidyverse.org/reference/Chat.html">ellmer::Chat</a></code>, в <code>Agent</code> можно добавить любое количество инструментов:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Создаём агента</span></span>
 <span><span class="va">weather_agent</span> <span class="op">&lt;-</span> <span class="va"><a href="https://rdrr.io/pkg/mini007/man/Agent.html">Agent</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"weather_assistant"</span>,</span>
@@ -447,7 +448,7 @@
 <span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">clear_tools</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">list_tools</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Но <code>Agent</code>, в отличие от <code><a href="https://ellmer.tidyverse.org/reference/Chat.html">ellmer::Chat</a></code>, умеет самостоятельно разрабатывать и добавлять в свой арсенал иснтрументы:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## автоматическое создание инструмента</span></span>
 <span><span class="va">weather_agent</span><span class="op">$</span><span class="fu">generate_and_register_tool</span><span class="op">(</span></span>
 <span>  description <span class="op">=</span> <span class="st">"Создай инструмент, который использует httr для вызова API open-meteo https://open-meteo.com/en/docs, чтобы получить текущую погоду в любом городе мира"</span></span>
@@ -460,9 +461,9 @@
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="класс-leadagent-разработка-мультиагентных-систем" class="section level3" number="6.3.4">
+<div id="класс-leadagent-разработка-мультиагентных-систем" class="section level3" number="7.3.4">
 <h3>
-<span class="header-section-number">6.3.4</span> Класс LeadAgent: Разработка мультиагентных систем<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-leadagent-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.4</span> Класс LeadAgent: Разработка мультиагентных систем<a class="anchor" aria-label="anchor" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-leadagent-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
 </h3>
 <p>Если <code>Agent</code> является базовой объектной единицой в мультиагентных системах, то <code>LeadAgent</code> это оркестратор, который реализует:</p>
 <ul>
@@ -471,7 +472,7 @@
 <li>Координация действий между агентами с цепочкой результатов.</li>
 </ul>
 <p>Для создания мульти агентной системы вам необходимо создать одного <code>LeadAgent</code>, и отдельно любое количество узкоспециализированных <code>Agent</code>.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
 <span></span>
@@ -549,12 +550,12 @@
 <li>
 <code>invoke()</code> - для получение задачи от пользователя</li>
 </ul>
-<div id="broadcasting" class="section level4" number="6.3.4.1">
+<div id="broadcasting" class="section level4" number="7.3.4.1">
 <h4>
-<span class="header-section-number">6.3.4.1</span> Broadcasting<a class="anchor" aria-label="anchor" href="#broadcasting"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.4.1</span> Broadcasting<a class="anchor" aria-label="anchor" href="#broadcasting"><i class="fas fa-link"></i></a>
 </h4>
 <p>Метод <code>broadcast()</code> позволяет вам передать один и тот же запрос всех зарегестрированным агентам, а метод <code>judge_and_choose_best_response()</code> позволяет <code>LeadAgent</code> выбрать лучший из полученных от разных <code>Agent</code> ответов:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ellmer.tidyverse.org">ellmer</a></span><span class="op">)</span></span>
 <span></span>
@@ -607,9 +608,9 @@
 <li>Быстрый тест без влияния на основной контекст</li>
 </ul>
 </div>
-<div id="human-in-the-loop" class="section level4" number="6.3.4.2">
+<div id="human-in-the-loop" class="section level4" number="7.3.4.2">
 <h4>
-<span class="header-section-number">6.3.4.2</span> Human in the loop<a class="anchor" aria-label="anchor" href="#human-in-the-loop"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.4.2</span> Human in the loop<a class="anchor" aria-label="anchor" href="#human-in-the-loop"><i class="fas fa-link"></i></a>
 </h4>
 <p><strong>Human-in-the-Loop (HITL)</strong> — это подход, при котором человек сознательно включён в цикл автоматизированного процесса или системы с ИИ/агентами, чтобы:</p>
 <ul>
@@ -632,7 +633,7 @@
 <li>Вручную измените ответ на указанном шаге и продолжите выполнение рабочего процесса;</li>
 <li>Остановка выполнения рабочего процесса (жесткая ошибка);</li>
 </ol>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
@@ -692,9 +693,9 @@
 <span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="va">lead_agent</span><span class="op">$</span><span class="fu">invoke</span><span class="op">(</span><span class="va">text_input</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="диалог-двух-агентов" class="section level4" number="6.3.4.3">
+<div id="диалог-двух-агентов" class="section level4" number="7.3.4.3">
 <h4>
-<span class="header-section-number">6.3.4.3</span> Диалог двух агентов<a class="anchor" aria-label="anchor" href="#%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3-%D0%B4%D0%B2%D1%83%D1%85-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BE%D0%B2"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.4.3</span> Диалог двух агентов<a class="anchor" aria-label="anchor" href="#%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3-%D0%B4%D0%B2%D1%83%D1%85-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BE%D0%B2"><i class="fas fa-link"></i></a>
 </h4>
 <p>Так же пакет <code>mini007</code> позволяет вам организовать диалог двух агентов, у которых могут быть одинаковые, или же противополжные задачи, как у заказчика и исполнителя, либо как у CEO и CMO.</p>
 <p>В примере ниже я организовал диалог двух агентов:</p>
@@ -703,7 +704,7 @@
 <li>developer - разработчик Shiny приложений, который будет реализовывать задачу от barmen, ему необходимо проанализировать задачу, и разработать Shiny приложение под требования barmen.</li>
 </ul>
 <p>Для реализации диалога вам необходимо создать 2 <code>Agent</code>, зарегистрировать их в <code>LeadAgent</code>, и инициализировать из диалог с помощью метода <code>agents_dialog</code>.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">llm</span> <span class="op">&lt;-</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html">chat_google_gemini</a></span><span class="op">(</span></span>
@@ -760,9 +761,9 @@
 <p>С помощью аргумента <code>max_iterations</code> вы можете ограничить количество итераций диалога. В итоге за указанное количество итераций агенты (<code>Agent</code>) могут либо прийти к общему решению, либо нет, во втором случае окончательное решение будет принимать <code>LeadAgent</code>.</p>
 </div>
 </div>
-<div id="интеграция-между-mini007-и-shinychat" class="section level3" number="6.3.5">
+<div id="интеграция-между-mini007-и-shinychat" class="section level3" number="7.3.5">
 <h3>
-<span class="header-section-number">6.3.5</span> Интеграция между mini007 и shinychat<a class="anchor" aria-label="anchor" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mini007-%D0%B8-shinychat"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.5</span> Интеграция между mini007 и shinychat<a class="anchor" aria-label="anchor" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mini007-%D0%B8-shinychat"><i class="fas fa-link"></i></a>
 </h3>
 <p>На момент записи этого видео урока, и написания этой главы я использовал <code>mini007</code> версии <code>0.3.0</code>, и на данный момент пакет не поддерживает глубокую интеграцию с интерфейсами созданными через <code>shinychat</code>, т.е.:</p>
 <ul>
@@ -771,7 +772,7 @@
 </ul>
 <p>Ещё одним минусом мультиагентных систем является скорость их работы, поскольку это целая цепочка запросов, и проверок.
 Но организовать максимально базовый однопоточный интерфейс чата можно:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mini007</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://posit-dev.github.io/shinychat/r/">shinychat</a></span><span class="op">)</span></span>
@@ -834,9 +835,9 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
 <p>Т.е. UI часть остаётся такое же как и в чатах создаваемых в интеграции с <code>ellmer</code>, а в серверной части мы используем метод <code>invoke()</code>.</p>
 </div>
-<div id="преимущества-мультиагентных-систем" class="section level3" number="6.3.6">
+<div id="преимущества-мультиагентных-систем" class="section level3" number="7.3.6">
 <h3>
-<span class="header-section-number">6.3.6</span> Преимущества мультиагентных систем<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B8%D0%BC%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.3.6</span> Преимущества мультиагентных систем<a class="anchor" aria-label="anchor" href="#%D0%BF%D1%80%D0%B5%D0%B8%D0%BC%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><i class="fas fa-link"></i></a>
 </h3>
 <p>Итак, подводя итоги я бы хотел объяснить в чём заключаются преимущества мультиагентных систем.</p>
 <p><strong>Одна LLM</strong>
@@ -850,9 +851,9 @@
 * <code>LeadAgent</code> собирает и проверяет результат как менеджер</p>
 </div>
 </div>
-<div id="вопросы-для-самопроверки-5" class="section level2" number="6.4">
+<div id="вопросы-для-самопроверки-6" class="section level2" number="7.4">
 <h2>
-<span class="header-section-number">6.4</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-5"><i class="fas fa-link"></i></a>
+<span class="header-section-number">7.4</span> Вопросы для самопроверки<a class="anchor" aria-label="anchor" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-6"><i class="fas fa-link"></i></a>
 </h2>
 <ol style="list-style-type: decimal">
 <li><details><summary><strong>В чем заключается основная роль класса <code>LeadAgent</code> в мультиагентной системе?</strong>
@@ -882,33 +883,33 @@
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="%D0%BA%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D0%B0-ai-%D1%87%D0%B0%D1%82%D0%B0-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-shinychat.html"><span class="header-section-number">5</span> Кастомизация интерфейса AI чата (пакет shinychat)</a></div>
-<div class="next"><a href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-5.html">Заключение</a></div>
+<div class="prev"><a href="shiny-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-%D0%B4%D0%BB%D1%8F-%D0%BC%D0%B0%D0%BD%D0%B8%D0%BF%D1%83%D0%BB%D1%8F%D1%86%D0%B8%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%BC%D0%B8-%D0%BD%D0%B0-%D0%B5%D1%81%D1%82%D0%B5%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%BC-%D1%8F%D0%B7%D1%8B%D0%BA%D0%B5-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-querychat.html"><span class="header-section-number">6</span> Shiny интерфейс для манипуляции данными на естественном языке (пакет querychat)</a></div>
+<div class="next"><a href="%D0%B7%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-6.html">Заключение</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><span class="header-section-number">6</span> Разработка мультиагентных систем (пакет mini007)</a></li>
+<li><a class="nav-link" href="#%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82-mini007"><span class="header-section-number">7</span> Разработка мультиагентных систем (пакет mini007)</a></li>
 <li>
-<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-5"><span class="header-section-number">6.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-5"><span class="header-section-number">6.1.1</span> Тайм-коды</a></li></ul>
+<a class="nav-link" href="#%D0%B2%D0%B8%D0%B4%D0%B5%D0%BE-6"><span class="header-section-number">7.1</span> Видео</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#%D1%82%D0%B0%D0%B9%D0%BC-%D0%BA%D0%BE%D0%B4%D1%8B-6"><span class="header-section-number">7.1.1</span> Тайм-коды</a></li></ul>
 </li>
-<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-5"><span class="header-section-number">6.2</span> Презентация</a></li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F-6"><span class="header-section-number">7.2</span> Презентация</a></li>
 <li>
-<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-5"><span class="header-section-number">6.3</span> Конспект</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><span class="header-section-number">6.3.1</span> Что такое мультиагентная система (MAS)?</a></li>
-<li><a class="nav-link" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><span class="header-section-number">6.3.2</span> Анатомия системы (разбор схемы)</a></li>
-<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><span class="header-section-number">6.3.3</span> Класс Agent</a></li>
-<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-leadagent-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><span class="header-section-number">6.3.4</span> Класс LeadAgent: Разработка мультиагентных систем</a></li>
-<li><a class="nav-link" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mini007-%D0%B8-shinychat"><span class="header-section-number">6.3.5</span> Интеграция между mini007 и shinychat</a></li>
-<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B8%D0%BC%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><span class="header-section-number">6.3.6</span> Преимущества мультиагентных систем</a></li>
+<a class="nav-link" href="#%D0%BA%D0%BE%D0%BD%D1%81%D0%BF%D0%B5%D0%BA%D1%82-6"><span class="header-section-number">7.3</span> Конспект</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#%D1%87%D1%82%D0%BE-%D1%82%D0%B0%D0%BA%D0%BE%D0%B5-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-mas"><span class="header-section-number">7.3.1</span> Что такое мультиагентная система (MAS)?</a></li>
+<li><a class="nav-link" href="#%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%D0%B8%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%80%D0%B0%D0%B7%D0%B1%D0%BE%D1%80-%D1%81%D1%85%D0%B5%D0%BC%D1%8B"><span class="header-section-number">7.3.2</span> Анатомия системы (разбор схемы)</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-agent"><span class="header-section-number">7.3.3</span> Класс Agent</a></li>
+<li><a class="nav-link" href="#%D0%BA%D0%BB%D0%B0%D1%81%D1%81-leadagent-%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><span class="header-section-number">7.3.4</span> Класс LeadAgent: Разработка мультиагентных систем</a></li>
+<li><a class="nav-link" href="#%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D1%8F-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-mini007-%D0%B8-shinychat"><span class="header-section-number">7.3.5</span> Интеграция между mini007 и shinychat</a></li>
+<li><a class="nav-link" href="#%D0%BF%D1%80%D0%B5%D0%B8%D0%BC%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%BD%D1%8B%D1%85-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC"><span class="header-section-number">7.3.6</span> Преимущества мультиагентных систем</a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-5"><span class="header-section-number">6.4</span> Вопросы для самопроверки</a></li>
+<li><a class="nav-link" href="#%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B0%D0%BC%D0%BE%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B8-6"><span class="header-section-number">7.4</span> Вопросы для самопроверки</a></li>
 </ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/06_multi_agent_systems.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/06_multi_agent_systems.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/selesnow/build_ai_tools_using_r/blob/master/07_multi_agent_systems.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/selesnow/build_ai_tools_using_r/edit/master/07_multi_agent_systems.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -920,7 +921,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-02-24.</p>
+    <p>"<strong>Курс ‘Язык R для разработки AI инструментов’</strong>" was written by Алексей Селезнёв. It was last built on 2026-03-13.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
