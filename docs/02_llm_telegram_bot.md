@@ -3,7 +3,7 @@
 
 В этой главе мы переместим наш AI-движок в Telegram. Главный вызов здесь — многопользовательская среда. Мы разберем, как сделать так, чтобы бот не путал контекст диалогов разных людей и помнил историю переписки даже после перезагрузки сервера. Мы превратим Telegram из простого мессенджера в полноценную точку доступа к вашему кастомному ИИ.
 
->Если вы не знакомы с принципами разработки telegram ботов на языке R то можете пройти курс ["Разработка telegram ботов на языке R"](https://selesnow.github.io/build_telegram_bot_using_r/).
+>Если вы не знакомы с принципами разработки telegram ботов на языке R то можете пройти курс ["Разработка telegram ботов на языке R"](https://alexey-seleznev.pro/build_telegram_bot_using_r/).
 
 ## Видео
 <iframe width="560" height="315" src="https://www.youtube.com/embed/J7fLXcHtDX0?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

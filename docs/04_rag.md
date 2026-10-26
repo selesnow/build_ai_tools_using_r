@@ -69,7 +69,7 @@
 Далее каждый шаг разберём более подробно на реальном примере.
 
 ### Обработка документов: фрагментирование, эмбединг и запись в хранилище
-В качестве базы знаний я буду использовать свой учебник по [разработке telegram ботов](https://selesnow.github.io/build_telegram_bot_using_r/). Для начала нам необходимо получить ссылки на все главы учебника:
+В качестве базы знаний я буду использовать свой учебник по [разработке telegram ботов](https://alexey-seleznev.pro/build_telegram_bot_using_r/). Для начала нам необходимо получить ссылки на все главы учебника:
 
 
 ``` r
@@ -80,11 +80,11 @@ library(ellmer)
 # 1. Создание базы знаний -------------------------------------------------
 
 # задаём URL документации
-base_url <- "https://selesnow.github.io/build_telegram_bot_using_r/"
+base_url <- "https://alexey-seleznev.pro/build_telegram_bot_using_r/"
 
 # считываем все ссылки исключая не нужные
 pages <- ragnar_find_links(base_url) %>% 
-         .[stringr::str_detect(., 'https://selesnow.github.io/build_telegram_bot_using_r')]
+         .[stringr::str_detect(., 'https://alexey-seleznev.pro/build_telegram_bot_using_r')]
 ```
 
 ### Разбивка документов на фрагменты
@@ -219,9 +219,9 @@ relevant_chunks <- ragnar_retrieve(store, text)
 # A tibble: 3 × 9
   origin                                                 doc_id chunk_id start   end cosine_distance bm25  context text 
   <chr>                                                   <int> <list>   <int> <int> <list>          <lis> <chr>   <chr>
-1 https://selesnow.github.io/build_telegram_bot_using_r…     10 <int>    23266 24775 <dbl [1]>       <dbl> "# Гла… "Дал…
-2 https://selesnow.github.io/build_telegram_bot_using_r…     10 <int>    39143 40839 <dbl [1]>       <dbl> "# Гла… "###…
-3 https://selesnow.github.io/build_telegram_bot_using_r…     12 <int>     4767  7211 <dbl [2]>       <dbl> "# Гла… "## …
+1 https://alexey-seleznev.pro/build_telegram_bot_using_r…     10 <int>    23266 24775 <dbl [1]>       <dbl> "# Гла… "Дал…
+2 https://alexey-seleznev.pro/build_telegram_bot_using_r…     10 <int>    39143 40839 <dbl [1]>       <dbl> "# Гла… "###…
+3 https://alexey-seleznev.pro/build_telegram_bot_using_r…     12 <int>     4767  7211 <dbl [2]>       <dbl> "# Гла… "## …
 ```
 
 Я уже писал выше, что `ragnar` совмещает два типа поиска:
@@ -241,11 +241,11 @@ library(ellmer)
 # 1. Создание базы знаний -------------------------------------------------
 
 # задаём URL документации
-base_url <- "https://selesnow.github.io/build_telegram_bot_using_r/"
+base_url <- "https://alexey-seleznev.pro/build_telegram_bot_using_r/"
 
 # считываем все ссылки исключая не нужные
 pages <- ragnar_find_links(base_url) %>% 
-         .[stringr::str_detect(., 'https://selesnow.github.io/build_telegram_bot_using_r')]
+         .[stringr::str_detect(., 'https://alexey-seleznev.pro/build_telegram_bot_using_r')]
 
 # задём путь хранилища
 store_location <- "tgbot_rag.duckdb"

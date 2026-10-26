@@ -10,13 +10,13 @@
 <meta name="generator" content="bookdown 0.43 with bs4_book()">
 <meta property="og:title" content="Глава 2 Встраиваем LLM модель в Telegram бота | Курс ‘Язык R для разработки AI инструментов’">
 <meta property="og:type" content="book">
-<meta property="og:url" content="https://selesnow.github.io/build_ai_tools_using_r/встраиваем-llm-модель-в-telegram-бота.html">
-<meta property="og:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta property="og:url" content="https://alexey-seleznev.pro/build_ai_tools_using_r/встраиваем-llm-модель-в-telegram-бота.html">
+<meta property="og:image" content="https://alexey-seleznev.pro/build_ai_tools_using_r/img/cover.png">
 <meta property="og:description" content="В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне. В этой главе мы переместим наш...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Глава 2 Встраиваем LLM модель в Telegram бота | Курс ‘Язык R для разработки AI инструментов’">
 <meta name="twitter:description" content="В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне. В этой главе мы переместим наш...">
-<meta name="twitter:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta name="twitter:image" content="https://alexey-seleznev.pro/build_ai_tools_using_r/img/cover.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -76,7 +76,7 @@
 <p>В первой главе мы создали интеллект и дали ему «лицо» в виде Shiny-приложения. Но настоящий ассистент аналитика должен быть доступен в один клик прямо в смартфоне.</p>
 <p>В этой главе мы переместим наш AI-движок в Telegram. Главный вызов здесь — многопользовательская среда. Мы разберем, как сделать так, чтобы бот не путал контекст диалогов разных людей и помнил историю переписки даже после перезагрузки сервера. Мы превратим Telegram из простого мессенджера в полноценную точку доступа к вашему кастомному ИИ.</p>
 <blockquote>
-<p>Если вы не знакомы с принципами разработки telegram ботов на языке R то можете пройти курс <a href="https://selesnow.github.io/build_telegram_bot_using_r/">“Разработка telegram ботов на языке R”</a>.</p>
+<p>Если вы не знакомы с принципами разработки telegram ботов на языке R то можете пройти курс <a href="https://alexey-seleznev.pro/build_telegram_bot_using_r/">“Разработка telegram ботов на языке R”</a>.</p>
 </blockquote>
 <div id="видео-1" class="section level2" number="2.1">
 <h2>

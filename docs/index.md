@@ -4,7 +4,7 @@ author: "Алексей Селезнёв"
 date: "2026-03-13"
 site: bookdown::bookdown_site
 documentclass: book
-url: https://selesnow.github.io/build_ai_tools_using_r
+url: https://alexey-seleznev.pro/build_ai_tools_using_r
 cover-image: img/cover.jpg
 description: |
   Бесплатный видео курс по разработке AI инструментов на языке R.
@@ -15,7 +15,7 @@ description: |
 ------
 
 ## О курсе {-}
-<a href="https://selesnow.github.io"><img src="img/cover.png" align="right" alt="Cover image" class="cover" width="230" height="366" /></a>За последние годы мир кардинально изменился. Большие языковые модели — такие как ChatGPT, Claude и Gemini — глубоко проникли практически во все сферы нашей жизни: от работы и обучения до творчества и повседневных задач. Сегодня уже сложно представить, как ещё совсем недавно мы обходились без AI-ассистентов, способных отвечать на вопросы, писать тексты, анализировать данные и помогать принимать решения.
+<a href="https://alexey-seleznev.pro"><img src="img/cover.png" align="right" alt="Cover image" class="cover" width="230" height="366" /></a>За последние годы мир кардинально изменился. Большие языковые модели — такие как ChatGPT, Claude и Gemini — глубоко проникли практически во все сферы нашей жизни: от работы и обучения до творчества и повседневных задач. Сегодня уже сложно представить, как ещё совсем недавно мы обходились без AI-ассистентов, способных отвечать на вопросы, писать тексты, анализировать данные и помогать принимать решения.
 
 С большой вероятностью вы уже регулярно используете LLM-модели в своей работе или личных задачах. Но чаще всего это взаимодействие ограничивается уровнем обычного пользователя: задать вопрос в чате, получить ответ, иногда — уточнить или переформулировать запрос.
 В этом курсе мы сделаем следующий шаг.
@@ -47,7 +47,7 @@ description: |
 
 К тому же, если у вас есть вопросы по одной из лекций курса, вы можете задавать его под видео лекции на YouTube, это приветствуется, и на такие комментарии я с радостью отвечу.
 
-Буду рад любой конструктивной критике, и предложениям по улучшению курса "Язык R для разработки AI инструментов", направлять их можно мне на почту selesnow@gmail.com. Если вы хотите выразить благодарность мне за курс, то в конце раздела описано как это можно сделать.
+Буду рад любой конструктивной критике, и предложениям по улучшению курса "Язык R для разработки AI инструментов", направлять их можно мне на почту me@alexey-seleznev.pro. Если вы хотите выразить благодарность мне за курс, то в конце раздела описано как это можно сделать.
 
 ## Рекомендации по прохождению курса {-}
 Данный курс состоит из 4 видеолекций общей продолжительностью более 2 часов. В конце каждого урока вы найдете вопросы для самопроверки, попробуйте ответить на них, для того, что бы убедиться в том, что вы усвоили материал урока.
@@ -60,7 +60,7 @@ description: |
 
 ## Об авторе {-}
 Меня зовут Алексей Селезнёв, с 2008 года я являюсь практикующим аналитиком. На данный момент основной моей деятельностью является развитие отдела аналитики в одной из крупнейших украинских IT компаний - [Netpeak](https://https://netpeak.group/).
-<a href="https://selesnow.github.io"><img src="img/author.png" width="200" height="200" align="left" alt="Алексей Селезнёв" hspace="20" vspace="7" /></a>
+<a href="https://alexey-seleznev.pro"><img src="img/author.png" width="200" height="200" align="left" alt="Алексей Селезнёв" hspace="20" vspace="7" /></a>
 
 Мною были разработаны такие R пакеты как: `rgoogleads`, `rfacebookstat`, `timeperiodsR` и некоторые другие. На данный момент написанные мной пакеты только с CRAN были установленны более 200 000 раз.
 
@@ -76,11 +76,11 @@ description: |
 Как я уже писал выше, помимо курса "Разработка пакетов на языке R" у меня есть ряд других бесплатных курсов:
 
 1. [Язык R для интернет маркетинга](https://www.youtube.com/playlist?list=PLD2LDq8edf4o6dSZ4BIr7J08gT97nimH_), для начинающих, требуется бесплатная регистрация
-2. [Язык R для пользователей Excel](https://selesnow.github.io/r4excel_users/), для начинающих
-3. [Введение в dplyr 1.0.0](https://selesnow.github.io/dplyr_1_0_0_course), средней уровень сложности
-4. [Циклы и функционалы в языке R](https://selesnow.github.io/iterations_in_r/), средней уровень сложности
-5. [Разработка telegram ботов на языке R](https://selesnow.github.io/build_telegram_bot_using_r/), высокий уровень сложности
-6. [Разработка пакетов на языке R](https://selesnow.github.io/r_package_course/), высокий уровень сложности
+2. [Язык R для пользователей Excel](https://alexey-seleznev.pro/r4excel_users/), для начинающих
+3. [Введение в dplyr 1.0.0](https://alexey-seleznev.pro/dplyr_1_0_0_course), средней уровень сложности
+4. [Циклы и функционалы в языке R](https://alexey-seleznev.pro/iterations_in_r/), средней уровень сложности
+5. [Разработка telegram ботов на языке R](https://alexey-seleznev.pro/build_telegram_bot_using_r/), высокий уровень сложности
+6. [Разработка пакетов на языке R](https://alexey-seleznev.pro/r_package_course/), высокий уровень сложности
 
 ## Каналы автора {-}
 Если вы интересуетесь языком R, применяете его в работе, или планируете изучать, то думаю вам будут интересны мои каналы, о которых я писал выше. Буду рад видеть вас среди подписчиков:
@@ -110,25 +110,25 @@ _Дата обновления курса: 13.03.2026_
 
 ```{=html}
 <div class="r2social-link-container r2social-social-inline">
-<a href="https://www.facebook.com/sharer/sharer.php?u=https://selesnow.github.io/" target="_r2socialxlink">
+<a href="https://www.facebook.com/sharer/sharer.php?u=https://alexey-seleznev.pro/" target="_r2socialxlink">
 <div class="social-btn-inline" style="background-color:#1877f2">
 <div class="r2social-icons-inline r2s-ico-facebook"></div>
 <p class="order-1 google-font margin-telgram" style="color:black">facebook</p>
 </div>
 </a>
-<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://selesnow.github.io/" target="_r2socialxlink">
+<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://alexey-seleznev.pro/" target="_r2socialxlink">
 <div class="social-btn-inline" style="background-color:#0A66C2">
 <div class="r2social-icons-inline r2s-ico-linkedin"></div>
 <p class="order-1 google-font margin-telgram" style="color:black">linkedin</p>
 </div>
 </a>
-<a href="https://web.whatsapp.com/send?text= https://selesnow.github.io/" target="_r2socialxlink">
+<a href="https://web.whatsapp.com/send?text= https://alexey-seleznev.pro/" target="_r2socialxlink">
 <div class="social-btn-inline" style="background-color:#24cc63">
 <div class="r2social-icons-inline r2s-ico-whatsapp"></div>
 <p class="order-1 google-font margin-telgram" style="color:black">whatsapp</p>
 </div>
 </a>
-<a href="https://telegram.me/share/url?url=https://selesnow.github.io/&amp;text=" target="_r2socialxlink">
+<a href="https://telegram.me/share/url?url=https://alexey-seleznev.pro/&amp;text=" target="_r2socialxlink">
 <div class="social-btn-inline" style="background-color:#0088cc">
 <div class="r2social-icons-inline r2s-ico-telegram"></div>
 <p class="order-1 google-font margin-telgram" style="color:black">telegram</p>

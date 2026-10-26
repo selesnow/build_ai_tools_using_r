@@ -10,13 +10,13 @@
 <meta name="generator" content="bookdown 0.43 with bs4_book()">
 <meta property="og:title" content="Глава 4 RAG: Подключаем LLM модель к собственной базе знаний | Курс ‘Язык R для разработки AI инструментов’">
 <meta property="og:type" content="book">
-<meta property="og:url" content="https://selesnow.github.io/build_ai_tools_using_r/rag-подключаем-llm-модель-к-собственной-базе-знаний.html">
-<meta property="og:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta property="og:url" content="https://alexey-seleznev.pro/build_ai_tools_using_r/rag-подключаем-llm-модель-к-собственной-базе-знаний.html">
+<meta property="og:image" content="https://alexey-seleznev.pro/build_ai_tools_using_r/img/cover.png">
 <meta property="og:description" content="В предыдущей главе мы научили нашего ассистента пользоваться внешними инструментами через MCP. Но что делать, если задача требует не выполнения функции, а глубокого знания специфической...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Глава 4 RAG: Подключаем LLM модель к собственной базе знаний | Курс ‘Язык R для разработки AI инструментов’">
 <meta name="twitter:description" content="В предыдущей главе мы научили нашего ассистента пользоваться внешними инструментами через MCP. Но что делать, если задача требует не выполнения функции, а глубокого знания специфической...">
-<meta name="twitter:image" content="https://selesnow.github.io/build_ai_tools_using_r/img/cover.jpg">
+<meta name="twitter:image" content="https://alexey-seleznev.pro/build_ai_tools_using_r/img/cover.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -190,7 +190,7 @@
 <h3>
 <span class="header-section-number">4.3.3</span> Обработка документов: фрагментирование, эмбединг и запись в хранилище<a class="anchor" aria-label="anchor" href="#%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B4%D0%BE%D0%BA%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%8D%D0%BC%D0%B1%D0%B5%D0%B4%D0%B8%D0%BD%D0%B3-%D0%B8-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D1%8C-%D0%B2-%D1%85%D1%80%D0%B0%D0%BD%D0%B8%D0%BB%D0%B8%D1%89%D0%B5"><i class="fas fa-link"></i></a>
 </h3>
-<p>В качестве базы знаний я буду использовать свой учебник по <a href="https://selesnow.github.io/build_telegram_bot_using_r/">разработке telegram ботов</a>. Для начала нам необходимо получить ссылки на все главы учебника:</p>
+<p>В качестве базы знаний я буду использовать свой учебник по <a href="https://alexey-seleznev.pro/build_telegram_bot_using_r/">разработке telegram ботов</a>. Для начала нам необходимо получить ссылки на все главы учебника:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ragnar.tidyverse.org/">ragnar</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
@@ -199,11 +199,11 @@
 <span><span class="co"># 1. Создание базы знаний -------------------------------------------------</span></span>
 <span></span>
 <span><span class="co"># задаём URL документации</span></span>
-<span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://selesnow.github.io/build_telegram_bot_using_r/"</span></span>
+<span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://alexey-seleznev.pro/build_telegram_bot_using_r/"</span></span>
 <span></span>
 <span><span class="co"># считываем все ссылки исключая не нужные</span></span>
 <span><span class="va">pages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_find_links.html">ragnar_find_links</a></span><span class="op">(</span><span class="va">base_url</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>         <span class="va">.</span><span class="op">[</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">'https://selesnow.github.io/build_telegram_bot_using_r'</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<span>         <span class="va">.</span><span class="op">[</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">'https://alexey-seleznev.pro/build_telegram_bot_using_r'</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div id="разбивка-документов-на-фрагменты" class="section level3" number="4.3.4">
 <h3>
@@ -316,9 +316,9 @@
 # A tibble: 3 × 9
   origin                                                 doc_id chunk_id start   end cosine_distance bm25  context text 
   &lt;chr&gt;                                                   &lt;int&gt; &lt;list&gt;   &lt;int&gt; &lt;int&gt; &lt;list&gt;          &lt;lis&gt; &lt;chr&gt;   &lt;chr&gt;
-1 https://selesnow.github.io/build_telegram_bot_using_r…     10 &lt;int&gt;    23266 24775 &lt;dbl [1]&gt;       &lt;dbl&gt; "# Гла… "Дал…
-2 https://selesnow.github.io/build_telegram_bot_using_r…     10 &lt;int&gt;    39143 40839 &lt;dbl [1]&gt;       &lt;dbl&gt; "# Гла… "###…
-3 https://selesnow.github.io/build_telegram_bot_using_r…     12 &lt;int&gt;     4767  7211 &lt;dbl [2]&gt;       &lt;dbl&gt; "# Гла… "## …</code></pre>
+1 https://alexey-seleznev.pro/build_telegram_bot_using_r…     10 &lt;int&gt;    23266 24775 &lt;dbl [1]&gt;       &lt;dbl&gt; "# Гла… "Дал…
+2 https://alexey-seleznev.pro/build_telegram_bot_using_r…     10 &lt;int&gt;    39143 40839 &lt;dbl [1]&gt;       &lt;dbl&gt; "# Гла… "###…
+3 https://alexey-seleznev.pro/build_telegram_bot_using_r…     12 &lt;int&gt;     4767  7211 &lt;dbl [2]&gt;       &lt;dbl&gt; "# Гла… "## …</code></pre>
 <p>Я уже писал выше, что <code>ragnar</code> совмещает два типа поиска:</p>
 <ul>
 <li>VSS - Поиск по смыслу. Ищем не совпадение слов, а близость смысла. Удобно, например, для поиска нужной функций по её описанию.</li>
@@ -338,11 +338,11 @@
 <span><span class="co"># 1. Создание базы знаний -------------------------------------------------</span></span>
 <span></span>
 <span><span class="co"># задаём URL документации</span></span>
-<span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://selesnow.github.io/build_telegram_bot_using_r/"</span></span>
+<span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://alexey-seleznev.pro/build_telegram_bot_using_r/"</span></span>
 <span></span>
 <span><span class="co"># считываем все ссылки исключая не нужные</span></span>
 <span><span class="va">pages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ragnar.tidyverse.org/reference/ragnar_find_links.html">ragnar_find_links</a></span><span class="op">(</span><span class="va">base_url</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
-<span>         <span class="va">.</span><span class="op">[</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">'https://selesnow.github.io/build_telegram_bot_using_r'</span><span class="op">)</span><span class="op">]</span></span>
+<span>         <span class="va">.</span><span class="op">[</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">'https://alexey-seleznev.pro/build_telegram_bot_using_r'</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># задём путь хранилища</span></span>
 <span><span class="va">store_location</span> <span class="op">&lt;-</span> <span class="st">"tgbot_rag.duckdb"</span></span>
