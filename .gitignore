@@ -4,3 +4,7 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Служебные файлы предпросмотра bookdown (Knit в RStudio)
+/build_ai_tools_using_r.html
+/build_ai_tools_using_r.md
